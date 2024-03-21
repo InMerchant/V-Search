@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<item key="selection" value="    public Page&lt;Question&gt; getList(int page, String kw) {"/>
+		<list key="findhistory">
+			<item value="    public Page&lt;Question&gt; getList(int page, String kw) {"/>
+			<item value="&lt;div layout:fragment=&quot;content&quot; class=&quot;container my-3&quot;&gt;"/>
+			<item value="public String list(Model model, @RequestParam(value = &quot;page&quot;, defaultValue = &quot;0&quot;) int page,"/>
+			<item value="    public String list(Model model, @RequestParam(value = &quot;page&quot;, defaultValue = &quot;0&quot;) int page,"/>
+			<item value="  public Page&lt;Question&gt; getList(i"/>
+			<item value="QuestionService"/>
+			<item value="&lt;div class=&quot;card my-3&quot; th:each=&quot;answer : ${question.answerList}&quot;&gt;"/>
+			<item value="답변"/>
+			<item value="    &lt;div class=&quot;card-body&quot;&gt;"/>
+			<item value="return String.format(&quot;redirect:/question/detail/%s&quot;, answer.getQuestion().getId());"/>
+			<item value="redirect"/>
+			<item value="body"/>
+			<item value="cody"/>
+			<item value="추천"/>
+			<item value="수정"/>
+		</list>
+		<list key="replacehistory">
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1286"/>
+		<item key="DIALOG_Y_ORIGIN" value="399"/>
+		<item key="DIALOG_WIDTH" value="322"/>
+		<item key="DIALOG_HEIGHT" value="391"/>
+		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
+	</section>
+</section>
