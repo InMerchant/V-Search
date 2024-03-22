@@ -33,7 +33,7 @@ public class videoService {
 
       
        video video = new video();
-       video.setCREATOR_NO(1);
+       video.setUSER_NO(0);
        video.setVIDEO_NAME(file.getOriginalFilename());
        video.setSTORAGE(Files.readAllBytes(filePath)); // 파일의 내용을 byte 배열로 저장
 

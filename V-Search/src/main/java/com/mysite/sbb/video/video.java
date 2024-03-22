@@ -12,7 +12,7 @@ public class video {
 	@Id
 	private int VIDEO_NO;
 	
-	private int CREATOR_NO;
+	private int USER_NO;
 	@Lob
 	private byte[] STORAGE;
 	private String VIDEO_NAME;
