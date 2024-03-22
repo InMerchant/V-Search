@@ -14,31 +14,30 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user")
-
-
 public class MemberController {
-    private final MemberService userService;
+    private final MemberService memberService;
+
     @GetMapping("/signup")
-    public String signup(MemberCreateForm userCreateForm) {
+    public String signup(MemberCreateForm form) {
         return "signup_form";
     }
+
     @PostMapping("/signup")
-    public String signup(@Valid MemberCreateForm userCreateForm, BindingResult bindingResult) {
+    public String signup(@Valid MemberCreateForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "signup_form";
         }
-        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
-            bindingResult.rejectValue("password2", "passwordInCorrect", 
-                    "2개의 패스워드가 일치하지 않습니다.");
+        if (!form.getPW1().equals(form.getPW2())) {
+            bindingResult.rejectValue("PW2", "PWInCorrect", "2개의 패스워드가 일치하지 않습니다.");
             return "signup_form";
         }
         try {
-            userService.create(userCreateForm.getUsername(),userCreateForm.getPassword1());
-        }catch(DataIntegrityViolationException e) {
+            memberService.create(form.getUSERID(), form.getPW1());
+        } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup_form";
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup_form";
@@ -46,12 +45,10 @@ public class MemberController {
         
         return "redirect:/";
     }
-    
+
     @GetMapping("/login")
     public String login() {
         return "login_form";
     }
-    
-    
-    
 }
+
