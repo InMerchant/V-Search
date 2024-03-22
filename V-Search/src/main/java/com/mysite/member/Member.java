@@ -10,8 +10,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="test",schema = "bae")
-
+@Table(name="VIEWER",schema = "bae")
 
 public class Member {
 	  @Id
@@ -21,6 +20,5 @@ public class Member {
 	    @Column(unique = true)
 	    private String USERID;
 	    private String PW;
-	    private String NickName;
 
 }
