@@ -18,11 +18,11 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class MemberSecurityService implements UserDetailsService {
 
-    private final MemberRepository userRepository;
+    private final MemberRepository MemberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String USERID) throws UsernameNotFoundException {
-        Optional<Member> _member = this.userRepository.findByUSERID(USERID);
+        Optional<Member> _member = this.MemberRepository.findByID(USERID);
         if (_member.isEmpty()) {
             throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
         }
@@ -33,6 +33,6 @@ public class MemberSecurityService implements UserDetailsService {
         } else {
             authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
         }
-        return new User(siteUser.getUSERID(), siteUser.getPW(), authorities);
+        return new User(siteUser.getID(), siteUser.getPW(), authorities);
     }
 }

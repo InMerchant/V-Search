@@ -11,6 +11,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import lombok.RequiredArgsConstructor;
 
+
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user")
@@ -32,7 +34,7 @@ public class MemberController {
             return "signup_form";
         }
         try {
-            memberService.create(form.getUSERID(), form.getPW1());
+            memberService.create(form.getID(), form.getPW1());
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");

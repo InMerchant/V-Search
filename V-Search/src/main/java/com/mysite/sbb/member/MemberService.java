@@ -11,20 +11,21 @@ import com.mysite.sbb.DataNotFoundException;
 public class MemberService {
 
     private final MemberRepository MemberRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public Member create(String USERID,String PW) {
-    	Member user = new Member();
-        user.setUSERID(USERID);
-        user.setPW(passwordEncoder.encode(PW));
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPW(passwordEncoder.encode(PW));
+    public Member create(String ID, String PW) {
+        Member user = new Member();
+        user.setID(ID);
+        user.setPW(PW); // 비밀번호를 해시화하지 않고 그대로 저장
+
+        // 회원 저장
         this.MemberRepository.save(user);
+        
         return user;
     }
+
     
-    public Member getUser(String USERID) {
-        Optional<Member> Member = this.MemberRepository.findByUSERID(USERID);
+    public Member getUser(String ID) {
+        Optional<Member> Member = this.MemberRepository.findByID(ID);
         if (Member.isPresent()) {
             return Member.get();
         } else {
