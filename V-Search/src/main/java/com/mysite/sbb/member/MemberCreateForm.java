@@ -1,4 +1,4 @@
-package com.mysite.member;
+package com.mysite.sbb.member;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

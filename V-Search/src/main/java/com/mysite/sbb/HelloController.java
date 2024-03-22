@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller 
 public class HelloController { 
     @GetMapping("/test") 
-    @ResponseBody 
     public String hello() { 
-        return "Hello Spring Boot Board"; 
+        return "signup_form"; 
     } 
 }
