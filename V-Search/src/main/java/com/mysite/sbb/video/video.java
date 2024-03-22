@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Lob;// 파링 형식 blob 대용량 처리
 import jakarta.persistence.Id;
 @Entity
-@Table(name="test",schema = "bae")
+@Table(name="VIDEO",schema = "bae")
 @Data
 public class video {
 	@Id
