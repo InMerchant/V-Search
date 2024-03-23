@@ -10,24 +10,23 @@ import com.mysite.sbb.DataNotFoundException;
 @Service
 public class MemberService {
 
-    private final MemberRepository MemberRepository;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public Member create(String ID, String PW) {
+    public Member create(String ID,String PW) {
         Member user = new Member();
         user.setID(ID);
-        user.setPW(PW); // 비밀번호를 해시화하지 않고 그대로 저장
-
-        // 회원 저장
-        this.MemberRepository.save(user);
-        
+        user.setPW(passwordEncoder.encode(PW));
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPW(passwordEncoder.encode(PW));
+        this.memberRepository.save(user);
         return user;
     }
-
     
     public Member getUser(String ID) {
-        Optional<Member> Member = this.MemberRepository.findByID(ID);
-        if (Member.isPresent()) {
-            return Member.get();
+        Optional<Member> member = this.memberRepository.findByID(ID);
+        if (member.isPresent()) {
+            return member.get();
         } else {
             throw new DataNotFoundException("siteuser not found");
         }

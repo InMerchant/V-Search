@@ -12,7 +12,7 @@ import lombok.Data;
 
 public class Member {
 	@Id
-	    @Column(unique = true, nullable = false)
-	    private String ID;
-	    private String PW;
+	@Column(unique = true, nullable = false)
+	private String ID;
+	private String PW;
 }
