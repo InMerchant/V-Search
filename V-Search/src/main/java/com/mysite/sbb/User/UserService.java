@@ -1,4 +1,4 @@
-package com.mysite.sbb.user;
+package com.mysite.sbb.User;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

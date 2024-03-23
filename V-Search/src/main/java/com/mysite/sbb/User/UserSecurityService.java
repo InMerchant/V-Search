@@ -1,4 +1,4 @@
-package com.mysite.sbb.user;
+package com.mysite.sbb.User;
 
 import java.util.ArrayList;
 import java.util.List;

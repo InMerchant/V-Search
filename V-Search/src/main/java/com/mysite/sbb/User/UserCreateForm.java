@@ -1,4 +1,4 @@
-package com.mysite.sbb.user;
+package com.mysite.sbb.User;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
