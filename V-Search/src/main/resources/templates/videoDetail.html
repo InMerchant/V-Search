@@ -1,0 +1,6 @@
+<h1>제목</h1>
+<div>내용</div>
+<video width="320" height="240" controls>
+  <source th:attr="src=@{'data:video/mp4;base64,' + @{T(org.springframework.util.Base64Utils).encodeToString(videoData)}}" type="video/mp4">	
+  Your browser does not support the video tag.
+</video>
