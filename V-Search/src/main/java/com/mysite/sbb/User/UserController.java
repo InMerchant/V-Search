@@ -1,4 +1,4 @@
-package com.mysite.sbb.member;
+package com.mysite.sbb.user;
 
 import jakarta.validation.Valid;
 
@@ -11,35 +11,37 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import lombok.RequiredArgsConstructor;
 
-
-
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user")
-public class MemberController {
-    private final MemberService memberService;
+public class UserController {
+
+    private final UserService userService;
 
     @GetMapping("/signup")
-    public String signup(MemberCreateForm form) {
+    public String signup(UserCreateForm userCreateForm) {
         return "signup_form";
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid MemberCreateForm form, BindingResult bindingResult) {
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "signup_form";
         }
-        if (!form.getPW1().equals(form.getPW2())) {
-            bindingResult.rejectValue("PW2", "PWInCorrect", "2개의 패스워드가 일치하지 않습니다.");
+
+        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
+            bindingResult.rejectValue("password2", "passwordInCorrect", 
+                    "2개의 패스워드가 일치하지 않습니다.");
             return "signup_form";
         }
+
         try {
-            memberService.create(form.getID(), form.getPW1());
-        } catch (DataIntegrityViolationException e) {
+            userService.create(userCreateForm.getUsername(), userCreateForm.getPassword1());
+        }catch(DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup_form";
-        } catch (Exception e) {
+        }catch(Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup_form";
@@ -47,10 +49,12 @@ public class MemberController {
         
         return "redirect:/";
     }
-
+    
     @GetMapping("/login")
     public String login() {
         return "login_form";
     }
+    
+    
+    
 }
-

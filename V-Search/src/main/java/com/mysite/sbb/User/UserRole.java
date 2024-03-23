@@ -1,15 +1,14 @@
-package com.mysite.sbb.member;
-
+package com.mysite.sbb.user;
 
 import lombok.Getter;
 
 
 @Getter
-public enum MemberRole {
+public enum UserRole {
     ADMIN("ROLE_ADMIN"),
     USER("ROLE_USER");
 
-    MemberRole(String value) {
+    UserRole(String value) {
         this.value = value;
     }
 

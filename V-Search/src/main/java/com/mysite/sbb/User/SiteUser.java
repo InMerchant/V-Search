@@ -1,4 +1,5 @@
-package com.mysite.sbb.member;
+package com.mysite.sbb.user;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
@@ -9,10 +10,9 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="MEMBER",schema = "bae")
-
-public class Member {
+public class SiteUser {
 	@Id
 	@Column(unique = true, nullable = false)
-	private String ID;
-	private String PW;
+	private String username;
+	private String password;
 }
