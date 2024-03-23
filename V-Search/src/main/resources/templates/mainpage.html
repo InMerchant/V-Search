@@ -1,0 +1,14 @@
+<table>
+	<thead>
+		<tr>
+			<th>제목</th>
+			<th>번호</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="video : ${Allvideo}">
+			<td><a th:href="@{|/video/${video.VIDEO_NO}|}" th:text="${video.VIDEO_NAME}"></td>
+			<td th:text="${video.USER_NO}"></td>
+		</tr>
+	</tbody>
+</table>
