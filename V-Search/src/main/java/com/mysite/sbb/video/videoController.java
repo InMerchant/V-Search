@@ -42,8 +42,8 @@ public class videoController {
 	
 	@GetMapping("/")
 	public String mainPage(Model model) {
-		List<video> Allvideo=videoService.getAllVideo();
-		model.addAttribute("Allvideo",Allvideo);
+		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbers();
+		model.addAttribute("videoDetails", videoDetails);
 		return "mainpage";
 	}
 	@GetMapping("/uploadForm")
@@ -65,29 +65,5 @@ public class videoController {
             e.printStackTrace();
         }
         return "uploadResult";
-    }
-
-    @GetMapping("/downloadForm")
-	public String downloadForm() {
-		return "download";
-	}
-    @PostMapping("/download")
-    public void downloadFile(@RequestParam("videoName") String videoName, HttpServletResponse response) throws IOException, SQLException {
-        // 클라이언트로부터 전달된 비디오 이름을 사용하여 파일을 다운로드합니다.
-        String filePath = "바탕 화면" + videoName; // 실제 파일 경로를 여기에 입력하세요.
-
-        try {
-            videoService.downloadFile(videoName, filePath);
-
-            // 파일 다운로드를 위한 설정
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + videoName + "\"");
-
-            // 파일을 읽어서 클라이언트로 전송
-            response.getOutputStream().write(Files.readAllBytes(Paths.get(filePath)));
-            response.getOutputStream().flush();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace(); 
-        }
     }
 }

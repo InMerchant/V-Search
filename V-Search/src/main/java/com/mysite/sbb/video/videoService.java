@@ -29,6 +29,9 @@ public class videoService {
   public List<video> getAllVideo(){
 	  return vR.findAll();
   }
+  public List<Object[]> getAllVideoNamesAndUserNumbers() {
+	    return vR.findAllVideoNamesAndUserNumbers();
+	}
    
    private final String uploadDir = "\\\\192.168.34.15\\last_project"; // 실제 파일을 업로드할 디렉토리 경로를 지정합니다.
    @Transactional
@@ -42,37 +45,13 @@ public class videoService {
 
       
        video video = new video();
-       video.setUSER_NO(6);
+       video.setUSER_NO(7);
        video.setVIDEO_NAME(file.getOriginalFilename());
        video.setSTORAGE(Files.readAllBytes(filePath)); 
 
        // 비디오 엔티티 저장
        vR.save(video);
    }
-   public void downloadFile(String videoName, String filePath) throws SQLException {
-	    String sql = "SELECT STORAGE FROM bae.VIDEO WHERE VIDEO_NAME = ?";
-	    List<byte[]> blobBytesList = jT.query(sql, new Object[]{videoName}, (rs, rowNum) -> {
-	        Blob blob = rs.getBlob("STORAGE");
-	        try {
-	            return blobToBytes(blob);
-	        } catch (IOException e) {
-	            return null;
-	        }
-	    });
-
-	    if (blobBytesList.isEmpty()) {
-	        throw new SQLException("No video found with the given name: " + videoName);
-	    }
-
-	    // 첫 번째 결과를 선택하여 파일로 저장합니다.
-	    byte[] blobBytes = blobBytesList.get(0);
-	    try (FileOutputStream fos = new FileOutputStream(filePath)) {
-	        fos.write(blobBytes);
-	    } catch (IOException e) {
-	        // IOException 발생 시 예외를 다시 던집니다.
-	        throw new SQLException("Failed to write BLOB data to file", e);
-	    }
-	}
 
 	private byte[] blobToBytes(Blob blob) throws SQLException, IOException {
 	    try (InputStream inputStream = blob.getBinaryStream()) {
