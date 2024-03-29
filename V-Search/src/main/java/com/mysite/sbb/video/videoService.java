@@ -42,7 +42,7 @@ public class videoService {
    
    private final String uploadDir = "\\\\192.168.34.15\\last_project"; // 실제 파일을 업로드할 디렉토리 경로를 지정합니다.
    @Transactional
-   public void uploadFile(MultipartFile file) throws IOException {
+   public void uploadFile(MultipartFile file, String title) throws IOException {
        // 파일명에 UUID를 추가하여 중복을 방지합니다.
        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
        Path filePath = Paths.get(uploadDir, fileName);
@@ -54,7 +54,7 @@ public class videoService {
       
        video video = new video();
        video.setUSER_NO(userNo); 
-       video.setVIDEO_NAME(file.getOriginalFilename());
+       video.setVIDEO_NAME(title);
        video.setSTORAGE(Files.readAllBytes(filePath)); 
 
        // 비디오 엔티티 저장

@@ -17,12 +17,12 @@
     <h2>Search Results</h2>
     
     <!-- 검색 결과가 없는 경우 -->
-    <div th:if="${#lists.isEmpty(searchResults)}">
+    <div th:if="${searchResults == null or searchResults.empty}">
         <p>No results found.</p>
     </div>
     
     <!-- 검색 결과가 있는 경우 -->
-    <div th:if="${not #lists.isEmpty(searchResults)}">
+    <div th:if="${searchResults != null and not #lists.isEmpty(searchResults)}">
         <div th:each="result : ${searchResults}">
             <!-- 검색 결과를 클릭할 수 있는 링크로 래핑합니다 -->
             <a th:href="@{'/video/' + ${result.videoNumber}}">
