@@ -15,4 +15,5 @@ public class SiteUser {
 	@Column(unique = true, nullable = false)
 	private String username;
 	private String password;
+	private int USER_NO;
 }

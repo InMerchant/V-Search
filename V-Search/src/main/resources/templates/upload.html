@@ -2,77 +2,86 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>파일 업로드</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        h2 {
-            color: #333;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-        input[type="file"] {
-            margin-bottom: 10px;
-        }
-        button[type="submit"] {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        #preview {
-            margin-top: 20px;
-        }
-        #preview video {
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/upload.css}">
 </head>
 <body>
-    <h2>파일 업로드</h2>
-    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
-        <label for="file">업로드 파일:</label>
-        <input type="file" id="file" name="file" accept="video/*" required><br><br>
-        <div id="preview"></div>
-        <button type="submit">업로드</button>
+	 <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+    <div id="root">
+        <h2>파일 업로드</h2>
+        <hr>
+        <div class="contents">
+            <div class="upload-box">
+                <div id="drop-file" class="drag-file" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" ondragenter="dragEnterHandler(event)" ondragleave="dragLeaveHandler(event)">
+                    <img src="https://img.icons8.com/pastel-glyph/2x/image-file.png" alt="파일 아이콘" class="image">
+                    <p class="message">Drag files to upload</p>
+                </div>
+                <label class="file-label" for="chooseFile">파일 선택</label>
+                <input type="file" id="chooseFile" name="file" accept="video/*" onchange="handleFiles(this.files)"><br><br>
+            </div>
+            <div id="uploadPreview" class="upload-container"></div> <!-- 추가된 엘리먼트 -->
+            <div id="files" class="files">
+                <div class="file">
+                    <div class="thumbnail">
+                        <img src="https://img.icons8.com/pastel-glyph/2x/image-file.png" alt="파일타입 이미지" class="image">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <button type="submit">업로드</button>
+        <div class="white-container" id="whiteContainer">
+        <div class="preview-container" id="previewContainer">
+        </div>
+    </div>
+    </div>
     </form>
-    
+</body>
     <script>
-        // 파일 입력 필드 변경 이벤트를 감지하여 미리보기 업데이트
-        document.getElementById('file').addEventListener('change', function() {
-            var file = this.files[0];
+        function dropHandler(event) {
+            event.preventDefault();
+            var file = event.dataTransfer.files[0];
             if (file) {
-                var reader = new FileReader();
-                reader.onload = function(event) {
-                    var preview = document.getElementById('preview');
-                    var video = document.createElement('video');
-                    video.controls = true;
-                    video.src = event.target.result;
-                    preview.innerHTML = '';
-                    preview.appendChild(video);
-                };
-                reader.readAsDataURL(file);
+                previewFile(file);
+                console.log(file)
+                var formData = new FormData();
+		        formData.append("file", file);
             }
-        });
+        }
+        
+        function dragOverHandler(event) {
+            event.preventDefault();
+        }
+        
+        function dragEnterHandler(event) {
+            event.preventDefault();
+        }
+        
+        function dragLeaveHandler(event) {
+            event.preventDefault();
+        }
+        
+        function handleFiles(files) {
+		    var file = files[0];
+		    if (file) {
+		        previewFile(file);
+		        var formData = new FormData();
+		        formData.append("file", file);
+		    }
+		}
+        // 파일 미리보기 함수
+        function previewFile(file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var video = document.createElement('video');
+                video.controls = true;
+                video.src = event.target.result;
+                video.style.maxWidth = "100%";
+                video.style.maxHeight = "100%";
+                document.getElementById('previewContainer').innerHTML = ''; // 기존 내용 지우기
+                document.getElementById('previewContainer').appendChild(video);
+            };
+            reader.readAsDataURL(file);
+        }
     </script>
 </body>
 </html>

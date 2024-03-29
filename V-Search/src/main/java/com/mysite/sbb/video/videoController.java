@@ -11,6 +11,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,12 +52,13 @@ public class videoController {
         return "upload"; 
     }
     @PostMapping("/upload")
+    @Secured("ROLE_USER") 
     public String uploadFile(@RequestParam("file") MultipartFile file, Model model) {
-        if (file.isEmpty()) {
-            model.addAttribute("message", "Please select a file to upload.");
-            return "uploadResult";
-        }
-
+    	System.out.println(file);
+    	if (file == null || file.isEmpty() || file.getSize() == 0) {
+    	    model.addAttribute("message", "Please select a file to upload.");
+    	    return "uploadResult";
+    	}
         try {
             videoService.uploadFile(file); 
             model.addAttribute("message", "File uploaded successfully: " + file.getOriginalFilename());
@@ -66,4 +68,9 @@ public class videoController {
         }
         return "uploadResult";
     }
+    @GetMapping("/video/test")
+    public String test() {
+        return "test";
+    }
+    
 }

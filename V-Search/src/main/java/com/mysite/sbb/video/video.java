@@ -1,5 +1,6 @@
 package com.mysite.sbb.video;
 
+
 import lombok.Data;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -16,5 +17,5 @@ public class video {
 	@Lob
 	private byte[] STORAGE;
 	private String VIDEO_NAME;
-	
+
 }

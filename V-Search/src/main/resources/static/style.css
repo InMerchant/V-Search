@@ -43,3 +43,38 @@
         font-size: 14px; /* 모바일에서 링크 텍스트 크기 줄임 */
     }
 }
+
+h2 {
+    color: #333;
+}
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+input[type="file"] {
+    margin-bottom: 10px;
+}
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+#preview {
+    margin-top: 20px;
+}
+#preview video {
+    width: 100%;
+}
