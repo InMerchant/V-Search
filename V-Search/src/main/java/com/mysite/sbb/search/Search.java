@@ -9,10 +9,14 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="VIDEO",schema = "bae")
+@Table(name="VIDEO", schema = "bae")
 public class Search {
-	@Id
-    
+    @Id
     @Column(name = "VIDEO_NAME")
     private String videoName;
+
+    @Column(name = "USER_NO")
+    private int userNumber;
+    
+    
 }

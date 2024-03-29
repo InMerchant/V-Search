@@ -21,9 +21,9 @@ public class SearchController {
     public String search(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
         if(keyword != null && !keyword.isEmpty()) {
             List<Search> searchResults = searchService.search(keyword);
-            
             model.addAttribute("searchResults", searchResults);
-            System.out.println(searchResults);
+            // userNumber 정보도 함께 모델에 추가
+            model.addAttribute("userNumber", searchResults.get(0).getUserNumber());
         }
         return "search"; // search.html로 포워딩
     }

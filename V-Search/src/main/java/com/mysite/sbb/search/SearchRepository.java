@@ -7,5 +7,6 @@ import java.util.List;
 @Repository
 public interface SearchRepository extends JpaRepository<Search, Long> {
     List<Search> findByVideoNameContainingIgnoreCase(String videoName);
+    List<Search> findByUserNumber(int userNumber); 
 }
 
