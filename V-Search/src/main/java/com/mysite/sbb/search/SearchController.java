@@ -1,6 +1,5 @@
 package com.mysite.sbb.search;
 
-//SearchController.java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,16 +10,21 @@ import java.util.List;
 @Controller
 public class SearchController {
 
- @Autowired
- private SearchService searchService;
+    private final SearchService searchService;
 
- @GetMapping("/search")
- public String search(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
-     if(keyword != null && !keyword.isEmpty()) {
-         List<Search> searchResults = searchService.search(keyword);
-         model.addAttribute("searchResults", searchResults);
-     }
-     return "search"; // search.html로 포워딩
- }
+    @Autowired
+    public SearchController(SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
+        if(keyword != null && !keyword.isEmpty()) {
+            List<Search> searchResults = searchService.search(keyword);
+            
+            model.addAttribute("searchResults", searchResults);
+            System.out.println(searchResults);
+        }
+        return "search"; // search.html로 포워딩
+    }
 }
-
