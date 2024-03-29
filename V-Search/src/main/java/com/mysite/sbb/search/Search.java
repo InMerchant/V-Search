@@ -15,8 +15,8 @@ public class Search {
     @Column(name = "VIDEO_NAME")
     private String videoName;
 
-    @Column(name = "USER_NO")
-    private int userNumber;
+    @Column(name = "VIDEO_NO")
+    private int videoNumber;
     
     
 }

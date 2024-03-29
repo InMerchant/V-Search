@@ -21,9 +21,12 @@ public class SearchController {
     public String search(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
         if(keyword != null && !keyword.isEmpty()) {
             List<Search> searchResults = searchService.search(keyword);
-            model.addAttribute("searchResults", searchResults);
-            // userNumber 정보도 함께 모델에 추가
-            model.addAttribute("userNumber", searchResults.get(0).getUserNumber());
+            if (!searchResults.isEmpty()) {
+                model.addAttribute("searchResults", searchResults);
+                model.addAttribute("videoNumber", searchResults.get(0).getVideoNumber());
+            } else {
+                model.addAttribute("message", "검색 결과가 없습니다."); // 검색 결과가 없을 때 메시지 추가
+            }
         }
         return "search"; // search.html로 포워딩
     }

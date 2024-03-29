@@ -16,18 +16,23 @@
 
     <h2>Search Results</h2>
     
-    <!-- 수정된 부분: 검색 결과가 없을 때 -->
+    <!-- 검색 결과가 없는 경우 -->
     <div th:if="${#lists.isEmpty(searchResults)}">
         <p>No results found.</p>
     </div>
     
-    <!-- 수정된 부분: 검색 결과가 있을 때 -->
-    <div th:each="result : ${searchResults}">
-        <p>
-            <span th:text="${result.videoName}"></span>
-            <span> - </span>
-            <span th:text="${result.userNumber}"></span>
-        </p>
+    <!-- 검색 결과가 있는 경우 -->
+    <div th:if="${not #lists.isEmpty(searchResults)}">
+        <div th:each="result : ${searchResults}">
+            <!-- 검색 결과를 클릭할 수 있는 링크로 래핑합니다 -->
+            <a th:href="@{'/video/' + ${result.videoNumber}}">
+                <p>
+                    <span th:text="${result.videoName}"></span>
+                    <span> - </span>
+                    <span th:text="${result.videoNumber}"></span>
+                </p>
+            </a>
+        </div>
     </div>
 </body>
 </html>
