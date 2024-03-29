@@ -19,7 +19,5 @@ public class Withdrawal {
     private String userName;
 
     @Column(name = "PASSWORD")
-    private int pw;
-    
-    
+    private String pw;
 }
