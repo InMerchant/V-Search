@@ -1,5 +1,10 @@
 package com.mysite.sbb.userpage;
 
-public class UserPageRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
+public interface UserPageRepository extends JpaRepository<UserPage, String> {
+
+    UserPage findByUsername(String username);
 }
