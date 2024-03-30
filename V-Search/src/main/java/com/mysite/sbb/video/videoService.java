@@ -93,5 +93,21 @@ public class videoService {
 	    }
 
 	}
+	
+	@Transactional
+	public void recommendTest() {
+		
+		video video = new video();
+		
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    	int userNo = userService.getUserNO(username);
+		
+		video.getRecommends().forEach((recommend) -> {
+            if(recommend.getUser().getUSER_NO() == userNo) {
+                video.setRecommend_state(true);
+            }
+        });
+		video.setRecommend_count(video.getRecommends().size());
+	}
 
 }
