@@ -9,5 +9,19 @@
     <h1>User Page</h1>
     <p>Welcome, <span th:text="${user.username}"></span>!</p>
     <!-- 여기에 사용자 정보 표시 또는 기타 내용 추가 -->
+
+    <!-- 회원 탈퇴 이동 버튼 -->
+    <button onclick="confirmWithdraw()">회원 탈퇴</button>
+
+    <script>
+        function confirmWithdraw() {
+            // 확인 창을 표시
+            var confirmWithdrawal = confirm("정말로 회원 탈퇴를 하시겠습니까?");
+            if (confirmWithdrawal) {
+                // 확인을 누르면 탈퇴 처리를 위해 회원 탈퇴 URL로 이동
+                window.location.href = "/withdraw";
+            }
+        }
+    </script>
 </body>
 </html>
