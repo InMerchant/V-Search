@@ -27,7 +27,7 @@ public class WithdrawalController {
         boolean isWithdrawn = withdrawalService.withdrawMember(username);
         if (isWithdrawn) {
             redirectAttributes.addFlashAttribute("successMessage", "회원 탈퇴가 완료되었습니다.");
-            return "redirect:/logout"; // 로그아웃 페이지로 리다이렉트
+            return "redirect:/"; // 로그아웃 페이지로 리다이렉트
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
             return "redirect:/userpage"; // 사용자 페이지로 리다이렉트
