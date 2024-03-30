@@ -1,50 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
-    <title>이것만 보고</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 </head>
-<body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">이것만 보고</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item" style="text-align: center;" >
-                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
-                </li>
-                <li class="nav-item" style="text-align: center;" >
-                    <a class="nav-link"  sec:authorize="isAnonymous()" href="/user/signup">회원가입</a>
-                </li>
-                 <li class="nav-item" style="text-align: center;" >
-                    <a class="nav-link"  sec:authorize="isAuthenticated()" href="/uploadForm">업로드</a>
-                </li>
-                <li class="nav-item" style="text-align: center;" >
-                    <a class="nav-link"  sec:authorize="isAuthenticated()" href="/userpage">사용자 페이지</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-	</nav>
-	<div class="card-group" style="max-width: 1500px;">
-	    <div th:each="detail : ${videoDetails}" class="card" style="width: 12rem; height: 20rem; margin: 50px; padding: 10px;">
+<body layout:fragment="content">
+	<div class="card-group" style="max-width: 1500px;" th:if="${not #lists.isEmpty(videoDetails)}">
+	    <div th:each="detail, iterStat : ${videoDetails}" class="card" style="width: 12rem; height: 20rem; margin: 50px; padding: 10px;">
 	        <img class="card-img-top" src="..." alt="썸네일 추가?예정??">
 	        <div class="card-body" style="">
 	            <a th:href="@{|/video/${detail[0]}|}" class="card-title" th:text="${detail[1]}"></a>
 	            <p class="card-text" th:text="${detail[2]}"></p>
 	        </div>
 	    </div>
+	    <div th:if="${iterStat != null and iterStat.count % 3 == 0}"></div>
 	</div>
 </body>
 </html>

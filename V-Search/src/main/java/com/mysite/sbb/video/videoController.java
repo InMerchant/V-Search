@@ -54,8 +54,9 @@ public class videoController {
     @PostMapping("/upload")
     @Secured("ROLE_USER") 
     public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,Model model) {
-    	System.out.println(file);
-    	if ((file == null ||  file.getSize() == 0) || (title == null || title.isEmpty())) {
+    	System.out.println("File object: " + file);
+    	System.out.println("File size: " + file.getSize());
+    	if ((file == null ||  file.isEmpty()) || (title == null || title.isEmpty())) {
     	    model.addAttribute("message", "Please select a file and enter a title to upload.");
     	    return "uploadResult";
     	}
