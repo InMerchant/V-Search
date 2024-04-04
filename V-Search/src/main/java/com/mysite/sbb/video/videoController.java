@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,17 +43,15 @@ public class videoController {
 	private RecommendService recommendService;
 	
 	@GetMapping(value="/video/{no}")
-	public ResponseEntity<Resource> videoDetail(@PathVariable("no") int videoNo) throws SQLException {
+	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
 	    byte[] videoData = videoService.videoPlay(videoNo);
-	    ByteArrayResource resource = new ByteArrayResource(videoData);
+	    String base64EncodedVideoData = Base64.getEncoder().encodeToString(videoData);
+	    model.addAttribute("videoData", base64EncodedVideoData);
 
 	    //비디오 추천기능 테스트용
 	    videoService.recommendTest();
 	    
-	    return ResponseEntity.ok()
-	            .contentLength(videoData.length)
-	            .contentType(MediaType.parseMediaType("video/mp4")) // 비디오 포맷에 맞게 변경하세요
-	            .body(resource);
+	    return "videoDetail";
 	}
 	
 	@GetMapping("/")
@@ -88,16 +87,16 @@ public class videoController {
         return "test";
     }
     
-    @PostMapping("/video/{video_no}/recommend")
-    public ResponseDto<Integer> recommend(@PathVariable("video_no") Long video_no) {
+    @PostMapping("/video/{no}/recommend")
+    public ResponseDto<Integer> recommend(@PathVariable("no") Long video_no) {
     	String username = SecurityContextHolder.getContext().getAuthentication().getName();
     	int userNo = userService.getUserNO(username);
     	recommendService.recommend(video_no, userNo);
         return new ResponseDto<Integer>(HttpStatus.CREATED.value(), 1);
     }
 
-    @DeleteMapping("/video/{video_no}/recommend")
-    public ResponseDto<Integer> cancelRecommend(@PathVariable("video_no") Long video_no) {
+    @DeleteMapping("/video/{no}/recommend")
+    public ResponseDto<Integer> cancelRecommend(@PathVariable("no") Long video_no) {
     	String username = SecurityContextHolder.getContext().getAuthentication().getName();
     	int userNo = userService.getUserNO(username);
         recommendService.cancelRecommend(video_no, userNo);

@@ -18,6 +18,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.mysite.sbb.User.UserService;
+import com.mysite.sbb.recommend.Recommend;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -96,18 +98,24 @@ public class videoService {
 	
 	@Transactional
 	public void recommendTest() {
-		
-		video video = new video();
-		
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    	int userNo = userService.getUserNO(username);
-		
-		video.getRecommends().forEach((recommend) -> {
-            if(recommend.getUser().getUSER_NO() == userNo) {
-                video.setRecommend_state(true);
-            }
-        });
-		video.setRecommend_count(video.getRecommends().size());
+	    video video = new video();
+	    
+	    // 수정: video.getRecommends()가 null이 아닌지 확인
+	    List<Recommend> recommends = video.getRecommends();
+	    if (recommends != null) {
+	        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+	        int userNo = userService.getUserNO(username);
+
+	        // 수정: 목록이 null이 아닌 경우에만 순회하도록 수정
+	        recommends.forEach((recommend) -> {
+	            if(recommend.getUser().getUSER_NO() == userNo) {
+	                video.setRecommend_state(true);
+	            }
+	        });
+	        // 수정: 목록이 null이 아닌 경우에만 사이즈를 가져와 설정
+	        video.setRecommend_count(recommends.size());
+	    }
 	}
+
 
 }

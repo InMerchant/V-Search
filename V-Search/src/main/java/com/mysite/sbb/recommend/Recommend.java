@@ -24,7 +24,7 @@ public class Recommend {
 	
 	@JoinColumn(name = "VIDEO_NO")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private video video;
+	private video VIDEO;
 	
 	@JoinColumn(name = "USER_NO")
 	@ManyToOne(fetch = FetchType.LAZY)

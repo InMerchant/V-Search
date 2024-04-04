@@ -1,68 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>비디오 페이지</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .card {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgb(0, 255, 64);
-            margin-bottom: 20px;
-            width:500px;
-            height: 500px;
-        }
-        .video-wrapper {
-		    position: relative;
-		    max-width: 100%; /* 최대 너비를 설정합니다. */
-		    padding-bottom: 56.25%; /* 16:9 비율을 유지하기 위한 설정 */
-		    overflow: hidden;
-		    border-radius: 8	px;
-		}
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
 
-        .video-wrapper video {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-        .content {
-            padding: 20px;
-        }
-    </style>
+<head>
 </head>
-<body>
-    <div class="container">
-        <h1>제목</h1>
-        <div class="card">
-            <div class="video-wrapper">
-                <video controls width="100%" height="100%">
-				    <source th:attr="src=@{'data:video/mp4;base64,' + @{T(org.springframework.util.Base64Utils).encodeToString(videoData)}}" type="video/mp4">	
-				    Your browser does not support the video tag.
-				</video>
-            </div>
-            <div class="content">
-                <p>내용</p>
-            </div>
-        </div>
-    </div>
+
+<body layout:fragment="content">
+	<video width="640" height="480" controls>
+		<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
+		<!-- 다른 동영상 형식에 대한 소스 추가 -->
+	</video>
+
 </body>
 </html>
