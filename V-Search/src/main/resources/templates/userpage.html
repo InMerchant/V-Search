@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Page</title>
 </head>
-<body>
+<body layout:fragment="content">
     <h1>User Page</h1>
     <p>Welcome, <span th:text="${user.username}"></span>!</p>
     <!-- 여기에 사용자 정보 표시 또는 기타 내용 추가 -->
