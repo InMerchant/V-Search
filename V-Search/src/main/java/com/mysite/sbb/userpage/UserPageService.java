@@ -10,6 +10,6 @@ public class UserPageService {
     private UserPageRepository userPageRepository;
 
     public UserPage getUserByUsername(String username) {
-        return userPageRepository.findByUsername(username.toLowerCase());
+        return userPageRepository.findByUsername(username);
     }
 }
