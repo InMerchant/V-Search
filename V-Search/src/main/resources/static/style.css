@@ -1,36 +1,26 @@
-/* 네비게이션 바 스타일링 */
+
 .navbar {
 	background-color: #f8f9fa;
-	/* 배경색상 변경 */
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	/* 그림자 효과 추가 */
 }
 
 .navbar-brand {
 	font-weight: bold;
-	/* 로고 텍스트 굵게 */
 }
 
 .navbar-nav .nav-link {
 	color: #6c757d;
-	/* 링크 텍스트 색상 변경 */
 }
 
 .navbar-nav .nav-link:hover {
 	color: #007bff;
-	/* 호버시 색상 변경 */
 }
 
-/* 카드 스타일링 */
 .card {
 	background-color: #fff;
-	/* 카드 배경색 */
 	border: 1px solid rgba(0, 0, 0, .125);
-	/* 테두리 추가 */
 	border-radius: 8px;
-	/* 라운드 처리 */
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	/* 그림자 효과 */
 }
 
 .search-form {
@@ -43,7 +33,6 @@
 	padding: 8px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
-	margin-right: 8px;
 	font-size: 14px;
 }
 
@@ -59,4 +48,15 @@
 .search-button svg {
 	width: 16px;
 	height: 16px;
+}
+
+.input-group {
+	width:100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.search-form{
+	width:60%;
 }
