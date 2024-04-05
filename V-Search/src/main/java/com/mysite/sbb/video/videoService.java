@@ -108,13 +108,6 @@ public class videoService {
 	    if (recommends != null) {
 	        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 	        int userNo = userService.getUserNO(username);
-
-	        // 수정: 목록이 null이 아닌 경우에만 순회하도록 수정
-	        recommends.forEach((recommend) -> {
-	            if(recommend.getUser().getUSER_NO() == userNo) {
-	                video.setRecommend_state(true);
-	            }
-	        });
 	        // 수정: 목록이 null이 아닌 경우에만 사이즈를 가져와 설정
 	        video.setRecommend_count(recommends.size());
 	    }
