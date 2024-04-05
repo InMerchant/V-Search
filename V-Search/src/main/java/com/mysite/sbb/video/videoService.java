@@ -96,11 +96,15 @@ public class videoService {
 
 	}
 	
+	
+	public video getVideoByNo(int videoNo) {
+        return vR.findByVideoNo(videoNo);
+    }
+	
 	@Transactional
-	public void recommendTest() {
-	    video video = new video();
+	public void recommendTest(int videoNo) {
+	    video video = getVideoByNo(videoNo);
 	    
-	    // 수정: video.getRecommends()가 null이 아닌지 확인
 	    List<Recommend> recommends = video.getRecommends();
 	    if (recommends != null) {
 	        String username = SecurityContextHolder.getContext().getAuthentication().getName();

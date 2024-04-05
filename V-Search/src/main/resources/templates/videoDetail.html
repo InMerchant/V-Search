@@ -3,6 +3,7 @@
 	layout:decorate="~{layout/layout}">
 
 <head>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body layout:fragment="content">
@@ -10,53 +11,84 @@
 		<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
 		<!-- 다른 동영상 형식에 대한 소스 추가 -->
 	</video>
-	<div style="text-align: center;">
-		<c:choose>
-			<c:when test="${recommend.recommend_state}">
-				<c:choose>
-					<c:when test="${video.user.id != principal.user.id}">
-						<button onclick="index.recommend(${video.video_no}, ${video.recommend_state})" class="btn btn-success"
-							style="display: inline-block;">
-							추천 <span>${board.recommend_count}</span>
-						</button>
-					</c:when>
-					<c:otherwise>
-						<button onclick="index.recommend(${video.id}, ${video.recommend_state})" class="btn btn-success"
-							style="display: inline-block;" disabled>
-							추천 <span>${board.recommend_count}</span>
-						</button>
-					</c:otherwise>
-				</c:choose>
-			</c:when>
-			<c:otherwise>
-				<c:choose>
-					<c:when test="${board.user.id != principal.user.id}">
-						<button onclick="index.recommend(${board.id}, ${board.recommend_state})"
-							class="btn btn-outline-success" style="display: inline-block;">
-							추천 <span>${board.recommend_count}</span>
-						</button>
-					</c:when>
-					<c:otherwise>
-						<button onclick="index.recommend(${board.id}, ${board.recommend_state})"
-							class="btn btn-outline-success" style="display: inline-block;" disabled>
-							추천 <span>${board.recommend_count}</span>
-						</button>
-					</c:otherwise>
-				</c:choose>
-			</c:otherwise>
-		</c:choose>
+	<!-- 추천 상태 및 추천 수를 표시할 영역 -->
+	<div>
+		<p>추천 상태: <span th:text="${recommendState}"></span></p>
+		<p>추천 수: <span th:text="${recommendCount}"></span></p>
 	</div>
-</body>
 
-<script layout:fragment="script" type='text/javascript'>
-	const recommend_elements = document.getElementsByClassName("recommend");
-	Array.from(recommend_elements).forEach(function (element) {
-		element.addEventListener('click', function () {
-			if (confirm("정말로 추천하시겠습니까?")) {
-				location.href = this.dataset.uri;
-			};
-		});
-	});
-</script>
+	<form id="recommend" action="/video/104/recommend" method="post">
+		<button type="submit" id="recommendButton">추천</button>
+	</form>
+	<!-- 추천 버튼 -->
+
+	<!-- 추천 취소 버튼 -->
+	<button id="cancelRecommendButton" onclick="cancelRecommend()">추천 취소</button>
+
+
+	<script>
+		// 현재 페이지 URL에서 동영상 번호를 추출하는 함수
+		function extractVideoNoFromUrl() {
+			var url = window.location.href;
+			var parts = url.split("/");
+			return parts[parts.length - 1]; // 마지막 부분을 동영상 번호로 가정
+		}
+
+		// 추천 버튼 클릭 시
+		function recommend() {
+			var videoNo = extractVideoNoFromUrl();
+
+			// AJAX를 사용하여 POST 요청 보내기
+			$.ajax({
+				type: "POST",
+				url: "/video/" + videoNo + "/recommend",
+				success: function (response) {
+					updateRecommendationInfo();
+				},
+				error: function (xhr, status, error) {
+					console.error("추천에 실패했습니다.", error);
+				}
+			});
+		}
+
+		// 추천 취소 버튼 클릭 시
+		function cancelRecommend() {
+			var videoNo = extractVideoNoFromUrl();
+
+			// AJAX를 사용하여 DELETE 요청 보내기
+			$.ajax({
+				type: "DELETE",
+				url: "/video/" + videoNo + "/recommend",
+				success: function (response) {
+					console.log("추천이 취소되었습니다.");
+					// 추천 취소가 성공했을 때 화면 업데이트
+					updateRecommendationInfo();
+				},
+				error: function (xhr, status, error) {
+					console.error("추천 취소에 실패했습니다.", error);
+				}
+			});
+		}
+
+		// 추천 상태 및 추천 수를 업데이트하는 함수
+		function updateRecommendationInfo() {
+			var videoNo = extractVideoNoFromUrl();
+
+			// 추천 상태 및 추천 수를 업데이트하기 위해 AJAX를 사용하여 GET 요청 보내기
+			$.ajax({
+				type: "GET",
+				url: "/video/" + videoNo + "/recommendation-info",
+				success: function (response) {
+					// 추천 상태 및 추천 수 업데이트
+					$("#recommendState").text(response.recommendState);
+					$("#recommendCount").text(response.recommendCount);
+				},
+				error: function (xhr, status, error) {
+					console.error("추천 정보를 불러오는 데 실패했습니다.", error);
+				}
+			});
+		}
+	</script>
+</body>
 
 </html>
