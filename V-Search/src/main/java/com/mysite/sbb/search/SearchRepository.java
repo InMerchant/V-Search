@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface SearchRepository extends JpaRepository<Search, Long> {
+public interface SearchRepository extends JpaRepository<Search, String> {
     List<Search> findByVideoNameContainingIgnoreCase(String videoName);
     List<Search> findByVideoNumber(int videoNumber); 
     Page<Search> findByVideoNameContaining(String keyword, Pageable pageable);
