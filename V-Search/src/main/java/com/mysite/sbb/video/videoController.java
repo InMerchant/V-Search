@@ -90,7 +90,7 @@ public class videoController {
     @PostMapping("/video/{no}/recommend")
     public ResponseDto<Integer> recommend(@PathVariable("no") Long video_no) {
     	String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    	int userNo = userService.getUserNO(username);
+    	long userNo = userService.getUserNO(username);
     	recommendService.recommend(video_no, userNo);
         return new ResponseDto<Integer>(HttpStatus.CREATED.value(), 1);
     }
@@ -98,7 +98,7 @@ public class videoController {
     @DeleteMapping("/video/{no}/recommend")
     public ResponseDto<Integer> cancelRecommend(@PathVariable("no") Long video_no) {
     	String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    	int userNo = userService.getUserNO(username);
+    	long userNo = userService.getUserNO(username);
         recommendService.cancelRecommend(video_no, userNo);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }

@@ -10,6 +10,53 @@
 		<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
 		<!-- 다른 동영상 형식에 대한 소스 추가 -->
 	</video>
-
+	<div style="text-align: center;">
+		<c:choose>
+			<c:when test="${recommend.recommend_state}">
+				<c:choose>
+					<c:when test="${video.user.id != principal.user.id}">
+						<button onclick="index.recommend(${video.video_no}, ${video.recommend_state})" class="btn btn-success"
+							style="display: inline-block;">
+							추천 <span>${board.recommend_count}</span>
+						</button>
+					</c:when>
+					<c:otherwise>
+						<button onclick="index.recommend(${video.id}, ${video.recommend_state})" class="btn btn-success"
+							style="display: inline-block;" disabled>
+							추천 <span>${board.recommend_count}</span>
+						</button>
+					</c:otherwise>
+				</c:choose>
+			</c:when>
+			<c:otherwise>
+				<c:choose>
+					<c:when test="${board.user.id != principal.user.id}">
+						<button onclick="index.recommend(${board.id}, ${board.recommend_state})"
+							class="btn btn-outline-success" style="display: inline-block;">
+							추천 <span>${board.recommend_count}</span>
+						</button>
+					</c:when>
+					<c:otherwise>
+						<button onclick="index.recommend(${board.id}, ${board.recommend_state})"
+							class="btn btn-outline-success" style="display: inline-block;" disabled>
+							추천 <span>${board.recommend_count}</span>
+						</button>
+					</c:otherwise>
+				</c:choose>
+			</c:otherwise>
+		</c:choose>
+	</div>
 </body>
+
+<script layout:fragment="script" type='text/javascript'>
+	const recommend_elements = document.getElementsByClassName("recommend");
+	Array.from(recommend_elements).forEach(function (element) {
+		element.addEventListener('click', function () {
+			if (confirm("정말로 추천하시겠습니까?")) {
+				location.href = this.dataset.uri;
+			};
+		});
+	});
+</script>
+
 </html>
