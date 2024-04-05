@@ -33,45 +33,30 @@
 	/* 그림자 효과 */
 }
 
-
-h2 {
-	color: #333;
+.search-form {
+	display: flex;
+	align-items: center;
 }
 
-form {
-	background-color: #fff;
-	padding: 20px;
-	border-radius: 8px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+#keyword {
+	flex: 1;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin-right: 8px;
+	font-size: 14px;
 }
 
-label {
-	font-weight: bold;
-	margin-bottom: 10px;
-	display: block;
-}
-
-input[type="file"] {
-	margin-bottom: 10px;
-}
-
-button[type="submit"] {
+.search-button {
 	background-color: #007bff;
 	color: #fff;
 	border: none;
-	padding: 10px 20px;
-	border-radius: 5px;
+	border-radius: 4px;
+	padding: 8px 12px;
 	cursor: pointer;
 }
 
-button[type="submit"]:hover {
-	background-color: #0056b3;
-}
-
-#preview {
-	margin-top: 20px;
-}
-
-#preview video {
-	width: 100%;
+.search-button svg {
+	width: 16px;
+	height: 16px;
 }
