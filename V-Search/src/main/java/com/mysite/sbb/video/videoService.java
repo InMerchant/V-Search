@@ -52,7 +52,6 @@ public class videoService {
        Files.write(filePath, file.getBytes());
        String username = SecurityContextHolder.getContext().getAuthentication().getName();
        int userNo = userService.getUserNO(username);
-
       
        video video = new video();
        video.setUSER_NO(userNo); 

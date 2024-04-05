@@ -3,44 +3,54 @@
 	layout:decorate="~{layout/layout}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" th:href="@{/search.css}">
 </head>
+
 <body layout:fragment="content">
-    <!-- 검색 결과가 없는 경우 -->
-    <div th:if="${searchPage == null or searchPage.empty}">
-        <p>검색 결과가 없습니다!</p>
-    </div>
-    
-    <!-- 검색 결과가 있는 경우 -->
-    <div th:if="${searchPage != null and not searchPage.empty}">
-        <div th:each="result : ${searchPage.content}">
-            <!-- 검색 결과를 클릭할 수 있는 링크로 래핑합니다 -->
-            <a th:href="@{'/video/' + ${result.videoNumber}}">
-                <p>
-                    <span th:text="${result.videoName}"></span>
-                    <span> - </span>
-                    <span th:text="${result.videoNumber}"></span>
-                </p>
-            </a>
-        </div>
-    </div>
-    <!-- 페이징 -->
-     <div th:if="${searchPage != null}">
-        <ul class="pagination">
-            <!-- 이전 페이지로 이동하는 버튼 -->
-            <li th:if="${searchPage.number > 0}">
-                <a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number - 1}}">이전</a>
-            </li>
-            <!-- 페이지 번호 출력 -->
-            <li th:each="i : ${#numbers.sequence(1, searchPage.totalPages)}" th:class="${searchPage.number + 1 == i ? 'active' : ''}">
-                <a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${i - 1}}" th:text="${i}"></a>
-            </li>
-            <!-- 다음 페이지로 이동하는 버튼 -->
-            <li th:if="${searchPage.number + 1 < searchPage.totalPages}">
-                <a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number + 1}}">다음</a>
-            </li>
-        </ul>
-    </div>
+	<div id="main">
+		<!-- 검색 결과가 없는 경우 -->
+		<div th:if="${searchPage == null or searchPage.empty}">
+			<p>검색 결과가 없습니다!</p>
+		</div>
+
+		<!-- 검색 결과가 있는 경우 -->
+		<div th:if="${searchPage != null and not searchPage.empty}">
+			<div th:each="result : ${searchPage.content}">
+				<!-- 검색 결과를 클릭할 수 있는 링크로 래핑합니다 -->
+				<div class="card-result-container">
+					<div class="card-result" th:href="@{'/video/' + ${result.videoNumber}}">
+						<a th:href="@{'/video/' + ${result.videoNumber}}">
+							<p>
+								<span th:text="${result.videoName}"></span>
+								<span> - </span>
+								<span th:text="${result.videoNumber}"></span>
+							</p>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:if="${searchPage != null}">
+			<ul class="pagination">
+				<!-- 이전 페이지로 이동하는 버튼 -->
+				<li th:if="${searchPage.number > 0}">
+					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number - 1}}">
+						<</a>
+				</li>
+				<!-- 페이지 번호 출력 -->
+				<li th:each="i : ${#numbers.sequence(1, searchPage.totalPages)}"
+					th:class="${searchPage.number + 1 == i ? 'active' : ''}">
+					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${i - 1}}" th:text="${i}"></a>
+				</li>
+				<!-- 다음 페이지로 이동하는 버튼 -->
+				<li th:if="${searchPage.number + 1 < searchPage.totalPages}">
+					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number + 1}}">></a>
+				</li>
+			</ul>
+		</div>
+	</div>
 </body>
+
 </html>
