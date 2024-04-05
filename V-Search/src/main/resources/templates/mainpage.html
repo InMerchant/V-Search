@@ -4,17 +4,19 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/mainpage.css}">
 </head>
+
 <body layout:fragment="content">
 	<div class="card-group" style="max-width: 1500px;" th:if="${not #lists.isEmpty(videoDetails)}">
-    <div th:each="detail, iterStat : ${videoDetails}" class="card" style="width: 12rem; height: 20rem; margin: 50px; padding: 10px;">
-        <img class="card-img-top" src="..." alt="썸네일 추가?예정??">
-        <div class="card-body" style="">
-            <a th:href="@{|/video/${detail[0]}|}" class="card-title" th:text="${detail[1]}"></a>
-            <p class="card-text" th:text="${detail[2]}"></p>
-        </div>
-        <div th:if="${iterStat != null and iterStat.count % 6 == 0}" style="clear:both;"></div>
-    </div>
-</div>
+		<div th:each="detail, iterStat : ${videoDetails}" class="custom-card">
+			<img class="card-img-top" src="..." alt="썸네일 추가?예정??">
+			<div class="card-body">
+				<a th:href="@{|/video/${detail[0]}|}" class="card-title" th:text="${detail[1]}"></a>
+				<p class="card-text" th:text="${detail[2]}"></p>
+			</div>
+		</div>
+	</div>
 </body>
+
 </html>

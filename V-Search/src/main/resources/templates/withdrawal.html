@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdrawal</title>
 </head>
-<body>
+<body layout:fragment="content">
     <h1>회원 탈퇴</h1>
     <form action="/withdraw" method="post">
         <label for="username">사용자 이름:</label>
