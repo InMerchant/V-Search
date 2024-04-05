@@ -12,7 +12,7 @@ public class UserPageController {
     @Autowired
     private UserPageService userPageService;
 
-    @GetMapping("/user/{username}")
+    @GetMapping("/Member/{username}")
     public String getUserPage(@PathVariable("username") String username, Model model) {
         UserPage user = userPageService.getUserByUsername(username);
         if (user != null) {
