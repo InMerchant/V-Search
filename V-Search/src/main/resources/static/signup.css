@@ -54,9 +54,9 @@ form {
 .form-control {
     border-radius: 5px;
     border: 1px solid #ccc;
-    padding: 10px;
     margin-bottom:20px;
     width: 100%;
+    height: 30px;
 }
 
 /* Style the submit button */

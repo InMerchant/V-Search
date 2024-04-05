@@ -1,26 +1,14 @@
 .card-text {
 	color: #6c757d;
-	/* 텍스트 색상 */
 }
 
 .card:hover {
 	transform: translateY(-5px);
-	/* 호버시 약간 들어오도록 애니메이션 */
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-	.navbar-nav .nav-link {
-		font-size: 14px;
-		/* 모바일에서 링크 텍스트 크기 줄임 */
-	}
 }
 
 .card-title {
 	color: #343a40;
-	/* 제목 색상 */
 	font-weight: bold;
-	/* 제목 굵게 */
 }
 
 .card-group {
@@ -29,18 +17,30 @@
 }
 
 .custom-card {
-	width: calc(16.6667% - 20px); /* 한 줄에 6개의 카드가 나오도록 너비 조정 */
+	width: calc(16.6667% - 20px);
+	text-align: center;
 	margin: 10px;
+	height: 200px;
 	padding: 10px;
 	box-sizing: border-box;
-	/* 여백 포함하여 너비 설정 */
-	background-color: #f8f9fa; /* 배경색 추가 */
-	border-radius: 10px; /* 모서리 둥글게 */
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
-	transition: transform 0.3s ease; /* 호버 시 애니메이션 속도 조정 */
+	background-color: #f8f9fa;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease;
 }
 
 .custom-card:hover {
 	transform: translateY(-8px);
-	/* 호버시 좀 더 들어오도록 애니메이션 변경 */
+}
+
+@media (max-width: 768px) {
+	.navbar-nav .nav-link {
+		font-size: 14px;
+	}
+}
+
+.card-group-container {
+	display: flex;
+	justify-content: center;
+	/* 가로 가운데 정렬 */
 }
