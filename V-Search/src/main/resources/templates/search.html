@@ -28,21 +28,9 @@
     <!-- 페이징 -->
     <div th:if="${searchPage != null}">
         <ul class="pagination">
-            <!-- 이전 페이지로 이동하는 링크 -->
-            <li th:class="${searchPage.first ? 'disabled' : ''}">
-                <a th:if="${not searchPage.first}" th:href="@{'/search?keyword=' + ${keyword} + '&page=1'}">&laquo;</a>
-            </li>
             <!-- 페이지 번호 출력 -->
             <li th:each="i : ${#numbers.sequence(1, searchPage.totalPages)}" th:class="${searchPage.number + 1 == i ? 'active' : ''}">
                 <a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${i - 1}}" th:text="${i}"></a>
-            </li>
-            <!-- 다음 페이지로 이동하는 링크 -->
-            <li th:class="${searchPage.last ? 'disabled' : ''}">
-                <a th:if="${not searchPage.last}" th:href="@{'/search?keyword=' + ${keyword} + '&page=' + (${searchPage.number + 1})}">&gt;</a>
-            </li>
-            <!-- 마지막 페이지로 이동하는 링크 -->
-            <li th:class="${searchPage.last ? 'disabled' : ''}">
-                <a th:if="${not searchPage.last}" th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.totalPages}}">&raquo;</a>
             </li>
         </ul>
     </div>
