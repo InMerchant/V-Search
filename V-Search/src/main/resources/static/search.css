@@ -1,0 +1,66 @@
+#main {
+	padding-top:20px;
+    padding-bottom: 50px;
+    text-align: center;
+}
+
+.pagination {
+    display: inline-block;
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    z-index: 999;
+}
+
+.pagination li {
+    display: inline;
+    margin-right: 5px;
+}
+
+.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+
+.pagination li a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination li a:hover:not(.active) {
+    background-color: #ddd;
+}
+
+/* Bootstrap 카드 스타일 */
+.card-result {
+    text-align: center;
+    width: 100%;
+    height: 63px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.card-result:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-result p {
+    margin-bottom: 0;
+}
+
+.card-result-container {
+    text-align: center;
+    margin: 0 auto; /* 가운데 정렬을 위한 margin 추가 */
+    width: 50%; /* 가로 너비 설정 */
+}
