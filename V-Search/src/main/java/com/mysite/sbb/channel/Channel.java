@@ -16,6 +16,8 @@ public class Channel {
 
     @Column(name = "VIDEO_NO")
     private int videoNumber;
-    
+  
+    @Column(name = "USER_NO")
+    private int userNumber;
     
 }

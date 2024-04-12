@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Videos</title>
+</head>
+<body>
+    <h1>User Videos</h1>
+    <ul>
+        <!-- Iterate over the videos and display them -->
+        <li th:each="video : ${videos}" th:text="${video.videoName}"></li>
+    </ul>
+</body>
+</html>
