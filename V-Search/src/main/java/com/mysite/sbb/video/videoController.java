@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.sbb.ResponseDto;
 import com.mysite.sbb.User.UserService;
-import com.mysite.sbb.recommend.RecommendService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +38,6 @@ public class videoController {
 	private videoService videoService;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private RecommendService recommendService;
 	
 	@GetMapping(value="/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
@@ -49,13 +46,7 @@ public class videoController {
 	    model.addAttribute("videoData", base64EncodedVideoData);
 	    
 	    
-	    // 비디오 추천 상태 및 추천 수를 가져옴
-	    videoService.recommendTest(videoNo); // 추천 상태 및 추천 수를 설정
-	    
-	    // 해당 비디오에 대한 추천 상태와 추천 수를 모델에 추가
-	    video video = videoService.getVideoByNo(videoNo);
-	    model.addAttribute("recommendState", video.isRecommend_state());
-	    model.addAttribute("recommendCount", video.getRecommend_count());
+	   
 	    
 	    
 	    return "videoDetail";
@@ -94,20 +85,6 @@ public class videoController {
         return "test";
     }
     
-    @PostMapping("/video/{no}/recommend")
-    public ResponseDto<Integer> recommend(@PathVariable("no") long video_no) {
-    	String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    	int userNo = userService.getUserNO(username);
-    	recommendService.recommend(video_no, userNo);
-        return new ResponseDto<Integer>(HttpStatus.CREATED.value(), 1);
-    }
-
-    @DeleteMapping("/video/{no}/recommend")
-    public ResponseDto<Integer> cancelRecommend(@PathVariable("no") Long video_no) {
-    	String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    	int userNo = userService.getUserNO(username);
-        recommendService.cancelRecommend(video_no, userNo);
-        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
-    }
+    
     
 }

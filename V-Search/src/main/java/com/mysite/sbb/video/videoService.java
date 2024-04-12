@@ -18,7 +18,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.mysite.sbb.User.UserService;
-import com.mysite.sbb.recommend.Recommend;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -96,18 +95,7 @@ public class videoService {
         return vR.findByVideoNo(videoNo);
     }
 	
-	@Transactional
-	public void recommendTest(int videoNo) {
-	    video video = getVideoByNo(videoNo);
-	    
-	    List<Recommend> recommends = video.getRecommends();
-	    if (recommends != null) {
-	        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-	        int userNo = userService.getUserNO(username);
-	        // 수정: 목록이 null이 아닌 경우에만 사이즈를 가져와 설정
-	        video.setRecommend_count(recommends.size());
-	    }
-	}
+	
 
 
 }

@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-import com.mysite.sbb.recommend.Recommend;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,13 +30,4 @@ public class video {
 	@Lob
 	private byte[] STORAGE;
 	private String VIDEO_NAME;
-	
-	@OneToMany(mappedBy = "VIDEO", cascade = CascadeType.REMOVE)
-    private List<Recommend> recommends;
-
-    @Transient
-    private boolean recommend_state;
-
-    @Transient
-    private int recommend_count;
 }
