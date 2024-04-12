@@ -31,13 +31,17 @@ import com.mysite.sbb.User.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+import com.mysite.sbb.delvideo.DelService;
+
 @RequiredArgsConstructor
 @Controller
 public class videoController {
-	@Autowired
-	private videoService videoService;
-	@Autowired
-	private UserService userService;
+	  @Autowired
+	    private videoService videoService;
+	    @Autowired
+	    private UserService userService;
+	    @Autowired
+	    private DelService delService;
 	
 	@GetMapping(value="/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
@@ -45,12 +49,22 @@ public class videoController {
 	    String base64EncodedVideoData = Base64.getEncoder().encodeToString(videoData);
 	    model.addAttribute("videoData", base64EncodedVideoData);
 	    
-	    
-	   
-	    
-	    
 	    return "videoDetail";
 	}
+
+	@PostMapping("/delvideos/{videoNo}")
+	public void deleteVideo(@PathVariable("videoNo") String videoNoString) {
+	    try {
+	        int videoNo = Integer.parseInt(videoNoString);
+	        delService.deleteVideo(videoNo);
+	    } catch (NumberFormatException e) {
+	        // 경로 변수를 정수로 변환할 수 없는 경우 예외 처리
+	        throw new IllegalArgumentException("Invalid video number: " + videoNoString);
+	    }
+	}
+
+
+
 	
 	@GetMapping("/")
 	public String mainPage(Model model) {
