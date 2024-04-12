@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Videos</title>
+    <title>채널</title>
 </head>
 <body>
-    <h1>User Videos</h1>
+    <h1>채널</h1>
     <ul>
-        <!-- Iterate over the videos and display them -->
+        <!-- 비디오 출력 장소 -->
         <li th:each="video : ${videos}" th:text="${video.videoName}"></li>
     </ul>
 </body>
