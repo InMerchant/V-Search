@@ -11,9 +11,10 @@
 		<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
 		<!-- 다른 동영상 형식에 대한 소스 추가 -->
 	</video>
-	<form action="/delvideos/${videoNumber}" method="POST">
-	    <input type="hidden" name="_method" value="DELETE">
-	    <input type="submit" value="동영상 삭제">
+	<form th:action="@{'/delvideos/' + ${videoNo}}" method="POST">
+
+		<input type="hidden" name="_method" value="DELETE">
+		<input type="submit" value="동영상 삭제">
 	</form>
 </body>
 

@@ -48,7 +48,7 @@ public class videoController {
 	    byte[] videoData = videoService.videoPlay(videoNo);
 	    String base64EncodedVideoData = Base64.getEncoder().encodeToString(videoData);
 	    model.addAttribute("videoData", base64EncodedVideoData);
-	    
+	    model.addAttribute("videoNo", videoNo);
 	    return "videoDetail";
 	}
 
