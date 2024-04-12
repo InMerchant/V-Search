@@ -41,5 +41,4 @@ public class video {
 
     @Transient
     private int recommend_count;
-
 }

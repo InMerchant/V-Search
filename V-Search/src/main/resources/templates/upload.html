@@ -34,6 +34,18 @@
 			<div class="text-container">
 				<textarea name="title" placeholder="제목을 입력 해주세요!"></textarea>
 			</div>
+			<div class="radio-group">
+				<label>
+					<input type="radio" name="summary" value="1">
+					요약 O
+				</label>
+			</div>
+			<div class="radio-group">
+				<label>
+					<input type="radio" name="language" value="0">
+					요약 X
+				</label>
+			</div>
 		</div>
 		<div class="upload-container">
 			<button type="submit" class="upload">업로드</button>
@@ -100,6 +112,7 @@
 				var formData = new FormData();
 				formData.append('file', file);
 				formData.append('title', title);
+				formData.append('summary', radioValue);
 
 				// Ajax로 서버에 데이터 전송
 				var xhr = new XMLHttpRequest();
