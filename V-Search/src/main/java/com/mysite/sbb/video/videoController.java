@@ -37,9 +37,9 @@ import lombok.RequiredArgsConstructor;
 public class videoController {
 	@Autowired
 	private videoService videoService;
-	
+	@Autowired
 	private UserService userService;
-	
+	@Autowired
 	private RecommendService recommendService;
 	
 	@GetMapping(value="/video/{no}")
@@ -47,9 +47,16 @@ public class videoController {
 	    byte[] videoData = videoService.videoPlay(videoNo);
 	    String base64EncodedVideoData = Base64.getEncoder().encodeToString(videoData);
 	    model.addAttribute("videoData", base64EncodedVideoData);
-
-	    //비디오 추천기능 테스트용
-	    videoService.recommendTest();
+	    
+	    
+	    // 비디오 추천 상태 및 추천 수를 가져옴
+	    videoService.recommendTest(videoNo); // 추천 상태 및 추천 수를 설정
+	    
+	    // 해당 비디오에 대한 추천 상태와 추천 수를 모델에 추가
+	    video video = videoService.getVideoByNo(videoNo);
+	    model.addAttribute("recommendState", video.isRecommend_state());
+	    model.addAttribute("recommendCount", video.getRecommend_count());
+	    
 	    
 	    return "videoDetail";
 	}
@@ -88,9 +95,9 @@ public class videoController {
     }
     
     @PostMapping("/video/{no}/recommend")
-    public ResponseDto<Integer> recommend(@PathVariable("no") Long video_no) {
+    public ResponseDto<Integer> recommend(@PathVariable("no") long video_no) {
     	String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    	long userNo = userService.getUserNO(username);
+    	int userNo = userService.getUserNO(username);
     	recommendService.recommend(video_no, userNo);
         return new ResponseDto<Integer>(HttpStatus.CREATED.value(), 1);
     }
@@ -98,7 +105,7 @@ public class videoController {
     @DeleteMapping("/video/{no}/recommend")
     public ResponseDto<Integer> cancelRecommend(@PathVariable("no") Long video_no) {
     	String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    	long userNo = userService.getUserNO(username);
+    	int userNo = userService.getUserNO(username);
         recommendService.cancelRecommend(video_no, userNo);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }

@@ -1,0 +1,24 @@
+.userpage {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 20px;
+	text-align: center;
+}
+
+.userpage h2 {
+	color: #333;
+}
+
+.userpage button {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.userpage button:hover {
+	background-color: #0056b3;
+}
