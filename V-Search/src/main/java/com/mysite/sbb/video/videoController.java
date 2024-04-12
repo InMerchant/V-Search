@@ -64,7 +64,7 @@ public class videoController {
     }
     @PostMapping("/upload")
     @Secured("ROLE_USER") 
-    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,Model model) {
+    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("summary") int summary,Model model) {
     	System.out.println("File object: " + file);
     	System.out.println("File size: " + file.getSize());
     	if ((file == null ||  file.isEmpty()) || (title == null || title.isEmpty())) {
@@ -72,7 +72,7 @@ public class videoController {
     	    return "uploadResult";
     	}
         try {
-            videoService.uploadFile(file,title); 
+            videoService.uploadFile(file,title,summary); 
             model.addAttribute("message", "File uploaded successfully: " + file.getOriginalFilename());
         } catch (Exception e) {
             model.addAttribute("message", "Failed to upload file: " + file.getOriginalFilename());

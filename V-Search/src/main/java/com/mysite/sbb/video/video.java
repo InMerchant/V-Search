@@ -25,7 +25,7 @@ public class video {
 	@Id
 	@Column(name="VIDEO_NO")
 	private int videoNo;
-	
+	private int summary_chk;
 	private int USER_NO;
 	@Lob
 	private byte[] STORAGE;

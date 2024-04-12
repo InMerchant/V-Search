@@ -42,7 +42,7 @@
 			</div>
 			<div class="radio-group">
 				<label>
-					<input type="radio" name="language" value="0">
+					<input type="radio" name="summary" value="0">
 					요약 X
 				</label>
 			</div>
@@ -107,6 +107,7 @@
 				var titleInput = document.querySelector('textarea[name="title"]');
 				var file = fileInput.files[0];
 				var title = titleInput.value;
+				var radioValue = document.querySelector('input[name="summary"]:checked').value; 
 
 				// FormData 생성
 				var formData = new FormData();

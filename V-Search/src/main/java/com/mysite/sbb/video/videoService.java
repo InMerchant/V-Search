@@ -42,7 +42,7 @@ public class videoService {
 	}
    
    @Transactional
-   public void uploadFile(MultipartFile file, String title) throws IOException {
+   public void uploadFile(MultipartFile file, String title,int summary) throws IOException {
        // 파일명에 UUID를 추가하여 중복을 방지합니다.
        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
        String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -52,7 +52,7 @@ public class videoService {
        video.setUSER_NO(userNo); 
        video.setVIDEO_NAME(title);
        video.setSTORAGE(fileBytes); 
-
+       video.setSummary_chk(summary);
        // 비디오 엔티티 저장
        vR.save(video);
    }
