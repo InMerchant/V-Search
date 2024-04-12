@@ -1,87 +1,127 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
+
 <head>
-    <link rel="stylesheet" type="text/css" th:href="@{/upload.css}">
-    
+	<link rel="stylesheet" type="text/css" th:href="@{/upload.css}">
+
 </head>
+
 <body layout:fragment="content">
-	 <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
-	    <div id="root">
-	        <h2>파일 업로드</h2>
-	        <hr>
-	        <div class="contents">
-	            <div class="upload-box">
-	                <div id="drop-file" class="drag-file" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" ondragenter="dragEnterHandler(event)" ondragleave="dragLeaveHandler(event)">
-	                    <img src="https://img.icons8.com/pastel-glyph/2x/image-file.png" alt="파일 아이콘" class="image">
-	                    <p class="message">Drag files to upload</p>
-	                </div>
-	                <label class="file-label" for="chooseFile">파일 선택</label>
-	                <input type="file" id="chooseFile" name="file" accept="video/*" onchange="handleFiles(this.files)"><br><br>
-	            </div>
-	            <div id="uploadPreview" class="upload-container"></div> <!-- 추가된 엘리먼트 -->
-	            <div id="files" class="files">
-			        <div class="white-container" id="whiteContainer">
-			        <div class="preview-container" id="previewContainer">
-			        </div>
-	            </div>
-	        </div>
-	    	</div>
-		    <div class="text-container">
+	<form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+		<div id="root">
+			<div class="contents">
+				<div class="upload-box">
+					<div id="drop-file" class="drag-file" ondrop="dropHandler(event)"
+						ondragover="dragOverHandler(event)" ondragenter="dragEnterHandler(event)"
+						ondragleave="dragLeaveHandler(event)">
+						<img src="https://img.icons8.com/pastel-glyph/2x/image-file.png" alt="파일 아이콘" class="image">
+						<p class="message">Drag files to upload</p>
+					</div>
+					<label class="file-label" for="chooseFile">파일 선택</label>
+					<input type="file" id="chooseFile" name="file" accept="video/*"
+						onchange="handleFiles(this.files)"><br><br>
+				</div>
+				<div id="uploadPreview" class="upload-container"></div> <!-- 추가된 엘리먼트 -->
+				<div id="files" class="files">
+					<div class="white-container" id="whiteContainer">
+						<div class="preview-container" id="previewContainer">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="text-container">
 				<textarea name="title" placeholder="제목을 입력 해주세요!"></textarea>
 			</div>
-		    <div class="upload-container">
-				<button type="submit">업로드</button>
-			</div>
-    	</div>
-    </form>
-    <script>
-        function dropHandler(event) {
-		    event.preventDefault();
-		    var file = event.dataTransfer.files[0];
-		    console.log(file);
-		    if (file) {
-		        previewFile(file);
-		        var formData = new FormData();
-       			formData.append('file', file);
-       			var uploadForm = document.getElementById('uploadForm');
-		    }
+		</div>
+		<div class="upload-container">
+			<button type="submit">업로드</button>
+		</div>
+	</form>
+	<script>
+		function dropHandler(event) {
+			event.preventDefault();
+			var file = event.dataTransfer.files[0];
+			console.log(file);
+			if (file) {
+				var fileInput = document.getElementById('chooseFile');
+				fileInput.files = event.dataTransfer.files;
+				previewFile(file);
+			}
 		}
 
-        
-        function dragOverHandler(event) {
-            event.preventDefault();
-        }
-        
-        function dragEnterHandler(event) {
-            event.preventDefault();
-        }
-        
-        function dragLeaveHandler(event) {
-            event.preventDefault();
-        }
-        
-        function handleFiles(files) {
-		    var file = files[0];
-		    console.log(file)
-		    if (file) {
-		        previewFile(file);
-		    }
+
+		function dragOverHandler(event) {
+			event.preventDefault();
 		}
-        // 파일 미리보기 함수
-        function previewFile(file) {
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var video = document.createElement('video');
-                video.controls = true;
-                video.src = event.target.result;
-                video.style.maxWidth = "100%";
-                video.style.maxHeight = "100%";
-                document.getElementById('previewContainer').innerHTML = ''; // 기존 내용 지우기
-                document.getElementById('previewContainer').appendChild(video);
-            };
-            reader.readAsDataURL(file);
-        }
-    </script>
+
+		function dragEnterHandler(event) {
+			event.preventDefault();
+		}
+
+		function dragLeaveHandler(event) {
+			event.preventDefault();
+		}
+
+		function handleFiles(files) {
+			var file = files[0];
+			console.log(file)
+			if (file) {
+				previewFile(file);
+			}
+		}
+		// 파일 미리보기 함수
+		function previewFile(file) {
+			var reader = new FileReader();
+			reader.onload = function (event) {
+				var video = document.createElement('video');
+				video.controls = true;
+				video.src = event.target.result;
+				video.style.maxWidth = "100%";
+				video.style.maxHeight = "100%";
+				document.getElementById('previewContainer').innerHTML = ''; // 기존 내용 지우기
+				document.getElementById('previewContainer').appendChild(video);
+			};
+			reader.readAsDataURL(file);
+		}
+		document.addEventListener("DOMContentLoaded", function () {
+			var uploadForm = document.getElementById('uploadForm');
+			uploadForm.addEventListener('submit', function (event) {
+				event.preventDefault(); // 기본 submit 동작 막기
+
+
+				var fileInput = document.getElementById('chooseFile');
+				var titleInput = document.querySelector('textarea[name="title"]');
+				var file = fileInput.files[0];
+				var title = titleInput.value;
+
+				// FormData 생성
+				var formData = new FormData();
+				formData.append('file', file);
+				formData.append('title', title);
+
+				// Ajax로 서버에 데이터 전송
+				var xhr = new XMLHttpRequest();
+				xhr.open('POST', '/upload', true);
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						// 업로드 성공 시 처리할 내용
+						console.log('Upload successful');
+						// 추가적인 작업이 필요하면 여기에 추가하세요.
+					} else {
+						// 업로드 실패 시 처리할 내용
+						console.error('Upload failed');
+					}
+				};
+				xhr.onerror = function () {
+					// 통신 오류 시 처리할 내용
+					console.error('Communication error');
+				};
+				xhr.send(formData);
+			});
+		});
+
+	</script>
 </body>
+
 </html>

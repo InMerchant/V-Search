@@ -47,16 +47,13 @@ public class videoService {
    public void uploadFile(MultipartFile file, String title) throws IOException {
        // 파일명에 UUID를 추가하여 중복을 방지합니다.
        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-       Path filePath = Paths.get(uploadDir, fileName);
-       // 파일을 지정된 경로에 저장합니다.
-       Files.write(filePath, file.getBytes());
        String username = SecurityContextHolder.getContext().getAuthentication().getName();
        int userNo = userService.getUserNO(username);
-      
+       byte[] fileBytes = file.getBytes();
        video video = new video();
        video.setUSER_NO(userNo); 
        video.setVIDEO_NAME(title);
-       video.setSTORAGE(Files.readAllBytes(filePath)); 
+       video.setSTORAGE(fileBytes); 
 
        // 비디오 엔티티 저장
        vR.save(video);
