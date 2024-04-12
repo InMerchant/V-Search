@@ -210,7 +210,7 @@ textarea {
 	text-align: center;
 }
 
-button[type="submit"] {
+button[class="upload"] {
 	background-color: #4CAF50;
 	/* 배경색 */
 	color: white;
@@ -228,7 +228,7 @@ button[type="submit"] {
 }
 
 /* 버튼 호버 효과 */
-button[type="submit"]:hover {
+button[class="upload"]:hover {
 	background-color: #5b975b;
 	/* 호버 배경색 */
 }

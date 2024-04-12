@@ -3,6 +3,7 @@
 	layout:decorate="~{layout/layout}">
 
 <head>
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 	<link rel="stylesheet" type="text/css" th:href="@{/upload.css}">
 
 </head>
@@ -35,7 +36,7 @@
 			</div>
 		</div>
 		<div class="upload-container">
-			<button type="submit">업로드</button>
+			<button type="submit" class="upload">업로드</button>
 		</div>
 	</form>
 	<script>
@@ -107,7 +108,8 @@
 					if (xhr.status === 200) {
 						// 업로드 성공 시 처리할 내용
 						console.log('Upload successful');
-						// 추가적인 작업이 필요하면 여기에 추가하세요.
+						window.location.href = "/"
+
 					} else {
 						// 업로드 실패 시 처리할 내용
 						console.error('Upload failed');

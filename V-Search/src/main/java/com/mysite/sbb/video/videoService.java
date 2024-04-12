@@ -42,7 +42,6 @@ public class videoService {
 	    return vR.findAllVideoNamesAndUserNumbers();
 	}
    
-   private final String uploadDir = "\\\\192.168.34.15\\last_project"; // 실제 파일을 업로드할 디렉토리 경로를 지정합니다.
    @Transactional
    public void uploadFile(MultipartFile file, String title) throws IOException {
        // 파일명에 UUID를 추가하여 중복을 방지합니다.
