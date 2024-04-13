@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mysite.sbb.ResponseDto;
 import com.mysite.sbb.User.UserService;
@@ -53,10 +54,13 @@ public class videoController {
 	}
 
 	@PostMapping("/delvideos/{videoNo}")
-	public void deleteVideo(@PathVariable("videoNo") String videoNoString) {
+	public String deleteVideo(@PathVariable("videoNo") String videoNoString, RedirectAttributes redirectAttributes) {
 	    try {
 	        int videoNo = Integer.parseInt(videoNoString);
 	        delService.deleteVideo(videoNo);
+	        
+	        redirectAttributes.addFlashAttribute("message", "동영상이 성공적으로 삭제되었습니다.");
+	        return "redirect:/"; // 사용자의 동영상 목록 페이지로 리다이렉션
 	    } catch (NumberFormatException e) {
 	        // 경로 변수를 정수로 변환할 수 없는 경우 예외 처리
 	        throw new IllegalArgumentException("Invalid video number: " + videoNoString);
@@ -64,8 +68,6 @@ public class videoController {
 	}
 
 
-
-	
 	@GetMapping("/")
 	public String mainPage(Model model) {
 		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbers();

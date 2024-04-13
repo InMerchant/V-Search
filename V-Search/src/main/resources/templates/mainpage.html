@@ -19,7 +19,30 @@
 			</div>
 		</div>
 	</div>
+	 <div th:if="${message}" class="alert alert-success" role="alert" id="flash-message">
+    <p th:text="${message}"></p>
+	</div>
+
 	<script th:src="@{/bootstrap.min.js}"></script>
+	
+	
+	<script>
+    // 페이지가 로드될 때 메시지를 숨기는 함수
+    function hideMessage() {
+        var messageElement = document.getElementById("flash-message");
+        if (messageElement) {
+            // 5초 후에 메시지를 숨김
+            setTimeout(function() {
+                messageElement.style.display = "none";
+            }, 5000); // 5초
+        }
+    }
+
+    // 페이지 로드 시 호출하여 메시지를 숨김
+    window.onload = hideMessage;
+</script>
+
+
 </body>
 
 </html>
