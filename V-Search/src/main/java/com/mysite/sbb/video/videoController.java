@@ -57,15 +57,19 @@ public class videoController {
 	public String deleteVideo(@PathVariable("videoNo") String videoNoString, RedirectAttributes redirectAttributes) {
 	    try {
 	        int videoNo = Integer.parseInt(videoNoString);
-	        delService.deleteVideo(videoNo);
-	        
-	        redirectAttributes.addFlashAttribute("message", "동영상이 성공적으로 삭제되었습니다.");
+	        boolean deletionResult = delService.deleteVideo(videoNo);
+	        if (deletionResult) {
+	            redirectAttributes.addFlashAttribute("message", "동영상이 성공적으로 삭제되었습니다.");
+	        } else {
+	            redirectAttributes.addFlashAttribute("message", "동영상 삭제에 실패하였습니다. 다시 시도해주세요.");
+	        }
 	        return "redirect:/"; // 사용자의 동영상 목록 페이지로 리다이렉션
 	    } catch (NumberFormatException e) {
 	        // 경로 변수를 정수로 변환할 수 없는 경우 예외 처리
 	        throw new IllegalArgumentException("Invalid video number: " + videoNoString);
 	    }
 	}
+
 
 
 	@GetMapping("/")

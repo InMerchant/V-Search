@@ -17,7 +17,7 @@ public class DelService {
     private UserService userService;
 
     @Transactional
-    public void deleteVideo(int videoNo) {
+    public boolean deleteVideo(int videoNo) {
         // 현재 로그인한 사용자의 아이디를 가져옴
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         // 사용자 아이디를 기반으로 사용자 번호를 조회
@@ -30,9 +30,9 @@ public class DelService {
         if (video != null && video.getUsernumber() == userNo) {
             // 동영상 삭제
             entityManager.remove(video);
+            return true; // 삭제 성공
         } else {
-            // 동영상을 삭제할 권한이 없는 경우 예외 발생
-            throw new IllegalStateException("You are not authorized to delete this video.");
+            return false; // 삭제 실패
         }
     }
 }
