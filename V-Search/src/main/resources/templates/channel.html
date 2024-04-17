@@ -3,18 +3,16 @@
 	layout:decorate="~{layout/layout}">
 
 <head>
-	<link rel="stylesheet" type="text/css" th:href="@{/userpage.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/sidebar.css}">
 	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>채널</title>
 </head>
 
 <body layout:fragment="content">
-	<button onclick="toggleSidebar()">toggle</button>
 	<div class="sidebar" id="sidebar">
 		<ul>
-			<li><a th:href="@{'/Member/'+${user.username}}">유저 정보</a></li>
+			<li><a th:href="@{'/Member/'+${username}}">유저 정보</a></li>
 			<li><a th:href="@{'/channel/'+${userNo}}">동영상 목록</a></li>
 		</ul>
 	</div>

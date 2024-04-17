@@ -4,14 +4,13 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" th:href="@{/userpage.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>사용자</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/sidebar.css}">
+		<meta charset=" UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>사용자</title>
 </head>
 
 <body layout:fragment="content">
-	<button onclick="toggleSidebar()">Toggle Sidebar</button>
 	<div class="sidebar" id="sidebar">
 		<ul>
 			<li><a th:href="@{'/Member/'+${user.username}}">유저 정보</a></li>

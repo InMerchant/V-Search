@@ -20,7 +20,14 @@
 		<input type="hidden" name="_method" value="DELETE">
 		<input type="submit" value="동영상 삭제">
 	</form>
-    <p>Recommendations: <span th:text="${recommendationsCount}"></span></p>
+
+	<form th:action="@{'/api/subscribe/'+${videoNo}}" method="POST">
+		<button type="submit">구독</button>
+	</form>
+	<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET">
+		<button type="submit">구독취소</button>
+	</form>
+	<p>Recommendations: <span th:text="${recommendationsCount}"></span></p>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

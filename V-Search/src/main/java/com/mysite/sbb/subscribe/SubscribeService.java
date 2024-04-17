@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class SubscribeService {
-	
+
 	private final SubscribeRepository subscribeRepository;
-	
+
 	@Transactional
 	public void subscribe(int fromUserId, int toUserId) {
 		try {
@@ -21,9 +21,9 @@ public class SubscribeService {
 			throw new CustomApiException("이미 구독을 하였습니다.");
 		}
 	}
-	
+
 	@Transactional
-	public void unsubscribe(int fromUserId, int toUserId) {
+	public void unSubscribe(int fromUserId, int toUserId) {
 		subscribeRepository.mUnSubscribe(fromUserId, toUserId);
 	}
 }

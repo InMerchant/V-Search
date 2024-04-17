@@ -1,6 +1,7 @@
 package com.mysite.sbb.channel;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +18,11 @@ public class ChannelController {
     public String getVideosByUserNumber(@PathVariable("userNumber") int userNumber, Model model) {
         try {
             List<Channel> videos = channelService.getVideosByUserNumber(userNumber);
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
             if (videos.isEmpty()) {
                 return "noVideosFound"; 
             }
+            model.addAttribute("username", username);
             model.addAttribute("videos", videos);
             model.addAttribute("userNo",userNumber);
             return "channel";
