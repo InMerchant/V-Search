@@ -10,12 +10,13 @@ import lombok.Data;
 @Entity
 @Table(name = "RECOMMEND", schema = "bae")
 public class Recommend {
-    @Id
+   
     @Column(name = "VIDEO_NO")
-    private Long videoNo;
-
+    private int videoNo;
+    
+    @Id
     @Column(name = "USER_NO")
-    private int userNo; // userNo는 문자열로 설정합니다.
+    private int userNo; //
 
     @Column(name = "RECOMMEND_CHK")
     private boolean recommendCheck;

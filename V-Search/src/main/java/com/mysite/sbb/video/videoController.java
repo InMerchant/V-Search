@@ -97,8 +97,13 @@ public class videoController {
 	    }
 
 	    @PostMapping("/recommend/toggle/{videoNo}")
-	    public void toggleRecommendation(@PathVariable("videoNo") int videoNo) {
-	        recommendService.toggleRecommendation(videoNo);
+	    public ResponseEntity<String> toggleRecommendation(@PathVariable("videoNo") int videoNo) {
+	        try {
+	            recommendService.toggleRecommendation(videoNo);
+	            return ResponseEntity.ok("Recommendation toggled successfully");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error toggling recommendation: " + e.getMessage());
+	        }
 	    }
 	}
 
