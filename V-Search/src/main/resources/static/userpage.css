@@ -22,22 +22,3 @@
 .userpage button:hover {
 	background-color: #0056b3;
 }
-
-.sidebar {
-	width: 200px;
-	height: 100%;
-	left:-200px;
-	position: fixed;
-	transition: left 0.3s ease;
-}
-
-.sidebar.active {
-	left: 0;
-}
-
-.toggle-button {
-	position: fixed;
-	left: 10px;
-	top: 0;
-
-}
