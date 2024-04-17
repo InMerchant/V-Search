@@ -18,13 +18,12 @@ public class ChannelController {
         try {
             List<Channel> videos = channelService.getVideosByUserNumber(userNumber);
             if (videos.isEmpty()) {
-                // Handle case when no videos found for the userNumber
-                return "noVideosFound"; // You can replace "noVideosFound" with an appropriate view name
+                return "noVideosFound"; 
             }
             model.addAttribute("videos", videos);
+            model.addAttribute("userNo",userNumber);
             return "channel";
         } catch (Exception e) {
-            // Handle case when userNumber is not provided in the request
             return "userNumberNotFound"; // You can replace "userNumberNotFound" with an appropriate view name
         }
     }

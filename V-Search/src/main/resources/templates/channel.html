@@ -1,15 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>채널</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/userpage.css}">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>채널</title>
 </head>
-<body>
-    <h1>채널</h1>
-    <ul>
-        <!-- 비디오 출력 장소  -->
-        <li th:each="video : ${videos}" th:text="${video.videoName}"></li>
-    </ul>
+
+<body layout:fragment="content">
+	<button onclick="toggleSidebar()">toggle</button>
+	<div class="sidebar" id="sidebar">
+		<ul>
+			<li><a th:href="@{'/Member/'+${user.username}}">유저 정보</a></li>
+			<li><a th:href="@{'/channel/'+${userNo}}">동영상 목록</a></li>
+		</ul>
+	</div>
+	<h1>채널</h1>
+	<ul>
+		<!-- 비디오 출력 장소  -->
+		<li th:each="video : ${videos}" th:text="${video.videoName}"></li>
+	</ul>
+	<script>
+		function toggleSidebar() {
+			var sidebar = document.getElementById("sidebar");
+			sidebar.classList.toggle("active");
+		}
+	</script>
 </body>
+
 </html>
