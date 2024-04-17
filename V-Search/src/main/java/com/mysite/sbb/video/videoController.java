@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,12 +31,18 @@ import com.mysite.sbb.ResponseDto;
 import com.mysite.sbb.User.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.mysite.sbb.delvideo.DelService;
+import com.mysite.sbb.recommend.Recommend;
+import com.mysite.sbb.recommend.RecommendRepository;
+import com.mysite.sbb.recommend.RecommendService;
+
 
 @RequiredArgsConstructor
 @Controller
+@EnableTransactionManagement
 public class videoController {
 	  @Autowired
 	    private videoService videoService;
@@ -70,8 +77,22 @@ public class videoController {
 	    }
 	}
 
+	@Controller
+	public class RecommendController {
+	    private final RecommendService recommendService;
 
+	    public RecommendController(RecommendService recommendService) {
+	        this.recommendService = recommendService;
+	    }
 
+	    @GetMapping("/recommend/toggle")
+	    public String toggleRecommendation(@RequestParam("videoNo") int videoNo) {
+	        recommendService.toggleRecommendation(videoNo);
+	        return "redirect:/video/" + videoNo; // Assuming there's a page to display the video details
+	    }
+	}
+
+	
 	@GetMapping("/")
 	public String mainPage(Model model) {
 		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbers();

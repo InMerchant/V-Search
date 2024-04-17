@@ -35,6 +35,10 @@ dependencies {
     implementation 'org.commonmark:commonmark:0.21.0'
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-parameters"
+}
+
 
 tasks.named('test') {
 	useJUnitPlatform()

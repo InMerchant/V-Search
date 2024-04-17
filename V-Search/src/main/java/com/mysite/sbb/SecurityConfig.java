@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/withdraw")).authenticated() // /withdraw에 대한 접근 권한을 인증된 사용자로 설정
                 .requestMatchers(new AntPathRequestMatcher("/uploadForm")).authenticated() // /uploadForm에 대한 접근 권한을 인증된 사용자로 설정
                 .requestMatchers(new AntPathRequestMatcher("/Member/**")).authenticated() //userpage에 대한 접근 권한을 인증된 사용자로 설정
+                .requestMatchers(new AntPathRequestMatcher("/delvideos/**")).authenticated() //삭제에 대한 접근 권한을 인증된 사용자로 설정
                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()) // 나머지 모든 요청은 모든 사용자에게 허용
             .csrf().disable()
             .headers((headers) -> headers

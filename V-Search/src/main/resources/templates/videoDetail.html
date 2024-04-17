@@ -11,11 +11,19 @@
 		<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
 		<!-- 다른 동영상 형식에 대한 소스 추가 -->
 	</video>
-	<form th:action="@{'/delvideos/' + ${videoNo}}" method="POST">
+	
+				<form action="@{'/recommend/toggle/'+ ${videoNo}}" method="get">
+				    <button type="submit">추천</button>
+				</form>
 
+    
+    
+	<form th:action="@{'/delvideos/' + ${videoNo}}" method="POST">
 		<input type="hidden" name="_method" value="DELETE">
 		<input type="submit" value="동영상 삭제">
 	</form>
-</body>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</body>
 </html>
