@@ -4,18 +4,26 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" th:href="@{/userpage.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>사용자</title>
 </head>
 
 <body layout:fragment="content">
+	<button onclick="toggleSidebar()">Toggle Sidebar</button>
+	<div class="sidebar" id="sidebar">
+		<ul>
+			<li><a th:href="@{'/Member/'+${user.username}}">유저 정보</a></li>
+			<li><a th:href="@{'/channel/'+${userNo}}">동영상 목록</a></li>
+			<!-- 필요한 만큼 항목 추가 -->
+		</ul>
+	</div>
 	<div class="userpage">
 		<h2><span th:text="${user.username}">의 페이지</span></h2>
 		<h5>아이디 : <span th:text="${user.username}"></span></h5>
 		<button onclick="confirmWithdraw()">회원 탈퇴</button>
 	</div>
-
 
 	<script>
 		function confirmWithdraw() {
@@ -24,6 +32,11 @@
 				window.location.href = "/withdraw";
 			}
 		}
+		function toggleSidebar() {
+			var sidebar = document.getElementById("sidebar");
+			sidebar.classList.toggle("active");
+		}
+
 	</script>
 </body>
 

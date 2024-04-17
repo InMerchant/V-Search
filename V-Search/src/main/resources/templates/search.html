@@ -4,6 +4,7 @@
 
 <head>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" th:href="@{/search.css}">
 </head>
@@ -37,7 +38,7 @@
 				<!-- 이전 페이지로 이동하는 버튼 -->
 				<li th:if="${searchPage.number > 0}">
 					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number - 1}}">
-						<</a>
+						<< /a>
 				</li>
 				<!-- 페이지 번호 출력 -->
 				<li th:each="i : ${#numbers.sequence(1, searchPage.totalPages)}"
