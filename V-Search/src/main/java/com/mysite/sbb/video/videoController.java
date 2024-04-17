@@ -41,6 +41,9 @@ import com.mysite.sbb.recommend.RecommendRepository;
 import com.mysite.sbb.recommend.RecommendService;
 
 
+
+
+
 @RequiredArgsConstructor
 @Controller
 @EnableTransactionManagement
@@ -51,13 +54,16 @@ public class videoController {
 	    private UserService userService;
 	    @Autowired
 	    private DelService delService;
-	
+	    private final RecommendService recommendService;
+
 	@GetMapping(value="/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
 	    byte[] videoData = videoService.videoPlay(videoNo);
 	    String base64EncodedVideoData = Base64.getEncoder().encodeToString(videoData);
 	    model.addAttribute("videoData", base64EncodedVideoData);
 	    model.addAttribute("videoNo", videoNo);
+	    int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
+	    model.addAttribute("recommendationsCount", recommendationsCount);
 	    return "videoDetail";
 	}
 
@@ -94,8 +100,8 @@ public class videoController {
 	    public void toggleRecommendation(@PathVariable("videoNo") int videoNo) {
 	        recommendService.toggleRecommendation(videoNo);
 	    }
-
 	}
+
 
 	
 	@GetMapping("/")

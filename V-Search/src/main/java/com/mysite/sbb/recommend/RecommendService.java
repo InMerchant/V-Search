@@ -34,4 +34,9 @@ public class RecommendService {
             recommendRepository.delete(existingRecommendation);
         }
     }
+    
+    @Transactional(readOnly = true)
+    public int getRecommendationsCountByVideoNo(int videoNo) {
+        return recommendRepository.countByVideoNoAndRecommendCheck(videoNo, true);
+    }
 }
