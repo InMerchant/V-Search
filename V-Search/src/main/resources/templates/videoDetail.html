@@ -12,7 +12,7 @@
 		<!-- 다른 동영상 형식에 대한 소스 추가 -->
 	</video>
 
-	<form th:action="@{'/recommend/toggle/'+ ${videoNo}}" method="get">
+	<form th:action="@{'/recommend/toggle/'+ ${videoNo}}" method="POST">
 		<button type="submit">추천</button>
 	</form>
 

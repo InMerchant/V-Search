@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -77,19 +78,23 @@ public class videoController {
 	    }
 	}
 
-	@Controller
+	
+	  
+	@RestController
 	public class RecommendController {
+
 	    private final RecommendService recommendService;
 
+	    @Autowired
 	    public RecommendController(RecommendService recommendService) {
 	        this.recommendService = recommendService;
 	    }
 
-	    @GetMapping("/recommend/toggle")
-	    public String toggleRecommendation(@RequestParam("videoNo") int videoNo) {
+	    @PostMapping("/recommend/toggle/{videoNo}")
+	    public void toggleRecommendation(@PathVariable("videoNo") int videoNo) {
 	        recommendService.toggleRecommendation(videoNo);
-	        return "redirect:/video/" + videoNo; // Assuming there's a page to display the video details
 	    }
+
 	}
 
 	
