@@ -29,7 +29,7 @@ public class SubscribeApiController {
 		int principalNo = userService.getUserNO(username);
 		Del video = entityManager.find(Del.class, videoNo);
 		int videoUserId=video.getUsernumber();//금요일 클래스화 잊지 말것!
-		subscribeService.subscribe(principalNo, videoUserId);
+		subscribeService.subscribe(principalNo, videoUserId, videoNo);
 		
 		return null;
 	}

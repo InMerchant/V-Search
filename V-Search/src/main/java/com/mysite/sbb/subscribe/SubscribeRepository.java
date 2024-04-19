@@ -8,16 +8,18 @@ import org.springframework.data.repository.query.Param;
 public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
 	
 	@Modifying
-	@Query(value = "INSERT INTO subscribe(fromUserId, toUserId, createDate) VALUES(:fromUserId, :toUserId, SYSDATE)", nativeQuery = true)
-	int mSubscribe(@Param("fromUserId") int fromUserId, @Param("toUserId") int toUserId);
+	@Query(value = "INSERT INTO subscribe(fromUserId, toUserId, videoNo, createDate) VALUES(:fromUserId, :toUserId, :videoNo, SYSDATE)", nativeQuery = true)
+	int mSubscribe(@Param("fromUserId") int fromUserId, @Param("toUserId") int toUserId, @Param("videoNo") int videoNo);
 	
 	@Modifying
 	@Query(value = "DELETE FROM subscribe WHERE fromUserId = :fromUserId AND toUserId = :toUserId", nativeQuery = true)
 	int mUnSubscribe(@Param("fromUserId") int fromUserId, @Param("toUserId") int toUserId);
 	
-	@Query(value = "SELECT COUNT(*) FROM subscribe WHERE fromUserId = :principalId AND toUserId = :videoUserId", nativeQuery = true)
-	int mSubscribeState(int principalId, int videoUserId);
+	@Query(value = "SELECT COUNT(*) FROM subscribe WHERE fromUserId = :fromUserId AND toUserId = :toUserId", nativeQuery = true)
+    int mSubscribeState(@Param("fromUserId") int fromUserId, @Param("toUserId") int toUserId);
 	
-	@Query(value = "SELECT COUNT(*) FROM subscribe WHERE fromUserId = :videoUserId", nativeQuery = true)
-	int mSubscribeCount(int videoUserId);
+	@Query(value = "SELECT COUNT(*) FROM subscribe WHERE videoNo = :videoNo", nativeQuery = true)
+	int mSubscribeCount(@Param("videoNo")int videoNo);
+	
+	
 }

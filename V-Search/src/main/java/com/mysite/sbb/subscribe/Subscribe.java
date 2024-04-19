@@ -3,6 +3,7 @@ package com.mysite.sbb.subscribe;
 import java.time.LocalDateTime;
 
 import com.mysite.sbb.User.SiteUser;
+import com.mysite.sbb.video.video;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,10 +35,16 @@ public class Subscribe {
 	@ManyToOne
 	private SiteUser toUser;
 	
+	@JoinColumn(name = "videoNo", referencedColumnName = "VIDEO_NO") // video 테이블의 video_no 값과 매핑
+    @ManyToOne
+    private video video;
+	
 	private LocalDateTime createDate;
 	
 	@PrePersist
 	public void createDate() {
 		this.createDate = LocalDateTime.now();
 	}
+	
+	
 }

@@ -27,6 +27,10 @@
 	<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET">
 		<button type="submit">구독취소</button>
 	</form>
+	<p>videoOwnerState: <span th:text="${userDto.videoOwnerState}"></span></p>
+	<p>subscribeState: <span th:text="${userDto.subscribeState}"></span></p>
+	<p>subscribeCount: <span th:text="${userDto.subscribeCount}"></span></p>
+	
 	<p>Recommendations: <span th:text="${recommendationsCount}"></span></p>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

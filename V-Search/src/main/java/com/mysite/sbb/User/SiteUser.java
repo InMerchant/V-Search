@@ -24,5 +24,5 @@ public class SiteUser {
     // USER_NO 데이터 유형을 변경하여 데이터베이스와 일치시킴
 	@Id
     @Column(name = "USER_NO")
-    private int USER_NO;
+    private int userNo;
 }

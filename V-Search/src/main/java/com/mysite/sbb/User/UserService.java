@@ -41,17 +41,17 @@ public class UserService {
 	public int getUserNO(String username) {
 		Optional<SiteUser> userOptional = userRepository.findByusername(username);
 		SiteUser user = userOptional.orElseThrow(() -> new RuntimeException("User not found with username: " + username));
-		return user.getUSER_NO();
+		return user.getUserNo();
 	}
 	
 	@Transactional(readOnly = true)
-	public UserProfileDto userProfile(int videoUserId) {
+	public UserProfileDto userProfile(int videoUserId, int videoNo) {
 		UserProfileDto dto = new UserProfileDto();
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int principalId = getUserNO(username);
 		
-		//문제생길확률 있음
-		SiteUser userEntity = userRepository.findById(username).orElseThrow(()-> {
+		
+		SiteUser userEntity = userRepository.findByUserNo(principalId).orElseThrow(()-> {
 			throw new CustomApiException("해당 유저를 찾을 수 없습니다.");
 		});
 		
@@ -59,7 +59,7 @@ public class UserService {
 		dto.setVideoOwnerState(videoUserId == principalId);
 		
 		int subscribeState = subscribeRepository.mSubscribeState(principalId, videoUserId);
-		int subscribeCount = subscribeRepository.mSubscribeCount(videoUserId);
+		int subscribeCount = subscribeRepository.mSubscribeCount(videoNo);
 		
 		dto.setSubscribeState(subscribeState == 1);
 		dto.setSubscribeCount(subscribeCount);
