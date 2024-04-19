@@ -14,14 +14,17 @@
 	<div class="card-group-container">
 		<div class="card-group" th:if="${not #lists.isEmpty(videoDetails)}">
 			<div th:each="detail, iterStat : ${videoDetails}" class="custom-card">
-				<img class="card-img-top" src="..." alt="썸네일 추가?예정??">
-				<div class="card-body">
-					<a th:href="@{|/video/${detail[0]}|}" class="card-title" th:text="${detail[1]}"></a>
-					<p class="card-text" th:text="${detail[2]}"></p>
-				</div>
+				<a th:href="@{|/video/${detail[0]}|}" style="text-decoration: none; color: inherit;">
+					<img class="card-img-top" src="..." alt="썸네일 추가?예정??">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${detail[1]}"></h5>
+						<p class="card-text" th:text="${detail[2]}"></p>
+					</div>
+				</a>
 			</div>
 		</div>
 	</div>
+
 
 
 
