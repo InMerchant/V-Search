@@ -35,7 +35,7 @@ public class Subscribe {
 	@ManyToOne
 	private SiteUser toUser;
 	
-	@JoinColumn(name = "videoNo", referencedColumnName = "VIDEO_NO") // video 테이블의 video_no 값과 매핑
+	@JoinColumn(name = "videoNo", referencedColumnName = "VIDEO_NO")
     @ManyToOne
     private video video;
 	
