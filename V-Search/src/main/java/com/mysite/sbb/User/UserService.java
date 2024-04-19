@@ -4,6 +4,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import java.util.Optional;
@@ -46,24 +47,49 @@ public class UserService {
 	
 	@Transactional(readOnly = true)
 	public UserProfileDto userProfile(int videoUserId, int videoNo) {
+		
 		UserProfileDto dto = new UserProfileDto();
+		
+		//로그인한 유저 이름
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		int principalId = getUserNO(username);
 		
+		//로그인한 유저 아이디
+		int principalId;
 		
-		SiteUser userEntity = userRepository.findByUserNo(principalId).orElseThrow(()-> {
-			throw new CustomApiException("해당 유저를 찾을 수 없습니다.");
-		});
+		//구독여부
+		int subscribeState;
 		
-		dto.setUser(userEntity);
-		dto.setVideoOwnerState(videoUserId == principalId);
+		//비디오 구독수
+		int subscribeCount;
 		
-		int subscribeState = subscribeRepository.mSubscribeState(principalId, videoUserId);
-		int subscribeCount = subscribeRepository.mSubscribeCount(videoNo);
+		//로그인한 유저 객체
+		SiteUser userEntity;
 		
-		dto.setSubscribeState(subscribeState == 1);
+		subscribeCount = subscribeRepository.mSubscribeCount(videoNo);
 		dto.setSubscribeCount(subscribeCount);
 		
-		return dto;
+		// 현재 로그인 여부 체크
+		if (username == "anonymousUser") {
+			dto.setSubscribeState(false);
+	        return dto;
+	    }
+		else {
+			principalId = getUserNO(username);	
+			
+			userEntity = userRepository.findByUserNo(principalId).orElseThrow(()-> {
+				throw new CustomApiException("해당 유저를 찾을 수 없습니다.");
+			});
+			
+			dto.setUser(userEntity);
+			dto.setVideoOwnerState(videoUserId == principalId);
+			
+			subscribeState = subscribeRepository.mSubscribeState(principalId, videoUserId);
+			
+			
+			dto.setSubscribeState(subscribeState == 1);
+			
+			
+			return dto;
+		}
 	}
 }
