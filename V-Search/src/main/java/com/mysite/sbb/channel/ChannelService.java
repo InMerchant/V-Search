@@ -12,4 +12,5 @@ public class ChannelService {
     public List<Channel> getVideosByUserNumber(int userNumber) {
         return channelRepository.findByUserNumber(userNumber);
     }
+    
 }

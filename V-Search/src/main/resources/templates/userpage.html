@@ -15,11 +15,11 @@
 		<ul>
 			<li><a th:href="@{'/Member/'+${user.username}}">유저 정보</a></li>
 			<li><a th:href="@{'/channel/'+${userNo}}">동영상 목록</a></li>
-			<!-- 필요한 만큼 항목 추가 -->
+			<!--추가 예정 -->
 		</ul>
 	</div>
 	<div class="userpage">
-		<h2><span th:text="${user.username}">의 페이지</span></h2>
+		<h2><span th:text="${user.username}">님의 정보</span></h2>
 		<h5>아이디 : <span th:text="${user.username}"></span></h5>
 		<button onclick="confirmWithdraw()">회원 탈퇴</button>
 	</div>
