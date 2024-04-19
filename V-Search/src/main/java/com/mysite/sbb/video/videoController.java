@@ -64,12 +64,12 @@ public class videoController {
 	@GetMapping(value="/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
 	    byte[] videoData = videoService.videoPlay(videoNo);
-	    
 	    //비디오에 대한 유저 구독 정보 삽입
 	    Del video = entityManager.find(Del.class, videoNo);
 		int videoUserId = video.getUsernumber();
 		UserProfileDto userDto = userService.userProfile(videoUserId, videoNo);
 		model.addAttribute("userDto", userDto);
+	
 	    
 	    String base64EncodedVideoData = Base64.getEncoder().encodeToString(videoData);
 	    model.addAttribute("videoData", base64EncodedVideoData);
