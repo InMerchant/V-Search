@@ -12,5 +12,5 @@ public interface videoRepository extends JpaRepository<video, Integer> {
 	List<Object[]> findAllVideoNamesAndUserNumbers();
 
 	video findByVideoNo(int videoNo);
-
+	
 }

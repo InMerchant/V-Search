@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
-
 <head>
-	<link rel="stylesheet" type="text/css" th:href="@{/sidebar.css}">
-	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>채널</title>
+	<title>채널 - 동영상 목록</title> <!-- 한글 제목 추가 -->
+	<link rel="stylesheet" type="text/css" th:href="@{/sidebar.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/channel.css}">
 </head>
-
 <body layout:fragment="content">
 	<div class="sidebar" id="sidebar">
 		<ul>
-			<li><a th:href="@{'/Member/'+${username}}">유저 정보</a></li>
-			<li><a th:href="@{'/channel/'+${userNo}}">동영상 목록</a></li>
+			<li><a th:href="@{'/Member/' + ${username}}">유저 정보</a></li>
+			<li><a th:href="@{'/channel/' + ${userNo}}">동영상 목록</a></li>
+			<li><a th:href="@{'/subscriber'+${userNo}}">구독 목록</a></li>
 		</ul>
 	</div>
-	<h1>채널</h1>
-	<ul>
-		<!-- 비디오 출력 장소  -->
-		<li th:each="video : ${videos}" th:text="${video.videoName}"></li>
-	</ul>
-	<script>
-		function toggleSidebar() {
-			var sidebar = document.getElementById("sidebar");
-			sidebar.classList.toggle("active");
-		}
-	</script>
+	<h1>업로드 목록</h1>
+	<div class="content">
+		<div class="videolist">
+			<ul class="video">
+				<th:block th:if="${videos}">
+					<th:block th:each="video : ${videos}">
+						<li>
+							<a th:href="@{'/video/' + ${video.videoNumber}}">
+								<div class="thumbnail">
+									<img src="..." alt="썸네일 추가예정">
+								</div>
+								<div class="video-info">
+									<span th:text="${video.videoName}"></span>
+								</div>
+							</a>
+						</li>
+					</th:block>
+				</th:block>
+				<th:block th:unless="${videos}">
+					<li>동영상이 없습니다.</li>
+				</th:block>
+			</ul>
+		</div>
+	</div>
 </body>
-
 </html>

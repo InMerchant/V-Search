@@ -4,6 +4,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import java.util.Optional;
@@ -41,29 +42,54 @@ public class UserService {
 	public int getUserNO(String username) {
 		Optional<SiteUser> userOptional = userRepository.findByusername(username);
 		SiteUser user = userOptional.orElseThrow(() -> new RuntimeException("User not found with username: " + username));
-		return user.getUSER_NO();
+		return user.getUserNo();
 	}
 	
 	@Transactional(readOnly = true)
-	public UserProfileDto userProfile(int videoUserId) {
+	public UserProfileDto userProfile(int videoUserId, int videoNo) {
+		
 		UserProfileDto dto = new UserProfileDto();
+		
+		//로그인한 유저 이름
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		int principalId = getUserNO(username);
 		
-		//문제생길확률 있음
-		SiteUser userEntity = userRepository.findById(username).orElseThrow(()-> {
-			throw new CustomApiException("해당 유저를 찾을 수 없습니다.");
-		});
+		//로그인한 유저 아이디
+		int principalId;
 		
-		dto.setUser(userEntity);
-		dto.setVideoOwnerState(videoUserId == principalId);
+		//구독여부
+		int subscribeState;
 		
-		int subscribeState = subscribeRepository.mSubscribeState(principalId, videoUserId);
-		int subscribeCount = subscribeRepository.mSubscribeCount(videoUserId);
+		//비디오 구독수
+		int subscribeCount;
 		
-		dto.setSubscribeState(subscribeState == 1);
+		//로그인한 유저 객체
+		SiteUser userEntity;
+		
+		subscribeCount = subscribeRepository.mSubscribeCount(videoNo);
 		dto.setSubscribeCount(subscribeCount);
 		
-		return dto;
+		// 현재 로그인 여부 체크
+		if (username == "anonymousUser") {
+			dto.setSubscribeState(false);
+	        return dto;
+	    }
+		else {
+			principalId = getUserNO(username);	
+			
+			userEntity = userRepository.findByUserNo(principalId).orElseThrow(()-> {
+				throw new CustomApiException("해당 유저를 찾을 수 없습니다.");
+			});
+			
+			dto.setUser(userEntity);
+			dto.setVideoOwnerState(videoUserId == principalId);
+			
+			subscribeState = subscribeRepository.mSubscribeState(principalId, videoUserId);
+			
+			
+			dto.setSubscribeState(subscribeState == 1);
+			
+			
+			return dto;
+		}
 	}
 }

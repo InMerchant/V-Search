@@ -14,9 +14,9 @@ public class SubscribeService {
 	private final SubscribeRepository subscribeRepository;
 
 	@Transactional
-	public void subscribe(int fromUserId, int toUserId) {
+	public void subscribe(int fromUserId, int toUserId, int videoNo) {
 		try {
-			subscribeRepository.mSubscribe(fromUserId, toUserId);
+			subscribeRepository.mSubscribe(fromUserId, toUserId, videoNo);
 		} catch (Exception e) {
 			throw new CustomApiException("이미 구독을 하였습니다.");
 		}

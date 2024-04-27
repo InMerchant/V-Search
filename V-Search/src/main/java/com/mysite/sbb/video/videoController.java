@@ -29,12 +29,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mysite.sbb.ResponseDto;
+import com.mysite.sbb.User.UserProfileDto;
 import com.mysite.sbb.User.UserService;
 
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import com.mysite.sbb.delvideo.Del;
 import com.mysite.sbb.delvideo.DelService;
 import com.mysite.sbb.recommend.Recommend;
 import com.mysite.sbb.recommend.RecommendRepository;
@@ -55,10 +58,19 @@ public class videoController {
 	    @Autowired
 	    private DelService delService;
 	    private final RecommendService recommendService;
+	    @Autowired
+		private EntityManager entityManager;
 
 	@GetMapping(value="/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
 	    byte[] videoData = videoService.videoPlay(videoNo);
+	    //비디오에 대한 유저 구독 정보 삽입
+	    Del video = entityManager.find(Del.class, videoNo);
+		int videoUserId = video.getUsernumber();
+		UserProfileDto userDto = userService.userProfile(videoUserId, videoNo);
+		model.addAttribute("userDto", userDto);
+	
+	    
 	    String base64EncodedVideoData = Base64.getEncoder().encodeToString(videoData);
 	    model.addAttribute("videoData", base64EncodedVideoData);
 	    model.addAttribute("videoNo", videoNo);
