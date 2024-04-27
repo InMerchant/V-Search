@@ -1,6 +1,6 @@
 package com.mysite.sbb.comment;
 import com.mysite.sbb.User.SiteUser;
-import com.mysite.sbb.main.Video;
+import com.mysite.sbb.video.Video;
 import groovy.transform.builder.Builder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity
+@Entity(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

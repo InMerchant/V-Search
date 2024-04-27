@@ -29,73 +29,71 @@ import jakarta.validation.Valid;
 public class VideoService {
 	@Autowired
 	private UserService userService;
-   @Autowired
-   private VideoRepository vR;
-   @Autowired
-   private JdbcTemplate jT;
-   
-  public List<Video> getAllVideo(){
-	  return vR.findAll();
-  }
-  public List<Object[]> getAllVideoNamesAndUserNumbers() {
-	    return vR.findAllVideoNamesAndUserNumbers();
+	@Autowired
+	private VideoRepository vR;
+	@Autowired
+	private JdbcTemplate jT;
+
+	public List<Video> getAllVideo() {
+		return vR.findAll();
 	}
-   
-   @Transactional
-   public void uploadFile(MultipartFile file, String title,int summary) throws IOException {
-       // 파일명에 UUID를 추가하여 중복을 방지합니다.
-       String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-       String username = SecurityContextHolder.getContext().getAuthentication().getName();
-       int userNo = userService.getUserNO(username);
-       byte[] fileBytes = file.getBytes();
-       Video video = new Video();
-       video.setUSER_NO(userNo); 
-       video.setVIDEO_NAME(title);
-       video.setSTORAGE(fileBytes); 
-       video.setSummary_chk(summary);
-       // 비디오 엔티티 저장
-       vR.save(video);
-   }
+
+	public List<Object[]> getAllVideoNamesAndUserNumbers() {
+		return vR.findAllVideoNamesAndUserNumbers();
+	}
+
+	@Transactional
+	public void uploadFile(MultipartFile file, String title, int summary) throws IOException {
+		// 파일명에 UUID를 추가하여 중복을 방지합니다.
+		String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		int userNo = userService.getUserNO(username);
+		byte[] fileBytes = file.getBytes();
+		Video Video = new Video();
+		Video.setUSER_NO(userNo);
+		Video.setVIDEO_NAME(title);
+		Video.setSTORAGE(fileBytes);
+		Video.setSummary_chk(summary);
+		// 비디오 엔티티 저장
+		vR.save(Video);
+	}
 
 	private byte[] blobToBytes(Blob blob) throws SQLException, IOException {
-	    try (InputStream inputStream = blob.getBinaryStream()) {
-	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	        byte[] buffer = new byte[8192];
-	        int bytesRead = -1;
-	        while ((bytesRead = inputStream.read(buffer)) != -1) {
-	            outputStream.write(buffer, 0, bytesRead);
-	        }
-	        return outputStream.toByteArray();
-	    }
+		try (InputStream inputStream = blob.getBinaryStream()) {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			byte[] buffer = new byte[8192];
+			int bytesRead = -1;
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, bytesRead);
+			}
+			return outputStream.toByteArray();
+		}
 	}
+
 	public byte[] videoPlay(int videoNO) throws SQLException {
-	    String sql = "SELECT STORAGE FROM bae.VIDEO WHERE VIDEO_NO=?";
-	    List<byte[]> blobBytesList = jT.query(sql, new Object[]{videoNO}, (rs, rowNum) -> {
-	        Blob blob = rs.getBlob("STORAGE");
-	        try {
-	            return blobToBytes(blob);
-	        } catch (IOException e) {
-	            return null;
-	        }
-	    });
-	    if (blobBytesList.isEmpty()) {
-	        throw new SQLException("No video found with the given name: " + videoNO);
-	    }
-	    byte[] blobBytes = blobBytesList.get(0);
-	    if (blobBytes != null) {
-	        return blobBytes;
-	    } else {
-	        throw new SQLException("BLOB data is null");
-	    }
+		String sql = "SELECT STORAGE FROM bae.VIDEO WHERE VIDEO_NO=?";
+		List<byte[]> blobBytesList = jT.query(sql, new Object[] { videoNO }, (rs, rowNum) -> {
+			Blob blob = rs.getBlob("STORAGE");
+			try {
+				return blobToBytes(blob);
+			} catch (IOException e) {
+				return null;
+			}
+		});
+		if (blobBytesList.isEmpty()) {
+			throw new SQLException("No video found with the given name: " + videoNO);
+		}
+		byte[] blobBytes = blobBytesList.get(0);
+		if (blobBytes != null) {
+			return blobBytes;
+		} else {
+			throw new SQLException("BLOB data is null");
+		}
 
 	}
-	
-	
-	public Video getVideoByNo(int videoNo) {
-        return vR.findByVideoNo(videoNo);
-    }
-	
-	
 
+	public Video getVideoByNo(int videoNo) {
+		return vR.findByVideoNo(videoNo);
+	}
 
 }
