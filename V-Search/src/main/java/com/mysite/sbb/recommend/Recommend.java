@@ -11,6 +11,7 @@ import lombok.Data;
 @Table(name = "RECOMMEND", schema = "bae")
 public class Recommend {
    
+	
     @Column(name = "VIDEO_NO")
     private int videoNo;
     
