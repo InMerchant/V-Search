@@ -21,7 +21,7 @@ import jakarta.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class video {
+public class Video {
 	@Id
 	@Column(name="VIDEO_NO")
 	private int videoNo;

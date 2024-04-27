@@ -50,9 +50,9 @@ import com.mysite.sbb.recommend.RecommendService;
 @RequiredArgsConstructor
 @Controller
 @EnableTransactionManagement
-public class videoController {
+public class VideoController {
 	  @Autowired
-	    private videoService videoService;
+	    private VideoService videoService;
 	    @Autowired
 	    private UserService userService;
 	    @Autowired

@@ -3,7 +3,7 @@ package com.mysite.sbb.subscribe;
 import java.time.LocalDateTime;
 
 import com.mysite.sbb.User.SiteUser;
-import com.mysite.sbb.video.video;
+import com.mysite.sbb.video.Video;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,7 +39,7 @@ public class Subscribe {
 	
 	@JoinColumn(name = "videoNo", referencedColumnName = "VIDEO_NO")
     @ManyToOne
-    private video video;
+    private Video video;
 	
 	private LocalDateTime createDate;
 	

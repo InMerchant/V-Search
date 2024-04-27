@@ -26,15 +26,15 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
-public class videoService {
+public class VideoService {
 	@Autowired
 	private UserService userService;
    @Autowired
-   private videoRepository vR;
+   private VideoRepository vR;
    @Autowired
    private JdbcTemplate jT;
    
-  public List<video> getAllVideo(){
+  public List<Video> getAllVideo(){
 	  return vR.findAll();
   }
   public List<Object[]> getAllVideoNamesAndUserNumbers() {
@@ -48,7 +48,7 @@ public class videoService {
        String username = SecurityContextHolder.getContext().getAuthentication().getName();
        int userNo = userService.getUserNO(username);
        byte[] fileBytes = file.getBytes();
-       video video = new video();
+       Video video = new Video();
        video.setUSER_NO(userNo); 
        video.setVIDEO_NAME(title);
        video.setSTORAGE(fileBytes); 
@@ -91,7 +91,7 @@ public class videoService {
 	}
 	
 	
-	public video getVideoByNo(int videoNo) {
+	public Video getVideoByNo(int videoNo) {
         return vR.findByVideoNo(videoNo);
     }
 	
