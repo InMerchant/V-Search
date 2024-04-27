@@ -27,10 +27,12 @@ public class Subscribe {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	//구독한사람
 	@JoinColumn(name = "fromUserId", referencedColumnName = "USER_NO")
 	@ManyToOne
 	private SiteUser fromUser;
 	
+	//구독받는사람
 	@JoinColumn(name = "toUserId", referencedColumnName = "USER_NO")
 	@ManyToOne
 	private SiteUser toUser;
@@ -48,3 +50,4 @@ public class Subscribe {
 	
 	
 }
+

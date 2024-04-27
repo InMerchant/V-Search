@@ -65,8 +65,9 @@ public class UserService {
 		//로그인한 유저 객체
 		SiteUser userEntity;
 		
-		subscribeCount = subscribeRepository.mSubscribeCount(videoNo);
+		subscribeCount = subscribeRepository.mSubscribeCount(videoUserId);
 		dto.setSubscribeCount(subscribeCount);
+		System.out.println(subscribeCount);
 		
 		// 현재 로그인 여부 체크
 		if (username == "anonymousUser") {
