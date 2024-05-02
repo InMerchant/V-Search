@@ -11,6 +11,11 @@
 </head>
 
 <body layout:fragment="content">
+	<div>
+		<button>
+			임시 변경 버튼
+		</button>
+	</div>
 	<video width="640" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
 		<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
 		<!-- 다른 동영상 형식에 대한 소스 추가 -->
@@ -44,10 +49,10 @@
 			preload: "auto",
 			controlBar:
 			{
-				playToggle: true //재생, 일지정지 토글
-				, pictureInPictureToggle: false
-				, remainingTimeDisplay: true //남은 시간 표시
-				, progressControl: true //재생 진행바
+				playToggle: true
+				, pictureInPictureToggle: true
+				, remainingTimeDisplay: true
+				, progressControl: true
 			}
 		});
 	</script>
