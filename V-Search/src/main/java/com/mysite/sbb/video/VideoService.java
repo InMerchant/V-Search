@@ -95,5 +95,6 @@ public class VideoService {
 	public Video getVideoByNo(int videoNo) {
 		return vR.findByVideoNo(videoNo);
 	}
+	
 
 }

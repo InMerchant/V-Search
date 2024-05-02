@@ -32,12 +32,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mysite.sbb.ResponseDto;
+import com.mysite.sbb.User.SiteUser;
 import com.mysite.sbb.User.UserProfileDto;
 import com.mysite.sbb.User.UserService;
 import com.mysite.sbb.comment.Comment;
 import com.mysite.sbb.comment.CommentService;
 
 import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -119,49 +121,52 @@ public class VideoController {
 		}
 	}
 
+
+	@RestController
+	@RequestMapping("/comments")
+	public class CommentController {
+
+	    private final CommentService commentService;
+
+	    @Autowired
+	    public CommentController(CommentService commentService) {
+	        this.commentService = commentService;
+	    }
+
+	    @PostMapping("/create")
+	    public ResponseEntity<Comment> createComment(HttpServletRequest request, @RequestBody Comment comment) {
+	        // 새로운 댓글 생성
+	        Comment createdComment = commentService.createComment(comment, request);
+	        return ResponseEntity.ok(createdComment);
+	    }
+
+	    @GetMapping("/{id}")
+	    public ResponseEntity<Comment> getCommentById(@PathVariable("id") int id) {
+	        Comment comment = commentService.getCommentById(id);
+	        return ResponseEntity.ok(comment);
+	    }
+
+	    @GetMapping("/all")
+	    public ResponseEntity<List<Comment>> getAllComments() {
+	        List<Comment> comments = commentService.getAllComments();
+	        return ResponseEntity.ok(comments);
+	    }
+
+	    @PutMapping("/{id}")
+	    public ResponseEntity<Comment> updateComment(@PathVariable("id") int id, @RequestBody Comment updatedComment) {
+	        Comment updated = commentService.updateComment(id, updatedComment);
+	        return ResponseEntity.ok(updated);
+	    }
+
+	    @DeleteMapping("/{id}")
+	    public ResponseEntity<Void> deleteComment(@PathVariable("id") int id) {
+	        commentService.deleteComment(id);
+	        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	    }
+	}
+
 	
-	  // 중복되지 않은 CommentController 추가
-    @Controller
-    @RequestMapping("/comments")
-    public class CommentController {
 
-        private final CommentService commentService;
-
-        @Autowired
-        public CommentController(CommentService commentService) {
-            this.commentService = commentService;
-        }
-
-        @PostMapping("/create")
-        public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
-            Comment createdComment = commentService.createComment(comment);
-            return ResponseEntity.ok(createdComment);
-        }
-
-        @GetMapping("/{id}")
-        public ResponseEntity<Comment> getCommentById(@PathVariable("id") int id) {
-            Comment comment = commentService.getCommentById(id);
-            return ResponseEntity.ok(comment);
-        }
-
-        @GetMapping("/all")
-        public ResponseEntity<List<Comment>> getAllComments() {
-            List<Comment> comments = commentService.getAllComments();
-            return ResponseEntity.ok(comments);
-        }
-
-        @PutMapping("/{id}")
-        public ResponseEntity<Comment> updateComment(@PathVariable("id") int id, @RequestBody Comment updatedComment) {
-            Comment updated = commentService.updateComment(id, updatedComment);
-            return ResponseEntity.ok(updated);
-        }
-
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteComment(@PathVariable("id") int id) {
-            commentService.deleteComment(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-    }
 	
 	@GetMapping("/")
 	public String mainPage(Model model) {
