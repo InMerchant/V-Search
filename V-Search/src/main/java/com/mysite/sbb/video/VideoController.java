@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +34,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.mysite.sbb.ResponseDto;
 import com.mysite.sbb.User.UserProfileDto;
 import com.mysite.sbb.User.UserService;
+import com.mysite.sbb.comment.Comment;
+import com.mysite.sbb.comment.CommentService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletResponse;
@@ -56,6 +61,7 @@ public class VideoController {
 	private final RecommendService recommendService;
 	@Autowired
 	private EntityManager entityManager;
+    private final CommentService commentService; // CommentService 추가
 
 	@GetMapping(value = "/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
@@ -113,6 +119,50 @@ public class VideoController {
 		}
 	}
 
+	
+	  // 중복되지 않은 CommentController 추가
+    @Controller
+    @RequestMapping("/comments")
+    public class CommentController {
+
+        private final CommentService commentService;
+
+        @Autowired
+        public CommentController(CommentService commentService) {
+            this.commentService = commentService;
+        }
+
+        @PostMapping("/create")
+        public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
+            Comment createdComment = commentService.createComment(comment);
+            return ResponseEntity.ok(createdComment);
+        }
+
+        @GetMapping("/{id}")
+        public ResponseEntity<Comment> getCommentById(@PathVariable("id") int id) {
+            Comment comment = commentService.getCommentById(id);
+            return ResponseEntity.ok(comment);
+        }
+
+        @GetMapping("/all")
+        public ResponseEntity<List<Comment>> getAllComments() {
+            List<Comment> comments = commentService.getAllComments();
+            return ResponseEntity.ok(comments);
+        }
+
+        @PutMapping("/{id}")
+        public ResponseEntity<Comment> updateComment(@PathVariable("id") int id, @RequestBody Comment updatedComment) {
+            Comment updated = commentService.updateComment(id, updatedComment);
+            return ResponseEntity.ok(updated);
+        }
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteComment(@PathVariable("id") int id) {
+            commentService.deleteComment(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+	
 	@GetMapping("/")
 	public String mainPage(Model model) {
 		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbers();
