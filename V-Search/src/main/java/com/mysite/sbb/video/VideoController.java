@@ -123,9 +123,7 @@ public class VideoController {
 
 
 	@RestController
-	@RequestMapping("/comments")
 	public class CommentController {
-
 	    private final CommentService commentService;
 
 	    @Autowired
@@ -133,37 +131,16 @@ public class VideoController {
 	        this.commentService = commentService;
 	    }
 
-	    @PostMapping("/create")
-	    public ResponseEntity<Comment> createComment(HttpServletRequest request, @RequestBody Comment comment) {
-	        // 새로운 댓글 생성
-	        Comment createdComment = commentService.createComment(comment, request);
-	        return ResponseEntity.ok(createdComment);
-	    }
+	    @PostMapping("/comments/create")
+	    public Comment createComment(HttpServletRequest request) {
+	        // 현재 URL에서 비디오 번호 추출 (여기서는 하드코딩으로 1을 사용하겠습니다)
+	        int videoNumber = 341;
 
-	    @GetMapping("/{id}")
-	    public ResponseEntity<Comment> getCommentById(@PathVariable("id") int id) {
-	        Comment comment = commentService.getCommentById(id);
-	        return ResponseEntity.ok(comment);
-	    }
-
-	    @GetMapping("/all")
-	    public ResponseEntity<List<Comment>> getAllComments() {
-	        List<Comment> comments = commentService.getAllComments();
-	        return ResponseEntity.ok(comments);
-	    }
-
-	    @PutMapping("/{id}")
-	    public ResponseEntity<Comment> updateComment(@PathVariable("id") int id, @RequestBody Comment updatedComment) {
-	        Comment updated = commentService.updateComment(id, updatedComment);
-	        return ResponseEntity.ok(updated);
-	    }
-
-	    @DeleteMapping("/{id}")
-	    public ResponseEntity<Void> deleteComment(@PathVariable("id") int id) {
-	        commentService.deleteComment(id);
-	        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	        // 댓글 생성
+	        return commentService.createComment(request, videoNumber);
 	    }
 	}
+
 
 	
 

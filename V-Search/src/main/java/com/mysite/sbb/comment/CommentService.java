@@ -26,17 +26,15 @@ public class CommentService {
         this.videoService = videoService; 
     }
 
-    
+   
  // 댓글 생성
-    public Comment createComment(HttpServletRequest request) {
-        // 폼 데이터에서 댓글 내용과 비디오 번호를 추출
+    public Comment createComment(HttpServletRequest request, int videoNumber) {
+        // 폼 데이터에서 댓글 내용을 추출
         String content = request.getParameter("content");
-        int videoNumber = Integer.parseInt(request.getParameter("videoNumber"));
 
         // 사용자 아이디를 기반으로 사용자 번호를 조회
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         int userNo = userService.getUserNO(username);
-        System.out.println(username);
 
         // Comment 객체에 사용자 정보 설정
         SiteUser user = new SiteUser();
@@ -53,6 +51,7 @@ public class CommentService {
 
         return commentRepository.save(comment);
     }
+
 
 
     // 댓글 조회
