@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-   layout:decorate="~{layout/layout}">
+	layout:decorate="~{layout/layout}">
 
 <head>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.8.1/video.min.js"></script>
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.8.1/video-js.min.css" rel="stylesheet">
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-thumbnails/0.1.1/videojs.thumbnails.css"
-      rel="stylesheet">
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <link rel="stylesheet" type="text/css" th:href="@{/detail.css}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.8.1/video.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.8.1/video-js.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-thumbnails/0.1.1/videojs.thumbnails.css"
+		rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/detail.css}">
 </head>
 
 <body layout:fragment="content">
-	<a href="#" class="btn front">
-		요약
-	</a>
-	<a href="#" class="btn back">
-		비요약
-	</a>
+	<div class="btncontainer">
+		<button class="btn front">
+			비요약
+		</button>
+		<button class="btn back" style="display: none;">
+			요약
+		</button>
+	</div>
 	<div class="main">
 		<div class="container">
 			<div class="card front-card">
 				<video width="640" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
 					<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
+					요약영상
 				</video>
 			</div>
 			<div class="card back-card">
 				<video width="640" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
 					<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
+					원본 영상
 				</video>
 			</div>
 		</div>
@@ -40,28 +44,28 @@
 	<form th:action="@{'/recommend/toggle/'+ ${videoNo}}" method="POST">
 		<button type="submit">추천</button>
 	</form>
-   <form th:action="@{'/delvideos/' + ${videoNo}}" method="POST">
-      <input type="hidden" name="_method" value="DELETE">
-      <input type="submit" value="동영상 삭제">
-   </form>
+	<form th:action="@{'/delvideos/' + ${videoNo}}" method="POST">
+		<input type="hidden" name="_method" value="DELETE">
+		<input type="submit" value="동영상 삭제">
+	</form>
 
-   <div>
-      <form th:action="@{'/api/subscribe/'+${videoNo}}" method="POST">
-         <button type="submit">구독</button>
-      </form>
-      <form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET">
-         <button type="submit">구독취소</button>
-      </form>
-   </div>
-   <p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
-   <p>추천 수 : <span th:text="${recommendationsCount}"></span></p>
+	<div>
+		<form th:action="@{'/api/subscribe/'+${videoNo}}" method="POST">
+			<button type="submit" id="subscribe">구독</button>
+		</form>
+		<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET" style="display:none">
+			<button type="submit" id="unsubscribe">구독취소</button>
+		</form>
+	</div>
+	<p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
+	<p>추천 수 : <span th:text="${recommendationsCount}"></span></p>
 
-   <h2>Comments</h2>
-   <div th:each="comment : ${comments}">
-      <p>User: <span th:text="${comment.user.username}"></span></p>
-      <p>Content: <span th:text="${comment.content}"></span></p>
-      <hr>
-   </div>
+	<h2>Comments</h2>
+	<div th:each="comment : ${comments}">
+		<p>User: <span th:text="${comment.user.username}"></span></p>
+		<p>Content: <span th:text="${comment.content}"></span></p>
+		<hr>
+	</div>
 	<!-- 댓글 입력 폼 -->
 	<h2>Add Comment</h2>
 	<form th:action="@{/comments/create}" method="post">
@@ -72,32 +76,42 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 		$('.front').on('click', function () {
+			$('.front').hide();
+			$('.back').show();
 			$('#checkboxCard').show();
 			$('.card').addClass('active');
+			var player = videojs('VideoPlayer');
+			player.pause(); 
 		});
 
 		$('.back').on('click', function () {
+			$('.front').show();
+			$('.back').hide();
 			$('.card').removeClass('active');
 			$('#checkboxCard').hide();
 		});
-		$('#checkboxCArd').on('shwo', function () {
-			checkBoxCreate();
-		})
+
+		$('.subscribe').on('click', function () {
+			$('.unsubscribe').show();
+			$('.subscribe').hide();
+		});
+		$('.unsubscribe').on('click', function () {
+			$('.subscribe').show();
+			$('.unsubscribe').hide();
+		});
+		var player = videojs("VideoPlayer", {
+			controls: true,
+			playsinline: true,
+			preload: "auto",
+			controlBar:
+			{
+				playToggle: true
+				, pictureInPictureToggle: true
+				, remainingTimeDisplay: true
+				, progressControl: true
+			}
+		});
 	</script>
-   <script>
-      var player = videojs("VideoPlayer", {
-         controls: true,
-         playsinline: true,
-         preload: "auto",
-         controlBar:
-         {
-            playToggle: true
-            , pictureInPictureToggle: true
-            , remainingTimeDisplay: true
-            , progressControl: true
-         }
-      });
-   </script>
 
 </body>
 
