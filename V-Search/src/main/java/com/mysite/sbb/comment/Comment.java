@@ -30,8 +30,9 @@ public class Comment {
     @ManyToOne
     private SiteUser user;
 
-    @Column(name = "videoNo")
-    private int videoNo; // 비디오 번호를 저장할 필드
+    @JoinColumn(name = "videoNo", referencedColumnName = "VIDEO_NO")
+    @ManyToOne
+    private Video VideoNo;
 
     @Column(name = "content")
     private String content;

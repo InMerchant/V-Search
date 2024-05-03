@@ -24,7 +24,7 @@ public class CommentService {
     }
 
     // 댓글 생성
-    public Comment createComment(HttpServletRequest request, int videoNumber) {
+    public Comment createComment(HttpServletRequest request, Video videoNumber) {
         // 새로운 댓글 객체 생성
 
         // 폼 데이터에서 댓글 내용을 추출
@@ -54,9 +54,8 @@ public class CommentService {
             comment.setContent(content);
             comment.setUser(user);
             comment.setVideoNo(videoNumber);
-
-            // 댓글 저장
             return commentRepository.save(comment);
+            
         } catch (Exception e) {
             // 저장 과정에서 예외가 발생한 경우 처리
             e.printStackTrace(); // 더 적합한 로깅 방식으로 변경하는 것이 좋습니다.
