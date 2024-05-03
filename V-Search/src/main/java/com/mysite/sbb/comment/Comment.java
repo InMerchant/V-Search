@@ -1,7 +1,8 @@
 package com.mysite.sbb.comment;
+
 import com.mysite.sbb.User.SiteUser;
 import com.mysite.sbb.video.Video;
-import groovy.transform.builder.Builder;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,13 +15,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
 @Table(name="comments", schema = "bae")
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -29,9 +30,8 @@ public class Comment {
     @ManyToOne
     private SiteUser user;
 
-    @JoinColumn(name = "videoNo", referencedColumnName = "VIDEO_NO")
-    @ManyToOne
-    private Video videoNo;
+    @Column(name = "videoNo")
+    private int videoNo; // 비디오 번호를 저장할 필드
 
     @Column(name = "content")
     private String content;

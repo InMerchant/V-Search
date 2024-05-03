@@ -1,7 +1,7 @@
 package com.mysite.sbb.comment;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.mysite.sbb.User.SiteUser;
@@ -16,81 +16,51 @@ public class CommentService {
 
     private final UserService userService;
     private final CommentRepository commentRepository;
-    private final VideoService videoService; // VideoService 추가
-
 
     @Autowired
-    public CommentService(UserService userService, CommentRepository commentRepository, VideoService videoService) {
+    public CommentService(UserService userService, CommentRepository commentRepository) {
         this.userService = userService;
         this.commentRepository = commentRepository;
-        this.videoService = videoService; 
     }
 
-   
- // 댓글 생성
+    // 댓글 생성
     public Comment createComment(HttpServletRequest request, int videoNumber) {
+        // 새로운 댓글 객체 생성
+
         // 폼 데이터에서 댓글 내용을 추출
         String content = request.getParameter("content");
+        
+        // 댓글 내용이 없는 경우 처리
+        if (content == null || content.isEmpty()) {
+            throw new IllegalArgumentException("댓글 내용이 없습니다.");
+        }
 
-        // 사용자 아이디를 기반으로 사용자 번호를 조회
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        int userNo = userService.getUserNO(username);
+        try {
+            // 사용자 인증 상태 확인
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                throw new IllegalStateException("인증되지 않은 사용자입니다.");
+            }
+            Comment comment = new Comment();
+            // 사용자 아이디를 기반으로 사용자 번호를 조회
+            String username = authentication.getName();
+            int userNo = userService.getUserNO(username);
 
-        // Comment 객체에 사용자 정보 설정
-        SiteUser user = new SiteUser();
-        user.setUserNo(userNo);
+            // Comment 객체에 사용자 정보 설정
+            SiteUser user = new SiteUser();
+            user.setUserNo(userNo);
 
-        // 비디오 번호를 사용하여 비디오를 데이터베이스에서 가져옴
-        Video video = videoService.getVideoByNo(videoNumber);
+            // Comment 객체 생성 및 설정
+            comment.setContent(content);
+            comment.setUser(user);
+            comment.setVideoNo(videoNumber);
 
-        // Comment 객체 생성 및 설정
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setUser(user);
-        comment.setVideoNo(video);
-
-        return commentRepository.save(comment);
+            // 댓글 저장
+            return commentRepository.save(comment);
+        } catch (Exception e) {
+            // 저장 과정에서 예외가 발생한 경우 처리
+            e.printStackTrace(); // 더 적합한 로깅 방식으로 변경하는 것이 좋습니다.
+            throw new RuntimeException("댓글 저장 중 오류가 발생했습니다.");
+        }
     }
-
-
-
-    // 댓글 조회
-    public Comment getCommentById(int id) {
-        return commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
-    }
-
-    // 모든 댓글 조회
-    public List<Comment> getAllComments() {
-        return commentRepository.findAll();
-    }
-
-    // 댓글 수정
-    public Comment updateComment(int id, Comment updatedComment) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
-
-        comment.setContent(updatedComment.getContent()); // 댓글 내용 수정 등 필요한 로직 추가
-
-        return commentRepository.save(comment);
-    }
-
-    // 댓글 삭제
-    public void deleteComment(int id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
-
-        commentRepository.delete(comment);
-    }
-    
-    private int extractVideoNumber(String url) {
-        // URL에서 "/video/" 이후의 숫자 부분 추출
-        String[] parts = url.split("/");
-        String lastPart = parts[parts.length - 1];
-        // 숫자 부분 추출
-        String videoNumberString = lastPart.replaceAll("[^0-9]", "");
-        // 추출한 문자열을 정수로 변환하여 반환
-        return Integer.parseInt(videoNumberString);
-    }
-    
 }
