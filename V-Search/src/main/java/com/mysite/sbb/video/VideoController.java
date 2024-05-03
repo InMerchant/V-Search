@@ -1,6 +1,7 @@
 package com.mysite.sbb.video;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -63,9 +64,7 @@ public class VideoController {
 	private final RecommendService recommendService;
 	@Autowired
 	private EntityManager entityManager;
-    private final CommentService commentService; // CommentService 추가
-
-	@GetMapping(value = "/video/{no}")
+    @GetMapping(value = "/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
 		byte[] videoData = videoService.videoPlay(videoNo);
 		// 비디오에 대한 유저 구독 정보 삽입
@@ -122,6 +121,7 @@ public class VideoController {
 	}
 
 
+
 	@RestController
 	public class CommentController {
 	    private final CommentService commentService;
@@ -131,18 +131,27 @@ public class VideoController {
 	        this.commentService = commentService;
 	    }
 
-	    @PostMapping("/comments/create")
-	    public Comment createComment(HttpServletRequest request) {
-	        // 현재 URL에서 비디오 번호 추출 (여기서는 하드코딩으로 1을 사용하겠습니다)
-	        int videoNumber = 341;
-
-	        // 댓글 생성
-	        return commentService.createComment(request, videoNumber);
+	    @PostMapping("/comments/create/{videoNo}")
+	    public ResponseEntity<?> createComment(HttpServletRequest request, @PathVariable("videoNo") int videoNumber) {
+	        try {
+	            System.out.println("Creating comment for video number: " + videoNumber);
+	     
+	            commentService.createComment(request, videoNumber);
+	            // 댓글이 성공적으로 생성되었으므로, 해당 댓글의 상세 페이지로 리다이렉션
+	            return ResponseEntity.status(HttpStatus.FOUND)
+	                    .location(URI.create("/video/" + videoNumber))
+	            		.build();
+	        } catch (Exception e) {
+	            System.err.println("An error occurred while creating comment: " + e.getMessage());
+	            e.printStackTrace();
+	            // 예외 처리 후 적절한 처리를 추가할 수 있습니다.
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
 	    }
 	}
 
 
-	
+
 
 	
 	@GetMapping("/")
