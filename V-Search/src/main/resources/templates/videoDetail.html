@@ -12,23 +12,29 @@
 </head>
 
 <body layout:fragment="content">
-	<div class="container">
-		<div class="card front-card">
-			<video width="640" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
-				<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
-			</video>
-			<a href="#" class="btn front">
-				요약
-			</a>
-
+	<a href="#" class="btn front">
+		요약
+	</a>
+	<a href="#" class="btn back">
+		비요약
+	</a>
+	<div class="main">
+		<div class="container">
+			<div class="card front-card">
+				<video width="640" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
+					<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
+				</video>
+			</div>
+			<div class="card back-card">
+				<video width="640" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
+					<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
+				</video>
+			</div>
 		</div>
-		<div class="card back-card">
-			<video width="640" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
-				<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
-			</video>
-			<a href="#" class="btn back">
-				비요약
-			</a>
+		<div class="summury">
+			<div id="checkboxCard" style="display: none;">
+				<h1>요약을 위한 체크박스 추가 예정</h1>
+			</div>
 		</div>
 	</div>
 	<form th:action="@{'/recommend/toggle/'+ ${videoNo}}" method="POST">
@@ -68,13 +74,17 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 		$('.front').on('click', function () {
+			$('#checkboxCard').show();
 			$('.card').addClass('active');
-			$('#VideoPlayer').get(0).pause();
 		});
 
 		$('.back').on('click', function () {
 			$('.card').removeClass('active');
+			$('#checkboxCard').hide();
 		});
+		$('#checkboxCArd').on('shwo', function () {
+			checkBoxCreate();
+		})
 	</script>
 
 	<script>
