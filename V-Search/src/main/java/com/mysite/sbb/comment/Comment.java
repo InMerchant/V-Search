@@ -32,7 +32,7 @@ public class Comment {
 
     @JoinColumn(name = "videoNo", referencedColumnName = "VIDEO_NO")
     @ManyToOne
-    private Video VideoNo;
+    private Video video;
 
     @Column(name = "content")
     private String content;

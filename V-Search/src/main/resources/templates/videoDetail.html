@@ -59,13 +59,20 @@
 	</div>
 	<p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
 	<p>추천 수 : <span th:text="${recommendationsCount}"></span></p>
+	
+	
+	
     <!-- 댓글 입력 폼 -->
    <h2>Add Comment</h2>
-   <form th:action="@{'/comments/create/'+${videoNo}}" method="post">
+   <form th:action="@{'/comments/create/'+${videoNo}}" method="POST">
       <input type="hidden" name="videoNo" th:value="${videoNo}">
       <textarea name="content" placeholder="Enter your comment" required></textarea><br>
       <button type="submit">Submit</button>
    </form>
+   
+   
+   
+   
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 		$('.front').on('click', function () {
