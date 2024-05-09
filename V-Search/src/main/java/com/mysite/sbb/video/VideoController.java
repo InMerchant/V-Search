@@ -133,12 +133,18 @@ public class VideoController {
 
 	    @PostMapping("/comments/create/{videoNo}")
 	    public ResponseEntity<?> createComment(HttpServletRequest request, @PathVariable("videoNo") Video videoNumber) {
-	                    
+	        try {	            
 	            commentService.createComment(request, videoNumber);
 	            
 	            // 댓글이 성공적으로 생성되었으므로, 해당 댓글의 상세 페이지로 리다이렉션
 				return ResponseEntity.ok("Recommendation toggled successfully");
-	      
+	        } catch (Exception e) {
+	        	System.out.println(videoNumber);
+	            System.err.println("An error occurred while creating comment: " + e.getMessage());
+	            e.printStackTrace();
+	            // 예외 처리 후 적절한 처리를 추가할 수 있습니다.
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
 	    }
 	}
 
