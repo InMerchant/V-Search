@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.2'
+	id 'org.springframework.boot' version '3.2.5'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
@@ -17,6 +17,8 @@ repositories {
 
 
 dependencies {
+	implementation 'javax.ws.rs:javax.ws.rs-api:2.0.1'
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation group: 'com.oracle.database.jdbc', name: 'ojdbc6', version: '11.2.0.4'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -33,6 +35,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'org.commonmark:commonmark:0.21.0'
+    implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-workrequests', version: '2.44.0'
+    implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-filestorage', version: '2.44.0'
+    implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-audit', version: '2.44.0'
+    implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-core', version: '2.44.0'
+    implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-database', version: '2.44.0'
+    implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '2.44.0'
+    implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-objectstorage-generated', version: '2.44.0'
+    implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.35'
+    implementation group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.35'
+    implementation group: 'org.glassfish.jersey.ext', name: 'jersey-entity-filtering', version: '2.35'
+    implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: '2.35'
+    implementation group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.35'
 }
 
 tasks.withType(JavaCompile) {
