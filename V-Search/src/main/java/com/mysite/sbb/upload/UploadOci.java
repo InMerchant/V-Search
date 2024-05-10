@@ -20,15 +20,15 @@ import com.oracle.bmc.objectstorage.transfer.UploadManager.UploadResponse;
 
 public class UploadOci {
 
-	public static void main(String[] args) throws Exception {
+	public void uploadOracle(File file, String title) throws Exception {
         String configurationFilePath = "~/key/config";
         String profile = "DEFAULT";
 
         String namespaceName = "axekzvuz7vol";
         String bucketName = "bucket-20240503-1000";
-        String objectName = "test/video1.png";
-        File body = "~\video\test"; // 업로드할 파일을 가리키는 File 객체
-        String contentType = null; // 업로드할 파일의 컨텐츠 타입 (예: "image/png", "application/pdf" 등)
+        String objectName =title;
+        File body = file; // 업로드할 파일을 가리키는 File 객체
+        String contentType = "video/mp4"; // 업로드할 파일의 컨텐츠 타입 (예: "image/png", "application/pdf" 등)
         Map<String, String> metadata = null; // 추가할 메타데이터가 없다면 null
         String contentEncoding = null; // 압축방식 예: "gzip", "deflate" 등, 없으면 null
         String contentLanguage = null; // 파일의 언어 (예: "en", "ko", "jp" 등), 언어 정보가 없다면 null
