@@ -48,7 +48,6 @@ public class VideoService {
 		String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int userNo = userService.getUserNO(username);
-		byte[] fileBytes = file.getBytes();
 		Video Video = new Video();
 		Video.setUSER_NO(userNo);
 		Video.setVIDEO_NAME(title);
