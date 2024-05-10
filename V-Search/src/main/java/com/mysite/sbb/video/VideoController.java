@@ -1,5 +1,6 @@
 package com.mysite.sbb.video;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -179,19 +180,11 @@ public class VideoController {
 
 	@PostMapping("/upload")
 	@Secured("ROLE_USER")
-	public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,
+	public String uploadFile(@RequestParam("file") File file, @RequestParam("title") String title,
 			@RequestParam("summary") int summary, Model model) {
-		System.out.println("File object: " + file);
-		System.out.println("File size: " + file.getSize());
-		if ((file == null || file.isEmpty()) || (title == null || title.isEmpty())) {
-			model.addAttribute("message", "Please select a file and enter a title to upload.");
-			return "uploadResult";
-		}
 		try {
 			videoService.uploadFile(file, title, summary);
-			model.addAttribute("message", "File uploaded successfully: " + file.getOriginalFilename());
 		} catch (Exception e) {
-			model.addAttribute("message", "Failed to upload file: " + file.getOriginalFilename());
 			e.printStackTrace();
 		}
 		return "uploadResult";
