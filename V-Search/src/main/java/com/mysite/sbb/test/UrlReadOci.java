@@ -27,7 +27,7 @@ public class UrlReadOci {
         String profile = "DEFAULT";
         String region = "ap-chuncheon-1";
         String bucketName = "bucket-20240503-1000";
-        String objectName = "test/video1.png";
+        String objectName = "test.mp4";
 
         final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(configurationFilePath, profile);
 
