@@ -137,7 +137,7 @@ public class VideoController {
 	            commentService.createComment(request, videoNumber);
 	            
 	            // 댓글이 성공적으로 생성되었으므로, 해당 댓글의 상세 페이지로 리다이렉션
-				return ResponseEntity.ok("Recommendation toggled successfully");
+				return ResponseEntity.ok("왜?");
 	        } catch (Exception e) {
 	        	System.out.println(videoNumber);
 	            System.err.println("An error occurred while creating comment: " + e.getMessage());
