@@ -25,6 +25,9 @@ public class OciUtilController {
 
         String configurationFilePath = "~/key/config";
         String profile = "DEFAULT";
+        String region = "ap-chuncheon-1";
+        String bucketName = "bucket-20240503-1000";
+        String objectName = "test/video1.png";
 
         final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(configurationFilePath, profile);
 
@@ -60,8 +63,6 @@ public class OciUtilController {
         } while (nextToken != null);
 
         // fetch the uploaded file from object storage
-        String bucketName = null;
-        String objectName = null;
         ResponseHandler<GetObjectRequest, GetObjectResponse> objectHandler =
                 new ResponseHandler<>();
         GetObjectRequest getObjectRequest =
@@ -76,6 +77,9 @@ public class OciUtilController {
         // stream contents should match the file uploaded
         try (final InputStream fileStream = getResponse.getInputStream()) {
             // use fileStream
+        	String objectURL = String.format("https://objectstorage.%s.oraclecloud.com/n/%s/b/%s/o/%s",
+        	                                region, namespaceName, bucketName, objectName);
+        	System.out.println("Object URL: " + objectURL);
         } // try-with-resources automatically closes fileStream
 
         client.close();
