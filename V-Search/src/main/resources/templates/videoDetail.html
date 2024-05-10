@@ -53,7 +53,7 @@
 		<form th:action="@{'/api/subscribe/'+${videoNo}}" method="POST">
 			<button type="submit" id="subscribe">구독</button>
 		</form>
-		<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET" style="display:none">
+		<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET">
 			<button type="submit" id="unsubscribe">구독취소</button>
 		</form>
 	</div>
