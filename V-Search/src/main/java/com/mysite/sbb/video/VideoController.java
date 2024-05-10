@@ -55,6 +55,7 @@ import com.mysite.sbb.recommend.RecommendService;
 @Controller
 @EnableTransactionManagement
 public class VideoController {
+    private final CommentService commentService;	
 	@Autowired
 	private VideoService videoService;
 	@Autowired
@@ -78,6 +79,12 @@ public class VideoController {
 		model.addAttribute("videoNo", videoNo);
 		int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
 		model.addAttribute("recommendationsCount", recommendationsCount);
+		
+		
+		
+		List<Comment> comments = commentService.getCommentsByVideoNumber(videoNo);
+	    model.addAttribute("comments", comments);
+	    
 		return "videoDetail";
 	}
 
@@ -98,6 +105,14 @@ public class VideoController {
 		}
 	}
 
+	
+	@PostMapping("/comments/{id}")
+	public void deleteComment(@PathVariable("id") int id) {
+	    commentService.deleteComment(id);
+	}
+
+	  
+	
 	@RestController
 	public class RecommendController {
 
@@ -147,8 +162,6 @@ public class VideoController {
 	        }
 	    }
 	}
-
-
 
 
 	
