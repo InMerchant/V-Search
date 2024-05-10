@@ -1,62 +1,112 @@
 package com.mysite.sbb.test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.util.concurrent.CountDownLatch;
 
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
-import com.oracle.bmc.objectstorage.ObjectStorage;
-import com.oracle.bmc.objectstorage.ObjectStorageClient;
-import com.oracle.bmc.objectstorage.requests.GetBucketRequest;
+import com.oracle.bmc.objectstorage.ObjectStorageAsync;
+import com.oracle.bmc.objectstorage.ObjectStorageAsyncClient;
+import com.oracle.bmc.objectstorage.model.BucketSummary;
 import com.oracle.bmc.objectstorage.requests.GetNamespaceRequest;
-import com.oracle.bmc.objectstorage.responses.GetBucketResponse;
+import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
+import com.oracle.bmc.objectstorage.requests.ListBucketsRequest;
+import com.oracle.bmc.objectstorage.requests.ListBucketsRequest.Builder;
 import com.oracle.bmc.objectstorage.responses.GetNamespaceResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
+import com.oracle.bmc.objectstorage.responses.ListBucketsResponse;
+import com.oracle.bmc.responses.AsyncHandler;
 
-@RestController
-@RequestMapping("/oci-util")
 public class OciUtilController {
 
-    @GetMapping("/test")
-    public void testOciUtil() {
-        // OCI 설정 파일의 경로
-        String configFile = "~/key/config";
+    public static void main(String[] args) throws Exception {
 
-        // OCI 설정 파일을 이용하여 인증 제공자 생성
-        AuthenticationDetailsProvider provider = null;
-        try {
-            provider = new ConfigFileAuthenticationDetailsProvider(configFile, "DEFAULT");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
+        String configurationFilePath = "~/key/config";
+        String profile = "DEFAULT";
+
+        final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(configurationFilePath, profile);
+
+        final AuthenticationDetailsProvider provider =
+                new ConfigFileAuthenticationDetailsProvider(configFile);
+        ObjectStorageAsync client =
+                ObjectStorageAsyncClient.builder().region(Region.AP_CHUNCHEON_1).build(provider);
+
+        ResponseHandler<GetNamespaceRequest, GetNamespaceResponse> namespaceHandler =
+                new ResponseHandler<>();
+        client.getNamespace(GetNamespaceRequest.builder().build(), namespaceHandler);
+        GetNamespaceResponse namespaceResponse = namespaceHandler.waitForCompletion();
+
+        String namespaceName = namespaceResponse.getValue();
+        System.out.println("Using namespace: " + namespaceName);
+
+        Builder listBucketsBuilder =
+                ListBucketsRequest.builder()
+                        .namespaceName(namespaceName)
+                        .compartmentId(provider.getTenantId());
+
+        String nextToken = null;
+        do {
+            listBucketsBuilder.page(nextToken);
+            ResponseHandler<ListBucketsRequest, ListBucketsResponse> listBucketsHandler =
+                    new ResponseHandler<>();
+            client.listBuckets(listBucketsBuilder.build(), listBucketsHandler);
+            ListBucketsResponse listBucketsResponse = listBucketsHandler.waitForCompletion();
+            for (BucketSummary bucket : listBucketsResponse.getItems()) {
+                System.out.println("Found bucket: " + bucket.getName());
+            }
+            nextToken = listBucketsResponse.getOpcNextPage();
+        } while (nextToken != null);
+
+        // fetch the uploaded file from object storage
+        String bucketName = null;
+        String objectName = null;
+        ResponseHandler<GetObjectRequest, GetObjectResponse> objectHandler =
+                new ResponseHandler<>();
+        GetObjectRequest getObjectRequest =
+                GetObjectRequest.builder()
+                        .namespaceName(namespaceName)
+                        .bucketName(bucketName)
+                        .objectName(objectName)
+                        .build();
+        client.getObject(getObjectRequest, objectHandler);
+        GetObjectResponse getResponse = objectHandler.waitForCompletion();
+
+        // stream contents should match the file uploaded
+        try (final InputStream fileStream = getResponse.getInputStream()) {
+            // use fileStream
+        } // try-with-resources automatically closes fileStream
+
+        client.close();
+    }
+
+    private static class ResponseHandler<IN, OUT> implements AsyncHandler<IN, OUT> {
+        private OUT item;
+        private Throwable failed = null;
+        private CountDownLatch latch = new CountDownLatch(1);
+
+        private OUT waitForCompletion() throws Exception {
+            latch.await();
+            if (failed != null) {
+                if (failed instanceof Exception) {
+                    throw (Exception) failed;
+                }
+                throw (Error) failed;
+            }
+            return item;
         }
 
-        // 객체 저장소 클라이언트 초기화
-        ObjectStorage client = new ObjectStorageClient(provider);
-        client.setRegion(Region.AP_CHUNCHEON_1);
+        @Override
+        public void onSuccess(IN request, OUT response) {
+            item = response;
+            latch.countDown();
+        }
 
-        // 네임스페이스 가져오기
-        GetNamespaceResponse namespaceResponse = client.getNamespace(GetNamespaceRequest.builder().build());
-        String namespaceName = namespaceResponse.getValue();
-
-        // 버킷 정보 가져오기
-        String bucketName = "bucket-20240503-1000";
-        GetBucketRequest request = GetBucketRequest.builder()
-                .namespaceName(namespaceName)
-                .bucketName(bucketName)
-                .build();
-        GetBucketResponse response = client.getBucket(request);
-
-        // 가져온 버킷 정보 출력
-        System.out.println("Bucket Name : " + response.getBucket().getName());
-        System.out.println("Bucket Compartment : " + response.getBucket().getCompartmentId());
-        System.out.println("The Approximate total number of objects within this bucket : "
-                + response.getBucket().getApproximateCount());
-        System.out.println("The Approximate total size of objects within this bucket : "
-                + response.getBucket().getApproximateSize());
+        @Override
+        public void onError(IN request, Throwable error) {
+            failed = error;
+            latch.countDown();
+        }
     }
 }
