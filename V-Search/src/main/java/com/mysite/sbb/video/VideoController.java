@@ -107,13 +107,14 @@ public class VideoController {
 	}
 
 	
-	@PostMapping("/comments/{id}")
-	public void deleteComment(@PathVariable("id") int id) {
+	@PostMapping("/comments/{videoNo}/{id}")
+	public String deleteComment(@PathVariable("videoNo") int videoNo, @PathVariable("id") int id) {
 	    commentService.deleteComment(id);
+	    // 삭제 후 리다이렉션할 URL을 반환합니다. 여기서는 원래 페이지로 리다이렉션합니다.
+	    return "redirect:/video/" + videoNo;
 	}
 
-	  
-	
+
 	@RestController
 	public class RecommendController {
 
