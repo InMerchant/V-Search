@@ -31,7 +31,9 @@
 			</div>
 			<div class="card back-card">
 				<video width="640" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
-					<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
+					<source
+						th:src="@{'https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axekzvuz7vol/b/bucket-20240503-1000/o/test.mp4'}"
+						type="video/mp4">
 					원본 영상
 				</video>
 			</div>
@@ -90,6 +92,8 @@
 				$('.back').hide();
 				$('.card').removeClass('active');
 				$('#checkboxCard').hide();
+				var player = videojs('VideoPlayer2');
+				player.pause();
 			});
 
 			$('.subscribe').on('click', function () {
@@ -101,6 +105,18 @@
 				$('.unsubscribe').hide();
 			});
 			var player = videojs("VideoPlayer", {
+				controls: true,
+				playsinline: true,
+				preload: "auto",
+				controlBar:
+				{
+					playToggle: true
+					, pictureInPictureToggle: true
+					, remainingTimeDisplay: true
+					, progressControl: true
+				}
+			});
+			var player = videojs("VideoPlayer2", {
 				controls: true,
 				playsinline: true,
 				preload: "auto",
