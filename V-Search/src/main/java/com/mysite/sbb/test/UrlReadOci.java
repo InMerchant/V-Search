@@ -19,7 +19,7 @@ import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListBucketsResponse;
 import com.oracle.bmc.responses.AsyncHandler;
 
-public class OciUtilController {
+public class UrlReadOci {
 
     public static void main(String[] args) throws Exception {
 
