@@ -42,6 +42,7 @@ dependencies {
     implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-core', version: '3.41.1'
     implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-database', version: '3.41.1'
     implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '3.41.1'
+    implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-objectstorage', version: '3.41.1'
     implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-objectstorage-generated', version: '3.41.1'
     implementation group: 'org.glassfish.jersey.connectors', name: 'jersey-apache-connector', version: '2.35'
     implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.35'
