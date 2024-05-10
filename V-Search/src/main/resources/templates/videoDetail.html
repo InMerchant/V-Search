@@ -72,7 +72,14 @@
 		<button type="submit">Submit</button>
 	</form>
 
-
+<div th:each="comment : ${comments}">
+    <p th:text="${comment.content}"></p>
+    <!-- 삭제 버튼 -->
+    <form th:action="@{/comments/{id}(id=${comment.id})}" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <input type="submit" value="삭제" />
+    </form>
+</div>
 
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
