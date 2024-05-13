@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.jvnet.hk2.annotations.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
@@ -18,16 +21,16 @@ import com.oracle.bmc.objectstorage.transfer.UploadManager;
 import com.oracle.bmc.objectstorage.transfer.UploadManager.UploadRequest;
 import com.oracle.bmc.objectstorage.transfer.UploadManager.UploadResponse;
 
+@Service
 public class UploadOci {
-
-	public void uploadOracle(File file, String title) throws Exception {
+	public void uploadOracle(MultipartFile file, String title) throws Exception {
         String configurationFilePath = "~/key/config";
         String profile = "DEFAULT";
 
         String namespaceName = "axekzvuz7vol";
         String bucketName = "bucket-20240503-1000";
         String objectName =title;
-        File body = file; // 업로드할 파일을 가리키는 File 객체
+        File body = new File(file.getOriginalFilename()); // 업로드할 파일을 가리키는 File 객체
         String contentType = "video/mp4"; // 업로드할 파일의 컨텐츠 타입 (예: "image/png", "application/pdf" 등)
         Map<String, String> metadata = null; // 추가할 메타데이터가 없다면 null
         String contentEncoding = null; // 압축방식 예: "gzip", "deflate" 등, 없으면 null

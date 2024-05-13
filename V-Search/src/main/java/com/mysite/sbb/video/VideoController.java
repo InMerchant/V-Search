@@ -181,7 +181,7 @@ public class VideoController {
 
 	@PostMapping("/upload")
 	@Secured("ROLE_USER")
-	public String uploadFile(@RequestParam("file") File file, @RequestParam("title") String title,
+	public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,
 			@RequestParam("summary") int summary, Model model) {
 		try {
 			videoService.uploadFile(file, title, summary);

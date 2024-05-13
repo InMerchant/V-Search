@@ -1,7 +1,7 @@
 package com.mysite.sbb.video;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+
 
 import org.springframework.security.core.userdetails.UserDetails;
 import java.io.FileOutputStream;
@@ -20,7 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.mysite.sbb.User.UserService;
-import com.mysite.sbb.upload.UploadOci;
+
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,8 +36,8 @@ public class VideoService {
 	private VideoRepository vR;
 	@Autowired
 	private JdbcTemplate jT;
-	@Autowired
-	private UploadOci UO;
+
+
 	public List<Video> getAllVideo() {
 		return vR.findAll();
 	}
@@ -47,15 +47,16 @@ public class VideoService {
 	}
 
 	@Transactional
-	public void uploadFile(File file, String title, int summary) throws Exception {
+	public void uploadFile(MultipartFile file, String title, int summary) throws IOException {
 		// 파일명에 UUID를 추가하여 중복을 방지합니다.
+		String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int userNo = userService.getUserNO(username);
-		UO.uploadOracle(file,title);
+
 		Video Video = new Video();
 		Video.setUSER_NO(userNo);
 		Video.setVIDEO_NAME(title);
-		//Video.setSTORAGE(URL);//URL 추출 함수 만들것
+		//Video.setSTORAGE(fileBytes);
 		Video.setSummary_chk(summary);
 		// 비디오 엔티티 저장
 		vR.save(Video);

@@ -72,14 +72,14 @@
 		<button type="submit">Submit</button>
 	</form>
 
-<div th:each="comment : ${comments}">
-    <p th:text="${comment.content}"></p>
-    <!-- 삭제 버튼 -->
-    <form th:action="@{'/comments/' + ${videoNo} + '/' + ${comment.id}}" method="POST">
-        <input type="hidden" name="_method" value="delete" />
-        <input type="submit" value="삭제" />
-    </form>
-</div>
+	<div th:each="comment : ${comments}">
+		<p th:text="${comment.content}"></p>
+		<!-- 삭제 버튼 -->
+		<form th:action="@{'/comments/' + ${videoNo} + '/' + ${comment.id}}" method="POST">
+			<input type="hidden" name="_method" value="delete" />
+			<input type="submit" value="삭제" />
+		</form>
+	</div>
 
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -111,46 +111,43 @@
 				$('.subscribe').show();
 				$('.unsubscribe').hide();
 			});
-			var player = videojs("VideoPlayer", {
-				controls: true,
-				playsinline: true,
-				preload: "auto",
-				controlBar:
-				{
-					playToggle: true
-					, pictureInPictureToggle: true
-					, remainingTimeDisplay: true
-					, progressControl: true
-				}
-			});
-			var player = videojs("VideoPlayer2", {
-				controls: true,
-				playsinline: true,
-				preload: "auto",
-				controlBar:
-				{
-					playToggle: true
-					, pictureInPictureToggle: true
-					, remainingTimeDisplay: true
-					, progressControl: true
-				}
+
+			// 영상 파트 설정
+			var parts = [
+				{start: 0, end: 30},  // 파트 1: 0초부터 30초까지
+				{start: 60, end: 90}, // 파트 2: 1분부터 1분 30초까지
+				{start: 120, end: 150} // 파트 3: 2분부터 2분 30초까지
+			];
+
+			// 요약 영상 재생 버튼
+			$('.front').on('click', function () {
+				playParts('VideoPlayer', parts);
 			});
 
-			player.markers({
-				markerTip: {
-					display: true,
-					text: function (marker) {
-						return marker.text;
-					},
-					time: function (marker) {
-						return marker.time;
-					}
-				},
-				markers: [
-					{time: 10, text: ''},
-					{time: 25, text: ''}
-				]
+			// 원본 영상 재생 버튼
+			$('.back').on('click', function () {
+				var player2 = videojs('VideoPlayer2');
+				player2.play();
 			});
+
+			// Video.js를 이용하여 파트 재생
+			function playParts(playerId, parts) {
+				var player = videojs(playerId);
+				player.pause(); // 영상 일시 중지
+
+				// 각 파트를 순회하면서 재생
+				parts.forEach(function (part) {
+					player.currentTime(part.start); // 해당 파트의 시작 시간으로 이동
+					player.play(); // 영상 재생
+
+					// 파트 종료 시간에 도달하면 영상 일시 중지
+					player.on('timeupdate', function () {
+						if (player.currentTime() >= part.end) {
+							player.pause();
+						}
+					});
+				});
+			}
 		});
 	</script>
 
