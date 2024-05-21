@@ -28,6 +28,6 @@ public class Video {
 	private int summary_chk;
 	private int USER_NO;
 	@Lob
-	private byte[] STORAGE;
+	private String STOURL;
 	private String VIDEO_NAME;
 }

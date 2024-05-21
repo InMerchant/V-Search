@@ -25,7 +25,7 @@
 		<div class="container">
 			<div class="card front-card">
 				<video width="640" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
-					<source th:src="@{'data:video/mp4;base64,' + ${videoData}}" type="video/mp4">
+					<source th:src="@{${videoData}}" type="video/mp4">
 					요약영상
 				</video>
 			</div>
@@ -62,8 +62,6 @@
 	<p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
 	<p>추천 수 : <span th:text="${recommendationsCount}"></span></p>
 
-
-
 	<!-- 댓글 입력 폼 -->
 	<h2>Add Comment</h2>
 	<form th:action="@{'/comments/create/'+${videoNo}}" method="POST">
@@ -80,7 +78,6 @@
 			<input type="submit" value="삭제" />
 		</form>
 	</div>
-
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
@@ -103,51 +100,67 @@
 				player.pause();
 			});
 
-			$('.subscribe').on('click', function () {
-				$('.unsubscribe').show();
-				$('.subscribe').hide();
-			});
-			$('.unsubscribe').on('click', function () {
-				$('.subscribe').show();
-				$('.unsubscribe').hide();
+			var player1 = videojs("VideoPlayer", {
+				controls: true,
+				playsinline: true,
+				preload: "auto",
+				controlBar:
+				{
+					playToggle: true
+					, pictureInPictureToggle: true
+					, remainingTimeDisplay: true
+					, progressControl: true
+				}
 			});
 
-			// 영상 파트 설정
-			var parts = [
-				{start: 0, end: 30},  // 파트 1: 0초부터 30초까지
-				{start: 60, end: 90}, // 파트 2: 1분부터 1분 30초까지
-				{start: 120, end: 150} // 파트 3: 2분부터 2분 30초까지
+			var player2 = videojs("VideoPlayer2", {
+				controls: true,
+				playsinline: true,
+				preload: "auto",
+				controlBar:
+				{
+					playToggle: true
+					, pictureInPictureToggle: true
+					, remainingTimeDisplay: true
+					, progressControl: true
+				}
+			});
+
+			player1.markers({
+				markerTip: {
+					display: true,
+					text: function (marker) {
+						return marker.text;
+					},
+					time: function (marker) {
+						return marker.time;
+					}
+				},
+				markers: [
+					{time: 10, text: ''},
+					{time: 25, text: ''}
+				]
+			});
+			var sections = [
+				{start: 0, end: 5},
+				{start: 10, end: 15}
 			];
+			var curIndex = 0;
+			player2.on('timeupdate', function () {
+				var currentTime = player2.currentTime();
+				var curSecIndex = sections[curIndex];
 
-			// 요약 영상 재생 버튼
-			$('.front').on('click', function () {
-				playParts('VideoPlayer', parts);
-			});
-
-			// 원본 영상 재생 버튼
-			$('.back').on('click', function () {
-				var player2 = videojs('VideoPlayer2');
-				player2.play();
-			});
-
-			// Video.js를 이용하여 파트 재생
-			function playParts(playerId, parts) {
-				var player = videojs(playerId);
-				player.pause(); // 영상 일시 중지
-
-				// 각 파트를 순회하면서 재생
-				parts.forEach(function (part) {
-					player.currentTime(part.start); // 해당 파트의 시작 시간으로 이동
-					player.play(); // 영상 재생
-
-					// 파트 종료 시간에 도달하면 영상 일시 중지
-					player.on('timeupdate', function () {
-						if (player.currentTime() >= part.end) {
-							player.pause();
-						}
-					});
-				});
-			}
+				if (currentTime >= curSecIndex.end) {
+					curIndex++;
+					if (curIndex < sections.length) {
+						player2.currentTime(sections[curIndex].start);
+						player2.play();
+					}
+					else {
+						player2.pause();
+					}
+				}
+			})
 		});
 	</script>
 
