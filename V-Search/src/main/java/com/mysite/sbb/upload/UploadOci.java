@@ -4,9 +4,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.jvnet.hk2.annotations.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
@@ -21,74 +20,59 @@ import com.oracle.bmc.objectstorage.transfer.UploadManager;
 import com.oracle.bmc.objectstorage.transfer.UploadManager.UploadRequest;
 import com.oracle.bmc.objectstorage.transfer.UploadManager.UploadResponse;
 
-@Service
+@Component
 public class UploadOci {
-	public void uploadOracle(MultipartFile file, String title) throws Exception {
-        String configurationFilePath = "~/key/config";
-        String profile = "DEFAULT";
 
-        String namespaceName = "axekzvuz7vol";
-        String bucketName = "bucket-20240503-1000";
-        String objectName =title;
-        File body = new File(file.getOriginalFilename()); // 업로드할 파일을 가리키는 File 객체
-        String contentType = "video/mp4"; // 업로드할 파일의 컨텐츠 타입 (예: "image/png", "application/pdf" 등)
-        Map<String, String> metadata = null; // 추가할 메타데이터가 없다면 null
-        String contentEncoding = null; // 압축방식 예: "gzip", "deflate" 등, 없으면 null
-        String contentLanguage = null; // 파일의 언어 (예: "en", "ko", "jp" 등), 언어 정보가 없다면 null
+	public void uploadOracle(File file, String title) throws Exception {
+		String configurationFilePath = "~/key/config";
+		String profile = "DEFAULT";
 
-        final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(configurationFilePath, profile);
+		String namespaceName = "axekzvuz7vol";
+		String bucketName = "bucket-20240503-1000";
+		String objectName = title;
+		Map<String, String> metadata = null;
+		String contentType = "video/mp4";
+		String contentEncoding = null;
+		String contentLanguage = null;
+		File body = file;
 
-        final ConfigFileAuthenticationDetailsProvider provider =
-                new ConfigFileAuthenticationDetailsProvider(configFile);
+		final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(configurationFilePath, profile);
 
-        ObjectStorage client =
-                ObjectStorageClient.builder().region(Region.AP_CHUNCHEON_1).build(provider);
+		final ConfigFileAuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(
+				configFile);
 
-        // configure upload settings as desired
-        UploadConfiguration uploadConfiguration =
-                UploadConfiguration.builder()
-                        .allowMultipartUploads(true)
-                        .allowParallelUploads(true)
-                        .build();
+		ObjectStorage client = ObjectStorageClient.builder().region(Region.AP_CHUNCHEON_1).build(provider);
 
-        UploadManager uploadManager = new UploadManager(client, uploadConfiguration);
+		// configure upload settings as desired
+		UploadConfiguration uploadConfiguration = UploadConfiguration.builder().allowMultipartUploads(true)
+				.allowParallelUploads(true).build();
 
-        PutObjectRequest request =
-                PutObjectRequest.builder()
-                        .bucketName(bucketName)
-                        .namespaceName(namespaceName)
-                        .objectName(objectName)
-                        .contentType(contentType)
-                        .contentLanguage(contentLanguage)
-                        .contentEncoding(contentEncoding)
-                        .opcMeta(metadata)
-                        .build();
+		UploadManager uploadManager = new UploadManager(client, uploadConfiguration);
 
-        UploadRequest uploadDetails =
-                UploadRequest.builder(body).allowOverwrite(true).build(request);
+		PutObjectRequest request = PutObjectRequest.builder().bucketName(bucketName).namespaceName(namespaceName)
+				.objectName(objectName).contentType(contentType).contentLanguage(contentLanguage)
+				.contentEncoding(contentEncoding).opcMeta(metadata).build();
 
-        // upload request and print result
-        // if multi-part is used, and any part fails, the entire upload fails and will throw
-        // BmcException
-        UploadResponse response = uploadManager.upload(uploadDetails);
-        System.out.println(response);
+		UploadRequest uploadDetails = UploadRequest.builder(body).allowOverwrite(true).build(request);
 
-        // fetch the object just uploaded
-        GetObjectResponse getResponse =
-                client.getObject(
-                        GetObjectRequest.builder()
-                                .namespaceName(namespaceName)
-                                .bucketName(bucketName)
-                                .objectName(objectName)
-                                .build());
+		// upload request and print result
+		// if multi-part is used, and any part fails, the entire upload fails and will
+		// throw
+		// BmcException
+		UploadResponse response = uploadManager.upload(uploadDetails);
+		System.out.println(response);
 
-        // use the response's function to print the fetched object's metadata
-        System.out.println(getResponse.getOpcMeta());
+		// fetch the object just uploaded
+		GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder().namespaceName(namespaceName)
+				.bucketName(bucketName).objectName(objectName).build());
 
-        // stream contents should match the file uploaded
-        try (final InputStream fileStream = getResponse.getInputStream()) {
-            // use fileStream
-        } // try-with-resources automatically closes fileStream
-    }
+		// use the response's function to print the fetched object's metadata
+		System.out.println(getResponse.getOpcMeta());
+
+		// stream contents should match the file uploaded
+		try (final InputStream fileStream = getResponse.getInputStream()) {
+			// use fileStream
+		} // try-with-resources automatically closes fileStream
+	}
 
 }
