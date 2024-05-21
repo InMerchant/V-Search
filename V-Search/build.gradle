@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+   implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.0.4.RELEASE'
    implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
    implementation 'javax.xml.bind:jaxb-api:2.3.1'
    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
