@@ -67,7 +67,6 @@ public class VideoService {
 		Video.setVIDEO_NAME(title);
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
-		// 비디오 엔티티 저장
 		vR.save(Video);
 	}
 
