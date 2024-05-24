@@ -5,6 +5,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.RestClientException;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Service
 public class CallService {
@@ -12,10 +13,11 @@ public class CallService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public String sendPostRequest(String url, SomeRequestPayload payload) {
+	public String sendPostRequest(String url, String title) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-
+		SomeRequestPayload payload=new SomeRequestPayload();
+		payload.setTitle(title);
 		HttpEntity<SomeRequestPayload> requestEntity = new HttpEntity<>(payload, headers);
 
 		try {
@@ -27,4 +29,18 @@ public class CallService {
 			return "Request failed: " + e.getMessage();
 		}
 	}
+
+	public class SomeRequestPayload {
+		@JsonProperty("title")
+		private String title;
+
+		public String getTitle() {
+			return title;
+		}
+
+		public void setTitle(String title) {
+			this.title = title;
+		}
+	}
+
 }

@@ -1,8 +1,6 @@
 package com.mysite.sbb.video;
 
 import java.io.ByteArrayOutputStream;
-import com.mysite.sbb.Call.SomeRequestPayload;
-
 import java.io.File;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +31,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import com.mysite.sbb.Call.SomeRequestPayload;
 
 @Service
 public class VideoService {
@@ -71,9 +68,7 @@ public class VideoService {
 			URL = UR.VideoUrl(title);
 			// SMYURL=UR.VideoUrl("summary"+title);
 			String Url = "https://648f-61-34-253-238.ngrok-free.app/execute";
-			SomeRequestPayload payload = new SomeRequestPayload();
-			payload.setTitle(title);
-			String callResponse = callService.sendPostRequest(Url, payload);
+			String callResponse = callService.sendPostRequest(Url,title);
 			System.out.println("Call Response: " + callResponse);
 		} catch (Exception e) {
 			e.printStackTrace();
