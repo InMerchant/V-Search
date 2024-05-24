@@ -20,6 +20,7 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.sbb.Call.CallService;
@@ -57,21 +58,21 @@ public class VideoService {
 	}
 
 	@Transactional
+	@ResponseBody
 	public void uploadFile(File file, String title, int summary) throws IOException {
 		// 파일명에 UUID를 추가하여 중복을 방지합니다.
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int userNo = userService.getUserNO(username);
 		String URL = null;
-		String SMYURL=null;
+		String SMYURL = null;
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
-			//SMYURL=UR.VideoUrl("summary"+title);
-			String callUrl = "https://b4fb-61-34-253-238.ngrok-free.app"; // 실제 호출 URL로 변경
+			// SMYURL=UR.VideoUrl("summary"+title);
+			String Url = "https://648f-61-34-253-238.ngrok-free.app/execute";
 			SomeRequestPayload payload = new SomeRequestPayload();
 			payload.setTitle(title);
-			System.out.println("test");
-			String callResponse = callService.sendPostRequest(callUrl, payload);
+			String callResponse = callService.sendPostRequest(Url, payload);
 			System.out.println("Call Response: " + callResponse);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,7 +80,7 @@ public class VideoService {
 		Video Video = new Video();
 		Video.setUSER_NO(userNo);
 		Video.setVIDEO_NAME(title);
-		//Video.setSMYURL(SMYURL);
+		// Video.setSMYURL(SMYURL);
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
 		vR.save(Video);
@@ -90,6 +91,7 @@ public class VideoService {
 		String url = jT.queryForObject(sql, new Object[] { videoNO }, String.class);
 		return url;
 	}
+
 	public String SMYPlay(int videoNO) throws SQLException {
 		String sql = "SELECT SMYURL FROM bae.VIDEO WHERE VIDEO_NO=?";
 		String url = jT.queryForObject(sql, new Object[] { videoNO }, String.class);

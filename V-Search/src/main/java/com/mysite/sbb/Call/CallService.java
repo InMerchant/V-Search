@@ -5,6 +5,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.RestClientException;
+import com.mysite.sbb.Call.SomeRequestPayload;
 
 @Service
 public class CallService {

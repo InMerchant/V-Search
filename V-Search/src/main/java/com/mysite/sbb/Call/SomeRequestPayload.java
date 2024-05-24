@@ -6,7 +6,6 @@ public class SomeRequestPayload {
 	@JsonProperty("title")
 	private String title;
 
-	// Getter와 Setter
 	public String getTitle() {
 		return title;
 	}
