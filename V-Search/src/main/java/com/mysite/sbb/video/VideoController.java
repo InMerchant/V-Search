@@ -70,12 +70,14 @@ public class VideoController {
 	@GetMapping(value = "/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
 		String URL= videoService.videoPlay(videoNo);
+		String SMYURL=videoService.SMYPlay(videoNo);
 		// 비디오에 대한 유저 구독 정보 삽입
 		Del video = entityManager.find(Del.class, videoNo);
 		int videoUserId = video.getUsernumber();
 		UserProfileDto userDto = userService.userProfile(videoUserId, videoNo);
 		model.addAttribute("userDto", userDto);
 		model.addAttribute("videoData", URL);
+		model.addAttribute("SMYURL",SMYURL);
 		model.addAttribute("videoNo", videoNo);
 		int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
 		model.addAttribute("recommendationsCount", recommendationsCount);

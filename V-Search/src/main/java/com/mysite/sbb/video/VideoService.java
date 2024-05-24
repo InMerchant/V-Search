@@ -62,9 +62,11 @@ public class VideoService {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int userNo = userService.getUserNO(username);
 		String URL = null;
+		String SMYURL=null;
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
+			//SMYURL=UR.VideoUrl("summary"+title);
 			String callUrl = "https://b4fb-61-34-253-238.ngrok-free.app"; // 실제 호출 URL로 변경
 			SomeRequestPayload payload = new SomeRequestPayload();
 			payload.setTitle(title);
@@ -77,6 +79,7 @@ public class VideoService {
 		Video Video = new Video();
 		Video.setUSER_NO(userNo);
 		Video.setVIDEO_NAME(title);
+		//Video.setSMYURL(SMYURL);
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
 		vR.save(Video);
@@ -84,6 +87,11 @@ public class VideoService {
 
 	public String videoPlay(int videoNO) throws SQLException {
 		String sql = "SELECT STOURL FROM bae.VIDEO WHERE VIDEO_NO=?";
+		String url = jT.queryForObject(sql, new Object[] { videoNO }, String.class);
+		return url;
+	}
+	public String SMYPlay(int videoNO) throws SQLException {
+		String sql = "SELECT SMYURL FROM bae.VIDEO WHERE VIDEO_NO=?";
 		String url = jT.queryForObject(sql, new Object[] { videoNO }, String.class);
 		return url;
 	}
