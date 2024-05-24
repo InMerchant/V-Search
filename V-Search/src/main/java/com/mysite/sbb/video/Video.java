@@ -27,7 +27,7 @@ public class Video {
 	private int videoNo;
 	private int summary_chk;
 	private int USER_NO;
-	@Lob
 	private String STOURL;
 	private String VIDEO_NAME;
+	private String SMYURL;
 }

@@ -25,7 +25,9 @@
 					<div class="grid gap-2">
 						<div th:each="result : ${searchPage.content}" class="bg-white rounded-lg shadow-md overflow-hidden dark:bg-gray-800">
 							<div class="relative group">
-								<a th:href="@{'/video/' + ${result.videoNumber}}" class="absolute inset-0 z-10"></a>
+								<a th:href="@{'/video/' + ${result.videoNumber}}" class="absolute inset-0 z-10">
+									<span class="sr-only">View</span>
+								</a>
 								<img th:src="@{/placeholder.svg}" alt="Article Image" width="400" height="225" class="w-full h-48 object-cover group-hover:opacity-50 transition-opacity" style="aspect-ratio: 400 / 225; object-fit: cover;" />
 								<div class="p-4">
 									<h2 class="text-lg font-bold mb-2">
@@ -34,12 +36,33 @@
 										</a>
 									</h2>
 									<div class="flex items-center gap-2 mb-4">
+										<span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 border">
+											<img th:src="@{/placeholder-user.jpg}" alt="@shadcn" class="aspect-square h-full w-full" />
+										</span>
 										<div class="text-sm">
-											<div class="font-semibold">유저닉네임</div>
+											<div class="font-semibold">Vercel</div>
+											<div class="text-xs text-gray-500 dark:text-gray-400">300K subscribers</div>
 										</div>
+									</div>
+									<div class="flex items-center gap-2">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-gray-500 dark:text-gray-400">
+											<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+											<circle cx="12" cy="12" r="3"></circle>
+										</svg>
 									</div>
 								</div>
 							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-span-2 grid gap-4">
+					<div th:each="result : ${searchPage.content}" class="flex items-start gap-4 relative">
+						<a th:href="@{'/video/' + ${result.videoNumber}}" class="absolute inset-0">
+							<span class="sr-only">View</span>
+						</a>
+						<img th:src="@{/placeholder.svg}" alt="Thumbnail" width="168" height="94" class="aspect-video rounded-lg object-cover" />
+						<div class="text-sm">
+							<div class="font-medium line-clamp-2" th:text="${result.videoName}"></div>
 						</div>
 					</div>
 				</div>
@@ -55,11 +78,11 @@
 				</li>
 				<!-- 페이지 번호 출력 -->
 				<li th:each="i : ${#numbers.sequence(1, searchPage.totalPages)}" th:classappend="${searchPage.number + 1 == i ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}" class="mx-1">
-					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${i - 1}}"  th:text="${i}"></a>
+					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${i - 1}}" class="px-3 py-1 rounded-full border" th:text="${i}"></a>
 				</li>
 				<!-- 다음 페이지로 이동하는 버튼 -->
 				<li th:if="${searchPage.number + 1 < searchPage.totalPages}" class="mx-1">
-					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number + 1}}" &raquo;</a>
+					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number + 1}}" class="px-3 py-1 rounded-full border bg-white text-gray-700">&raquo;</a>
 				</li>
 			</ul>
 		</div>

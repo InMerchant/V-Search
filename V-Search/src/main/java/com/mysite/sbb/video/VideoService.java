@@ -1,6 +1,8 @@
 package com.mysite.sbb.video;
 
 import java.io.ByteArrayOutputStream;
+import com.mysite.sbb.Call.SomeRequestPayload;
+
 import java.io.File;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.mysite.sbb.Call.CallService;
 import com.mysite.sbb.User.UserService;
 import com.mysite.sbb.upload.UploadOci;
 import com.mysite.sbb.upload.UrlReadOci;
@@ -41,6 +45,8 @@ public class VideoService {
 	private UploadOci UO;
 	@Autowired
 	private UrlReadOci UR;
+	@Autowired
+	private CallService callService;
 
 	public List<Video> getAllVideo() {
 		return vR.findAll();
@@ -59,6 +65,12 @@ public class VideoService {
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
+			String callUrl = "https://b4fb-61-34-253-238.ngrok-free.app"; // 실제 호출 URL로 변경
+			SomeRequestPayload payload = new SomeRequestPayload();
+			payload.setTitle(title);
+			System.out.println("test");
+			String callResponse = callService.sendPostRequest(callUrl, payload);
+			System.out.println("Call Response: " + callResponse);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
