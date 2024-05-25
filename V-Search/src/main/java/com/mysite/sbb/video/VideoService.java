@@ -66,17 +66,17 @@ public class VideoService {
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
-			// SMYURL=UR.VideoUrl("summary"+title);
-			String Url = "https://648f-61-34-253-238.ngrok-free.app/execute";
-			String callResponse = callService.sendPostRequest(Url,title);
+			String Url = "https://d585-61-34-253-238.ngrok-free.app/execute";
+			String callResponse = callService.sendPostRequest(Url, title);
 			System.out.println("Call Response: " + callResponse);
+			//SMYURL = UR.VideoUrl(title + "_smr");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		Video Video = new Video();
 		Video.setUSER_NO(userNo);
 		Video.setVIDEO_NAME(title);
-		// Video.setSMYURL(SMYURL);
+		//Video.setSMYURL(SMYURL);
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
 		vR.save(Video);

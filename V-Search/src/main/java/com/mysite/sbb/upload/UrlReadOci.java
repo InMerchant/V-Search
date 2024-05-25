@@ -30,7 +30,7 @@ public class UrlReadOci {
         String profile = "DEFAULT";
         String region = "ap-chuncheon-1";
         String bucketName = "bucket-20240503-1000";
-        String objectName = title;
+        String objectName = title+"/"+title;
 
         final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(configurationFilePath, profile);
 

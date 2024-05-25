@@ -29,7 +29,6 @@ public class UploadOci {
 
 		String namespaceName = "axekzvuz7vol";
 		String bucketName = "bucket-20240503-1000";
-		String objectName = title;
 		Map<String, String> metadata = null;
 		String contentType = "video/mp4";
 		String contentEncoding = null;

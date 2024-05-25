@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 
+import org.apache.http.cookie.SM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -51,6 +52,8 @@ import com.mysite.sbb.delvideo.DelService;
 import com.mysite.sbb.recommend.Recommend;
 import com.mysite.sbb.recommend.RecommendRepository;
 import com.mysite.sbb.recommend.RecommendService;
+import com.mysite.sbb.timeline.TimeLine;
+import com.mysite.sbb.timeline.TimeLineService;
 
 @RequiredArgsConstructor
 @Controller
@@ -66,19 +69,23 @@ public class VideoController {
 	private final RecommendService recommendService;
 	@Autowired
 	private EntityManager entityManager;
+	@Autowired
+	private TimeLineService TS;
 
 	@GetMapping(value = "/video/{no}")
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
-		String URL= videoService.videoPlay(videoNo);
-		String SMYURL=videoService.SMYPlay(videoNo);
+		String URL = videoService.videoPlay(videoNo);
+		String SMYURL = videoService.SMYPlay(videoNo);
 		// 비디오에 대한 유저 구독 정보 삽입
 		Del video = entityManager.find(Del.class, videoNo);
 		int videoUserId = video.getUsernumber();
 		UserProfileDto userDto = userService.userProfile(videoUserId, videoNo);
 		model.addAttribute("userDto", userDto);
 		model.addAttribute("videoData", URL);
-		model.addAttribute("SMYURL",SMYURL);
+		model.addAttribute("SMYURL", SMYURL);
 		model.addAttribute("videoNo", videoNo);
+		List<TimeLine> SMYresult = TS.timeLineCaption(videoNo);
+		model.addAttribute("SMYresult",SMYresult);
 		int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
 		model.addAttribute("recommendationsCount", recommendationsCount);
 

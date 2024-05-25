@@ -31,15 +31,20 @@
 			</div>
 			<div class="card back-card">
 				<video width="640" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
-					<source
-						th:src="@{'SMYURL'}"
-						type="video/mp4">
+					<!--<source th:src="@{'SMYURL'}" type="video/mp4">-->
 					원본 영상
 				</video>
 			</div>
 		</div>
 		<div class="summury">
 			<div id="checkboxCard" style="display: none;">
+				<div>
+					<div th:each="SMYresult:${SMYresult}">
+						<p><span th:onclick="timemove(8)"
+								th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"></span>
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -81,6 +86,7 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
+		var player1, player2;
 		$(document).ready(function () {
 			$('.front').on('click', function () {
 				$('.front').hide();
@@ -99,8 +105,7 @@
 				var player = videojs('VideoPlayer2');
 				player.pause();
 			});
-
-			var player1 = videojs("VideoPlayer", {
+			player1 = videojs("VideoPlayer", {
 				controls: true,
 				playsinline: true,
 				preload: "auto",
@@ -113,7 +118,7 @@
 				}
 			});
 
-			var player2 = videojs("VideoPlayer2", {
+			player2 = videojs("VideoPlayer2", {
 				controls: true,
 				playsinline: true,
 				preload: "auto",
@@ -162,6 +167,9 @@
 				}
 			})
 		});
+		function timemove(time) {
+			player2.currentTime(time);
+		}
 	</script>
 
 </body>
