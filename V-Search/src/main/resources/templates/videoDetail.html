@@ -36,13 +36,25 @@
 				</video>
 			</div>
 		</div>
-		<div class="summury">
-			<div id="checkboxCard" style="display: none;">
-				<div>
-					<div th:each="SMYresult:${SMYresult}">
-						<p><span th:onclick="timemove(8)"
-								th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"></span>
-						</p>
+		<div id="summarymain" style="display: none;">
+			<div class="smybtn">
+				<button class="user" onclick="checks()">사용자 요약</button>
+				<button class="search" onclick="searchs()">검색</button>
+			</div>
+			<div class="summaryobject">
+				<div id="checkboxCard">
+					<div>
+					</div>
+				</div>
+			</div>
+			<div class="summary">
+				<div id="searchsmy" style="display: none;">
+					<div>
+						<div th:each="SMYresult:${SMYresult}">
+							<p><span th:onclick="timemove(8)"
+									th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"></span>
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -91,7 +103,7 @@
 			$('.front').on('click', function () {
 				$('.front').hide();
 				$('.back').show();
-				$('#checkboxCard').show();
+				$('#summarymain').show();
 				$('.card').addClass('active');
 				var player = videojs('VideoPlayer');
 				player.pause();
@@ -101,7 +113,8 @@
 				$('.front').show();
 				$('.back').hide();
 				$('.card').removeClass('active');
-				$('#checkboxCard').hide();
+				$('#summarymain').hide();
+				$('#searchsmy').hide();
 				var player = videojs('VideoPlayer2');
 				player.pause();
 			});
@@ -170,6 +183,13 @@
 		function timemove(time) {
 			player2.currentTime(time);
 		}
+		function searchs(){
+			
+		}
+		function checks(){
+			
+		}
+
 	</script>
 
 </body>

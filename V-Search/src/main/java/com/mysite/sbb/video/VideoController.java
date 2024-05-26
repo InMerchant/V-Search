@@ -76,7 +76,6 @@ public class VideoController {
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
 		String URL = videoService.videoPlay(videoNo);
 		String SMYURL = videoService.SMYPlay(videoNo);
-		// 비디오에 대한 유저 구독 정보 삽입
 		Del video = entityManager.find(Del.class, videoNo);
 		int videoUserId = video.getUsernumber();
 		UserProfileDto userDto = userService.userProfile(videoUserId, videoNo);
@@ -88,10 +87,8 @@ public class VideoController {
 		model.addAttribute("SMYresult",SMYresult);
 		int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
 		model.addAttribute("recommendationsCount", recommendationsCount);
-
 		List<Comment> comments = commentService.getCommentsByVideoNumber(videoNo);
 		model.addAttribute("comments", comments);
-
 		return "videoDetail";
 	}
 

@@ -58,28 +58,33 @@ public class VideoService {
 	@Transactional
 	@ResponseBody
 	public void uploadFile(File file, String title, int summary) throws IOException {
-		// 파일명에 UUID를 추가하여 중복을 방지합니다.
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int userNo = userService.getUserNO(username);
 		String URL = null;
 		String SMYURL = null;
+		String Url = "https://d585-61-34-253-238.ngrok-free.app/execute";
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
-			String Url = "https://d585-61-34-253-238.ngrok-free.app/execute";
-			String callResponse = callService.sendPostRequest(Url, title);
-			System.out.println("Call Response: " + callResponse);
-			//SMYURL = UR.VideoUrl(title + "_smr");
+			if (summary == 1) {
+				String callResponse = callService.sendPostRequest(Url, title);
+				System.out.println("Call Response: " + callResponse);
+				// SMYURL = UR.VideoUrl(title + "_smr");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		Video Video = new Video();
 		Video.setUSER_NO(userNo);
 		Video.setVIDEO_NAME(title);
-		//Video.setSMYURL(SMYURL);
+		// Video.setSMYURL(SMYURL);
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
-		vR.save(Video);
+		Video saveVideo=vR.save(Video);
+		if (summary == 1) {
+			int videoNo=saveVideo.getVideoNo();
+			String callResponse=callService.sendPostvideoNo(Url, videoNo);
+		}
 	}
 
 	public String videoPlay(int videoNO) throws SQLException {
