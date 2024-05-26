@@ -190,7 +190,12 @@
 			element.addEventListener('click', function () {
 				var text = element.textContent.trim();
 				var timeComponents = text.split(':');
-				var time = parseInt(timeComponents[0]) * 3600 + parseInt(timeComponents[1]) * 60 + parseInt(timeComponents[2]);
+				var time = 0;
+				if (timeComponents.length === 3) {
+					time = parseInt(timeComponents[0]) * 3600 + parseInt(timeComponents[1]) * 60 + parseInt(timeComponents[2]);
+				} else if (timeComponents.length === 2) {
+					time = parseInt(timeComponents[0]) * 60 + parseInt(timeComponents[1]);
+				}
 				console.log("클릭된 시간값:", time)
 				timemove(parseInt(time));
 			});

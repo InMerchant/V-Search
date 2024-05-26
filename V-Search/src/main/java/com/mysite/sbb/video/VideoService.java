@@ -62,7 +62,7 @@ public class VideoService {
 		int userNo = userService.getUserNO(username);
 		String URL = null;
 		String SMYURL = null;
-		String Url = "https://d585-61-34-253-238.ngrok-free.app/execute";
+		String Url = "https://dad2-61-34-253-238.ngrok-free.app/execute";
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
@@ -80,11 +80,11 @@ public class VideoService {
 		Video.setSMYURL(SMYURL);
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
-		Video saveVideo=vR.save(Video);
-		if (summary == 1) {
-			int videoNo=saveVideo.getVideoNo();
-			callService.sendPostvideoNo(Url, videoNo);
-		}
+		Video saveVideo = vR.save(Video);
+		/*
+		 * if (summary == 1) { int videoNo=saveVideo.getVideoNo();
+		 * callService.sendPostvideoNo(Url, videoNo); }
+		 */
 	}
 
 	public String videoPlay(int videoNO) throws SQLException {
