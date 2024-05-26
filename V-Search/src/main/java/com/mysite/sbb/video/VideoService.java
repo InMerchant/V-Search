@@ -69,7 +69,7 @@ public class VideoService {
 			if (summary == 1) {
 				String callResponse = callService.sendPostRequest(Url, title);
 				System.out.println("Call Response: " + callResponse);
-				// SMYURL = UR.VideoUrl(title + "_smr");
+				SMYURL = UR.VideoUrl(title + "_smr");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,7 +77,7 @@ public class VideoService {
 		Video Video = new Video();
 		Video.setUSER_NO(userNo);
 		Video.setVIDEO_NAME(title);
-		// Video.setSMYURL(SMYURL);
+		Video.setSMYURL(SMYURL);
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
 		Video saveVideo=vR.save(Video);
