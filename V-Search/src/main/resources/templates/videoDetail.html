@@ -31,28 +31,35 @@
 			</div>
 			<div class="card back-card">
 				<video width="640" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
-					<!--<source th:src="@{'SMYURL'}" type="video/mp4">-->
+					<source th:src="@{${SMYURL}}" type="video/mp4">
 					원본 영상
 				</video>
 			</div>
 		</div>
 		<div id="summarymain" style="display: none;">
 			<div class="smybtn">
-				<button class="user" onclick="checks()">사용자 요약</button>
-				<button class="search" onclick="searchs()">검색</button>
+				<button class="user" th:onclick="checks()">사용자 요약</button>
+				<button class="search" th:onclick="searchs()">검색</button>
 			</div>
-			<div class="summaryobject">
+			<div id="summaryobject">
 				<div id="checkboxCard">
 					<div>
+						<h3>객체 추가 예정</h3>
 					</div>
 				</div>
 			</div>
-			<div class="summary">
+			<div>
 				<div id="searchsmy" style="display: none;">
-					<div>
+					<form>
+						<input id="searchInput" type="text" placeholder="검색">
+					</form>
+					<div id="resultsContainer">
 						<div th:each="SMYresult:${SMYresult}">
-							<p><span th:onclick="timemove(8)"
-									th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"></span>
+							<p>
+								<span
+									th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"
+									class="videoLink">
+								</span>
 							</p>
 						</div>
 					</div>
@@ -100,6 +107,9 @@
 	<script>
 		var player1, player2;
 		$(document).ready(function () {
+			$('form').on('submit', function (e) {
+				e.preventDefault();
+			});
 			$('.front').on('click', function () {
 				$('.front').hide();
 				$('.back').show();
@@ -114,7 +124,6 @@
 				$('.back').hide();
 				$('.card').removeClass('active');
 				$('#summarymain').hide();
-				$('#searchsmy').hide();
 				var player = videojs('VideoPlayer2');
 				player.pause();
 			});
@@ -180,16 +189,38 @@
 				}
 			})
 		});
+		document.querySelectorAll('.videoLink').forEach(function (element) {
+			element.addEventListener('click', function () {
+				var text = element.textContent.trim();
+				var timeComponents = text.split(':');
+				var time = parseInt(timeComponents[0]) * 3600 + parseInt(timeComponents[1]) * 60 + parseInt(timeComponents[2]);
+				console.log("클릭된 시간값:", time)
+				timemove(parseInt(time));
+			});
+		});
 		function timemove(time) {
 			player2.currentTime(time);
 		}
-		function searchs(){
-			
+		function searchs() {
+			$('#searchsmy').show()
+			$('#summaryobject').hide()
 		}
-		function checks(){
-			
+		function checks() {
+			$('#searchsmy').hide()
+			$('#summaryobject').show()
 		}
-
+		$('#searchInput').on('input', function () {
+			var searchTerm = $(this).val().toLowerCase();
+			$('#resultsContainer > div').each(function () {
+				var text = $(this).text().toLowerCase();
+				if (text.includes(searchTerm)) {
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			});
+			$('#searchsmy').show();
+		});
 	</script>
 
 </body>

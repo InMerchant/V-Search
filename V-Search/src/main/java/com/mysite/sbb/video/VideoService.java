@@ -83,7 +83,7 @@ public class VideoService {
 		Video saveVideo=vR.save(Video);
 		if (summary == 1) {
 			int videoNo=saveVideo.getVideoNo();
-			String callResponse=callService.sendPostvideoNo(Url, videoNo);
+			callService.sendPostvideoNo(Url, videoNo);
 		}
 	}
 
