@@ -232,15 +232,26 @@ button[class="upload"]:hover {
 }
 
 .radio-group-container {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .radio-group-container h5 {
-    text-align: left;
-    margin-right: auto;
+	text-align: left;
+	margin-right: auto;
 }
 
 .radio-group {
-    margin-left: 20px;
+	margin-left: 20px;
+}
+
+@keyframes rotate-loading {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.loading-popup-wrap .pop-img {
+	animation: rotate-loading 3s linear infinite;
+	transform-origin: 50% 50%;
 }
