@@ -54,6 +54,8 @@
 			<button type="submit" class="upload">업로드</button>
 		</div>
 	</form>
+	<div id="loadingIndicator" style="display: none;">
+		로딩중
 	</div>
 	<script>
 		function dropHandler(event) {
@@ -138,18 +140,6 @@
 				xhr.send(formData);
 			});
 		});
-		function updateLoadingText() {
-			const loadingTextElement = $('#loadingDots');
-			if (!loadingTextElement) return;
-
-			const dots = ['.', '..', '...'];
-			let index = 0;
-
-			loadingInterval = setInterval(() => {
-				loadingTextElement.text(dots[index]);
-				index = (index + 1) % dots.length;
-			}, 500);
-		}
 
 	</script>
 </body>
