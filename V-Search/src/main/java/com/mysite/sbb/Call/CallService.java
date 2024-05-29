@@ -23,21 +23,19 @@ public class CallService {
 		payloadJson = "{\"folder_name\":\"" + folderName + "\"}";
 		HttpEntity<String> requestEntity = new HttpEntity<>(payloadJson, headers);
 		try {
-			ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
-					String.class);
-			return responseEntity.getBody();
+			String response = restTemplate.postForObject(url, requestEntity, String.class);
+			return response;
 		} catch (RestClientException e) {
 			e.printStackTrace();
 			return "Request failed: " + e.getMessage();
 		}
 	}
 
-	public String sendPostvideoNo(String url, int videoNo) {
+	public String sendPostvideoNotitle(String url, int videoNo, String title) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		String payloadJson;
-		payloadJson = "{\"Video_NO\":\"" + videoNo + "\"}";
-		HttpEntity<Integer> requestEntity = new HttpEntity<>(videoNo, headers);
+		String payloadJson = "{\"folder_name\":\"" + title + "\", \"video_no\":\"" + videoNo + "\"}";
+		HttpEntity<String> requestEntity = new HttpEntity<>(payloadJson, headers);
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
 					String.class);

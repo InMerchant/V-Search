@@ -51,8 +51,8 @@ public class VideoService {
 		return vR.findAll();
 	}
 
-	public List<Object[]> getAllVideoNamesAndUserNumbers() {
-		return vR.findAllVideoNamesAndUserNumbers();
+	public List<Object[]> getAllVideoNamesAndUserNumbersAndSTOURL() {
+		return vR.findAllVideoNamesAndUserNumbersAndSTOURL();
 	}
 
 	@Transactional
@@ -62,11 +62,11 @@ public class VideoService {
 		int userNo = userService.getUserNO(username);
 		String URL = null;
 		String SMYURL = null;
-		String Url = "https://29e3-61-34-253-238.ngrok-free.app/execute";
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
 			if (summary == 1) {
+				String Url = "https://0093-61-34-253-238.ngrok-free.app/execute";
 				String callResponse = callService.sendPostRequest(Url, title);
 				System.out.println("Call Response: " + callResponse);
 				SMYURL = UR.VideoUrl(title + "_smr");
@@ -81,10 +81,12 @@ public class VideoService {
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
 		Video saveVideo = vR.save(Video);
-		/*
-		 * if (summary == 1) { int videoNo=saveVideo.getVideoNo();
-		 * callService.sendPostvideoNo(Url, videoNo); }
-		 */
+		if (summary == 1) {
+			String Url = "https://0093-61-34-253-238.ngrok-free.app/info";
+			int videoNo = saveVideo.getVideoNo();
+			System.out.println(videoNo);
+			callService.sendPostvideoNotitle(Url, videoNo, title);
+		}
 	}
 
 	public String videoPlay(int videoNO) throws SQLException {

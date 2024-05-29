@@ -23,7 +23,7 @@
 					<input type="file" id="chooseFile" name="file" accept="video/*"
 						onchange="handleFiles(this.files)"><br><br>
 				</div>
-				<div id="uploadPreview" class="upload-container"></div> <!-- 추가된 엘리먼트 -->
+				<div id="uploadPreview" class="upload-container"></div>
 				<div id="files" class="files">
 					<div class="white-container" id="whiteContainer">
 						<div class="preview-container" id="previewContainer">
@@ -120,10 +120,10 @@
 				formData.append('title', title);
 				formData.append('summary', radioValue);
 				loadingIndicator.style.display = 'block';
-
 				// Ajax로 서버에 데이터 전송
 				var xhr = new XMLHttpRequest();
 				xhr.open('POST', '/upload', true);
+				xhr.timeout = 3600000;
 				xhr.onload = function () {
 					if (xhr.status === 200) {
 						console.log('Upload successful');
@@ -132,6 +132,12 @@
 					} else {
 						console.error('Upload failed');
 					}
+				};
+				 xhr.ontimeout = function () {
+					// 타임아웃 발생 시 처리할 내용
+					loadingIndicator.style.display = 'none'; // 로딩 표시 숨기기
+					console.error('Request timed out');
+					alert('Request timed out. Please try again.');
 				};
 				xhr.onerror = function () {
 					// 통신 오류 시 처리할 내용

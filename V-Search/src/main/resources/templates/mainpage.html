@@ -3,7 +3,6 @@
 	layout:decorate="~{layout/layout}">
 
 <head>
-	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 	<link rel="stylesheet" type="text/css" th:href="@{/mainpage.css}">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 	<style>
@@ -29,6 +28,7 @@
 			<a class="absolute inset-0 z-10" th:href="@{|/video/${detail[0]}|}">
 				<span class="sr-only">비디오 보기</span>
 			</a>
+			<!--<h3 th:text="${detail[3]}"></h3>-->
 			<img alt="Video Thumbnail" class="w-full h-60 object-cover" th:src="@{/placeholder.svg}"
 				style="aspect-ratio: 400/225;">
 			<div

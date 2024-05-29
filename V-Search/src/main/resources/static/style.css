@@ -3,6 +3,13 @@
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.logoimg {
+	max-height: 100px;
+	max-width: 100px;
+	height: auto;
+	width: auto;
+}
+
 .navbar-brand {
 	font-weight: bold;
 }

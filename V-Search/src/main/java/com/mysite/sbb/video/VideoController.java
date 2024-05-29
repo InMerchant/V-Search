@@ -6,6 +6,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class VideoController {
 		model.addAttribute("SMYURL", SMYURL);
 		model.addAttribute("videoNo", videoNo);
 		List<TimeLine> SMYresult = TS.timeLineCaption(videoNo);
-		model.addAttribute("SMYresult",SMYresult);
+		model.addAttribute("SMYresult", SMYresult);
 		int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
 		model.addAttribute("recommendationsCount", recommendationsCount);
 		List<Comment> comments = commentService.getCommentsByVideoNumber(videoNo);
@@ -163,7 +164,10 @@ public class VideoController {
 
 	@GetMapping("/")
 	public String mainPage(Model model) {
-		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbers();
+		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbersAndSTOURL();
+		for (Object[] detail : videoDetails) {
+			System.out.println(Arrays.toString(detail));
+		}
 		model.addAttribute("videoDetails", videoDetails);
 		return "mainpage";
 	}
