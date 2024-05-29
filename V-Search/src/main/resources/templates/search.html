@@ -1,69 +1,111 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-	layout:decorate="~{layout/layout}">
+    layout:decorate="~{layout/layout}">
 
 <head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" th:href="@{/search.css}">
-	<script src="https://cdn.tailwindcss.com"></script>
-	<title>Search Results</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" th:href="@{/search.css}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Search Results</title>
 </head>
 
 <body layout:fragment="content" class="bg-gray-100">
-	<div class="w-full px-4 mx-auto grid grid-rows-[auto_1fr_auto] gap-4 md:gap-6 pb-10">
-		<!-- 검색 결과가 없는 경우 -->
-		<div th:if="${searchPage == null or searchPage.empty}">
-			<p>검색 결과가 없습니다!</p>
-		</div>
+    <div class="w-full px-4 mx-auto grid grid-rows-[auto_1fr_auto] gap-4 md:gap-6 pb-10">
+        <!-- 검색 결과가 없는 경우 -->
+        <div th:if="${searchPage == null or searchPage.empty}">
+            <p>검색 결과가 없습니다!</p>
+        </div>
 
-		<!-- 검색 결과가 있는 경우 -->
-		<div th:if="${searchPage != null and not searchPage.empty}">
-			<main class="grid md:grid-cols-6 gap-10 items-start">
-				<div class="col-span-4 grid gap-4">
-					<div class="grid gap-2">
-						<div th:each="result : ${searchPage.content}" class="bg-white rounded-lg shadow-md overflow-hidden dark:bg-gray-800">
-							<div class="relative group">
-								<a th:href="@{'/video/' + ${result.videoNumber}}" class="absolute inset-0 z-10"></a>
-								<img th:src="@{/placeholder.svg}" alt="Article Image" width="400" height="225" class="w-full h-48 object-cover group-hover:opacity-50 transition-opacity" style="aspect-ratio: 400 / 225; object-fit: cover;" />
-								<div class="p-4">
-									<h2 class="text-lg font-bold mb-2">
-										<a th:href="@{'/video/' + ${result.videoNumber}}" class="hover:text-primary-500 dark:hover:text-primary-400">
-											<span th:text="${result.videoName}"></span>
-										</a>
-									</h2>
-									<div class="flex items-center gap-2 mb-4">
-										<div class="text-sm">
-											<div class="font-semibold">유저닉네임</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</main>
-		</div>
+        <!-- 검색 결과가 있는 경우 -->
+        <div th:if="${searchPage != null and not searchPage.empty}">
+            <main class="grid md:grid-cols-6 gap-10 items-start">
+                <div class="col-span-4 grid gap-4">
+                    <div class="grid gap-2">
+                        <div th:each="result : ${searchPage.content}" class="bg-white rounded-lg shadow-md overflow-hidden dark:bg-gray-800">
+                            <div class="relative group">
+                                <a th:href="@{'/video/' + ${result.videoNumber}}" class="absolute inset-0 z-10"></a>
+                                <video class="w-full h-48 object-cover group-hover:opacity-50 transition-opacity"
+                                       th:attr="data-video-url=${result.videoUrl}"
+                                       style="aspect-ratio: 16/9; object-fit: cover; display: none;"></video>
+                                <img class="w-full h-48 object-cover group-hover:opacity-50 transition-opacity" 
+                                     style="aspect-ratio: 16/9; object-fit: cover;" />
+                                <div class="p-4">
+                                    <h2 class="text-lg font-bold mb-2">
+                                        <a th:href="@{'/video/' + ${result.videoNumber}}" class="hover:text-primary-500 dark:hover:text-primary-400">
+                                            <span th:text="${result.videoName}"></span>
+                                        </a>
+                                    </h2>
+                                    <div class="flex items-center gap-2 mb-4">
+                                        <div class="text-sm">
+                                            <div class="font-semibold">유저닉네임</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
 
-		<!-- 페이지 네비게이션 -->
-		<div th:if="${searchPage != null}">
-			<ul class="pagination flex justify-center mt-4">
-				<!-- 이전 페이지로 이동하는 버튼 -->
-				<li th:if="${searchPage.number > 0}" class="mx-1">
-					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number - 1}}" class="px-3 py-1 rounded-full border bg-white text-gray-700">&laquo;</a>
-				</li>
-				<!-- 페이지 번호 출력 -->
-				<li th:each="i : ${#numbers.sequence(1, searchPage.totalPages)}" th:classappend="${searchPage.number + 1 == i ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}" class="mx-1">
-					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${i - 1}}"  th:text="${i}"></a>
-				</li>
-				<!-- 다음 페이지로 이동하는 버튼 -->
-				<li th:if="${searchPage.number + 1 < searchPage.totalPages}" class="mx-1">
-					<a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number + 1}}" &raquo;</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+        <!-- 페이지 네비게이션 -->
+        <div th:if="${searchPage != null}">
+            <ul class="pagination flex justify-center mt-4">
+                <!-- 이전 페이지로 이동하는 버튼 -->
+                <li th:if="${searchPage.number > 0}" class="mx-1">
+                    <a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number - 1}}" class="px-3 py-1 rounded-full border bg-white text-gray-700">&laquo;</a>
+                </li>
+                <!-- 페이지 번호 출력 -->
+                <li th:each="i : ${#numbers.sequence(1, searchPage.totalPages)}" th:classappend="${searchPage.number + 1 == i ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}" class="mx-1">
+                    <a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${i - 1}}" th:text="${i}"></a>
+                </li>
+                <!-- 다음 페이지로 이동하는 버튼 -->
+                <li th:if="${searchPage.number + 1 < searchPage.totalPages}" class="mx-1">
+                    <a th:href="@{'/search?keyword=' + ${keyword} + '&page=' + ${searchPage.number + 1}}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 사용자 정의 스크립트 -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const videoElements = document.querySelectorAll('video');
+
+        videoElements.forEach((videoElement, index) => {
+            const videoUrl = videoElement.getAttribute('data-video-url'); // 비디오 URL을 가져옵니다.
+            const thumbnailImage = videoElement.nextElementSibling; // 다음 형제 요소로부터 이미지 요소를 가져옵니다.
+
+            // 비디오 요소의 src에 비디오 URL을 설정합니다.
+            videoElement.src = videoUrl;
+            videoElement.crossOrigin = 'anonymous';
+            videoElement.load();
+
+            videoElement.addEventListener('loadeddata', function () {
+                const captureTime = 1; // 캡처할 시간 (초)
+                videoElement.currentTime = captureTime;
+
+                videoElement.addEventListener('seeked', function () {
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.width = videoElement.videoWidth;
+                    canvas.height = videoElement.videoHeight;
+
+                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                    const dataUrl = canvas.toDataURL('image/jpeg');
+
+                    // 이미지 요소의 src에 캡처된 이미지를 설정합니다.
+                    thumbnailImage.src = dataUrl;
+                    thumbnailImage.style.display = 'block';
+                    videoElement.style.display = 'none'; // 비디오 요소 숨기기
+                }, { once: true });
+            }, { once: true });
+        });
+    });
+    </script>
+
 </body>
 
 </html>
