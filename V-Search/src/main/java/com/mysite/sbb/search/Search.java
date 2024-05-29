@@ -18,5 +18,6 @@ public class Search {
     @Column(name = "VIDEO_NO")
     private int videoNumber;
     
-    
+    @Column(name = "STOURL")
+    String videoUrl;
 }

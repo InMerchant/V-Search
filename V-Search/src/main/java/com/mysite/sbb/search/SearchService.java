@@ -2,37 +2,39 @@ package com.mysite.sbb.search;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.mysite.sbb.video.Video;
+import com.mysite.sbb.video.VideoRepository;
 
-@Service
-public class SearchService {
+@Controller
+public class SearchController {
 
-	private final SearchRepository searchRepository;
+    private final SearchService searchService;
+    private VideoRepository vr;
 
-	@Autowired
-	public SearchService(SearchRepository searchRepository) {
-		this.searchRepository = searchRepository;
-	}
+    @Autowired
+    public SearchController(SearchService searchService) {
+        this.searchService = searchService;
+    }
 
-	public Page<Search> searchPage(String keyword, int page) {
-		int pageSize = 10; // 페이지당 항목 수
-		return searchRepository.findByVideoNameContaining(keyword, PageRequest.of(page, pageSize));
-
-	}
-
-	public List<Search> search(String keyword) {
-		List<Search> searchResults = searchRepository.findByVideoNameContainingIgnoreCase(keyword);
-		if (!searchResults.isEmpty()) {
-			for (Search result : searchResults) {
-				result.setVideoNumber(result.getVideoNumber());
-			}
-
-			return searchResults;
-		}
-		// 검색 결과가 비어 있는 경우에는 빈 리스트 반환
-		return searchResults;
-	}
+    @GetMapping("/search")
+    public String search(@RequestParam(name = "keyword", required = false) String keyword,
+                         @RequestParam(name = "page", defaultValue = "0") int page,
+                         Model model) {
+        if (keyword != null && !keyword.isEmpty()) {
+            Page<Search> searchPage = searchService.searchPage(keyword, page);            
+            if (!searchPage.isEmpty()) {
+                model.addAttribute("searchPage", searchPage);
+                System.out.println(model);
+            } else {
+                model.addAttribute("message", "검색 결과가 없습니다."); // 검색 결과가 없을 때 메시지 추가
+            }
+        }
+        model.addAttribute("keyword", keyword); // 검색어를 모델에 추가
+        return "search"; // search.html로 포워딩
+    }
 }
