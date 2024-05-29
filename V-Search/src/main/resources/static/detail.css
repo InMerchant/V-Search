@@ -177,3 +177,8 @@ textarea {
 .delete-comment-button:hover {
 	opacity: 0.8;
 }
+
+.button-container {
+	display: flex;
+	margin-bottom: 20px;
+}

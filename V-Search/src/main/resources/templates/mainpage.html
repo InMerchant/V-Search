@@ -28,6 +28,7 @@
 			<a class="absolute inset-0 z-10" th:href="@{|/video/${detail[0]}|}">
 				<span class="sr-only">비디오 보기</span>
 			</a>
+			<h3 th:text="${detail[3]}" style="display: none;"></h3>
 			<img alt="Video Thumbnail" class="w-full h-60 object-cover" th:src="@{/placeholder.svg}"
 				style="aspect-ratio: 400/225;">
 			<div
@@ -61,41 +62,41 @@
 			}
 		}
 		window.onload = hideMessage;
-		
-		 document.addEventListener('DOMContentLoaded', function () {
-        // 모든 비디오 요소를 찾습니다.
-        const videoElements = document.querySelectorAll('.relative.group');
 
-        videoElements.forEach((element, index) => {
-            // <h3> 태그에서 비디오 URL을 추출합니다.
-            const videoUrl = element.querySelector('h3').innerText;
-            const videoElement = document.createElement('video');
-            videoElement.src = videoUrl;
-            videoElement.crossOrigin = 'anonymous';
-            videoElement.load();
+		document.addEventListener('DOMContentLoaded', function () {
+			// 모든 비디오 요소를 찾습니다.
+			const videoElements = document.querySelectorAll('.relative.group');
 
-            videoElement.addEventListener('loadeddata', function () {
-                const captureTime = 1; // in seconds
-                videoElement.currentTime = captureTime;
+			videoElements.forEach((element, index) => {
+				// <h3> 태그에서 비디오 URL을 추출합니다.
+				const videoUrl = element.querySelector('h3').innerText;
+				const videoElement = document.createElement('video');
+				videoElement.src = videoUrl;
+				videoElement.crossOrigin = 'anonymous';
+				videoElement.load();
 
-                videoElement.addEventListener('seeked', function () {
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.width = videoElement.videoWidth;
-                    canvas.height = videoElement.videoHeight;
+				videoElement.addEventListener('loadeddata', function () {
+					const captureTime = 1; // in seconds
+					videoElement.currentTime = captureTime;
 
-                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-                    const dataUrl = canvas.toDataURL('image/jpeg');
+					videoElement.addEventListener('seeked', function () {
+						const canvas = document.createElement('canvas');
+						const context = canvas.getContext('2d');
+						canvas.width = videoElement.videoWidth;
+						canvas.height = videoElement.videoHeight;
 
-                    // Find the corresponding thumbnail image and set the src attribute
-                    const thumbnailImage = element.querySelector('img');
-                    thumbnailImage.src = dataUrl;
-                    thumbnailImage.style.display = 'block';
-                }, { once: true });
-            }, { once: true });
-        });
-    });
-		
+						context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+						const dataUrl = canvas.toDataURL('image/jpeg');
+
+						// Find the corresponding thumbnail image and set the src attribute
+						const thumbnailImage = element.querySelector('img');
+						thumbnailImage.src = dataUrl;
+						thumbnailImage.style.display = 'block';
+					}, {once: true});
+				}, {once: true});
+			});
+		});
+
 	</script>
 </body>
 

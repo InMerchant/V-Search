@@ -13,4 +13,5 @@ public interface VideoRepository extends JpaRepository<Video, Integer> {
 	
 	Video findByVideoNo(int videoNo);
 	
+	
 }
