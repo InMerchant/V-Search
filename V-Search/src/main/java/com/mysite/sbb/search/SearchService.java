@@ -2,39 +2,53 @@ package com.mysite.sbb.search;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import com.mysite.sbb.video.Video;
 import com.mysite.sbb.video.VideoRepository;
 
-@Controller
-public class SearchController {
+import java.util.List;
 
-    private final SearchService searchService;
-    private VideoRepository vr;
+@Service
+public class SearchService {
 
-    @Autowired
-    public SearchController(SearchService searchService) {
-        this.searchService = searchService;
-    }
+	private final SearchRepository searchRepository;
+	private final VideoRepository videoRepository; // VideoRepository 추가
 
-    @GetMapping("/search")
-    public String search(@RequestParam(name = "keyword", required = false) String keyword,
-                         @RequestParam(name = "page", defaultValue = "0") int page,
-                         Model model) {
-        if (keyword != null && !keyword.isEmpty()) {
-            Page<Search> searchPage = searchService.searchPage(keyword, page);            
-            if (!searchPage.isEmpty()) {
-                model.addAttribute("searchPage", searchPage);
-                System.out.println(model);
-            } else {
-                model.addAttribute("message", "검색 결과가 없습니다."); // 검색 결과가 없을 때 메시지 추가
-            }
-        }
-        model.addAttribute("keyword", keyword); // 검색어를 모델에 추가
-        return "search"; // search.html로 포워딩
-    }
+	@Autowired
+	public SearchService(SearchRepository searchRepository, VideoRepository videoRepository) {
+		this.searchRepository = searchRepository;
+		this.videoRepository = videoRepository; // VideoRepository 주입
+	}
+
+	public Page<Search> searchPage(String keyword, int page) {
+		int pageSize = 10; // 페이지당 항목 수
+		Page<Search> searchPage = searchRepository.findByVideoNameContaining(keyword, PageRequest.of(page, pageSize));
+
+		// 검색 결과를 콘솔에 출력하고 비디오 URL을 가져오는 작업
+		System.out.println("Search Page Result: " + searchPage.getContent());
+		for (Search search : searchPage.getContent()) {
+			int videoNumber = search.getVideoNumber();
+			Video video = videoRepository.findByVideoNo(videoNumber);
+			String videoUrl = video.getSTOURL(); // 비디오의 URL 가져오기
+			// 여기에서 videoUrl을 사용하여 필요한 작업을 수행할 수 있습니다.
+			System.out.println("Video URL for video number " + videoNumber + ": " + videoUrl);
+		}
+
+		return searchPage;
+	}
+
+	public List<Search> search(String keyword) {
+		List<Search> searchResults = searchRepository.findByVideoNameContainingIgnoreCase(keyword);
+		if (!searchResults.isEmpty()) {
+			for (Search result : searchResults) {
+				result.setVideoNumber(result.getVideoNumber());
+			}
+
+			return searchResults;
+		}
+		// 검색 결과가 비어 있는 경우에는 빈 리스트 반환
+		return searchResults;
+	}
 }
