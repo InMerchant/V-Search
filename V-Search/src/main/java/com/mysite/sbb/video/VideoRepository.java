@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface VideoRepository extends JpaRepository<Video, Integer> {
 	@Query("SELECT v.videoNo , v.VIDEO_NAME,v.USER_NO,v.STOURL FROM Video v")
 	List<Object[]> findAllVideoNamesAndUserNumbersAndSTOURL();
-
+	
 	Video findByVideoNo(int videoNo);
 	
 }

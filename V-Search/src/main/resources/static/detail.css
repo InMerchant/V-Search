@@ -119,3 +119,61 @@
 	}
 
 }
+
+textarea {
+	width: 80%;
+	height: 100px;
+	padding: 10px;
+	margin: 10px 0;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	resize: none;
+}
+
+.recommend-button,
+.delete-video-button,
+.subscribe-button,
+.unsubscribe-button,
+.submit-comment-button,
+.delete-comment-button {
+	padding: 8px 16px;
+	margin: 4px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.recommend-button {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.delete-video-button,
+.delete-comment-button {
+	background-color: #f44336;
+	color: white;
+}
+
+.subscribe-button {
+	background-color: #008CBA;
+	color: white;
+}
+
+.unsubscribe-button {
+	background-color: #f44336;
+	color: white;
+}
+
+.submit-comment-button {
+	background-color: #555555;
+	color: white;
+}
+
+.recommend-button:hover,
+.delete-video-button:hover,
+.subscribe-button:hover,
+.unsubscribe-button:hover,
+.submit-comment-button:hover,
+.delete-comment-button:hover {
+	opacity: 0.8;
+}

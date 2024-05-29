@@ -165,9 +165,6 @@ public class VideoController {
 	@GetMapping("/")
 	public String mainPage(Model model) {
 		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbersAndSTOURL();
-		for (Object[] detail : videoDetails) {
-			System.out.println(Arrays.toString(detail));
-		}
 		model.addAttribute("videoDetails", videoDetails);
 		return "mainpage";
 	}
