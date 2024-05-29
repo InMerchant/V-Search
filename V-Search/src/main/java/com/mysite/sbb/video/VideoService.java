@@ -66,7 +66,7 @@ public class VideoService {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
 			if (summary == 1) {
-				String Url = "https://0093-61-34-253-238.ngrok-free.app/execute";
+				String Url = "https://daa7-61-34-253-238.ngrok-free.app/execute";
 				String callResponse = callService.sendPostRequest(Url, title);
 				System.out.println("Call Response: " + callResponse);
 				SMYURL = UR.VideoUrl(title + "_smr");
@@ -80,11 +80,11 @@ public class VideoService {
 		Video.setSMYURL(SMYURL);
 		Video.setSummary_chk(summary);
 		Video.setSTOURL(URL);
-		Video saveVideo = vR.save(Video);
+		vR.save(Video);
 		if (summary == 1) {
-			String Url = "https://0093-61-34-253-238.ngrok-free.app/info";
-			int videoNo = saveVideo.getVideoNo();
-			System.out.println(videoNo);
+			Video videosave=vR.findByUserNoAndTitle(userNo, title);
+			int videoNo=videosave.getVideoNo();
+			String Url = "https://daa7-61-34-253-238.ngrok-free.app/info";
 			callService.sendPostvideoNotitle(Url, videoNo, title);
 		}
 	}

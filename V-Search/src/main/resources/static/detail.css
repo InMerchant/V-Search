@@ -182,3 +182,9 @@ textarea {
 	display: flex;
 	margin-bottom: 20px;
 }
+.image-btn{
+	max-width: 200px;
+	max-height: 100px;
+	height: auto;
+	width: auto;
+}

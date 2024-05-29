@@ -19,11 +19,8 @@ public class SearchService {
 
 	public Page<Search> searchPage(String keyword, int page) {
 		int pageSize = 10; // 페이지당 항목 수
-		Page<Search> searchPage = searchRepository.findByVideoNameContaining(keyword, PageRequest.of(page, pageSize));
-		
-		// 검색 결과를 콘솔에 출력
-		System.out.println("Search Page Result: " + searchPage.getContent());
-		return searchPage;
+		return searchRepository.findByVideoNameContaining(keyword, PageRequest.of(page, pageSize));
+
 	}
 
 	public List<Search> search(String keyword) {

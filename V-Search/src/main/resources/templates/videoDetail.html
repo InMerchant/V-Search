@@ -8,6 +8,7 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-markers/0.7.0/videojs.markers.css" rel="stylesheet">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.10.0/video.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-markers/0.7.0/videojs-markers.min.js"></script>
 	<link rel="stylesheet" type="text/css" th:href="@{/detail.css}">
 </head>
@@ -15,23 +16,23 @@
 <body layout:fragment="content">
 	<div class="btncontainer">
 		<button class="btn front">
-			비요약
+			<img th:src="@{/img/btn.png}" class="image-btn">
 		</button>
 		<button class="btn back" style="display: none;">
-			요약
+			<img th:src="image-url">
 		</button>
 	</div>
 	<div class="main">
 		<div class="container">
 			<div class="card front-card">
 				<video width="640" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
-					<source th:src="@{${videoData}}" type="video/mp4">
+					<source th:src="@{${SMYURL}}" type="video/mp4">
 					요약영상
 				</video>
 			</div>
 			<div class="card back-card">
 				<video width="640" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
-					<source th:src="@{${SMYURL}}" type="video/mp4">
+					<source th:src="@{${videoData}}" type="video/mp4">
 					원본 영상
 				</video>
 			</div>
@@ -82,7 +83,7 @@
 		</form>
 
 		<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET">
-			<button type="submit" id="unsubscribe" class="unsubscribe-button">구독취소</button>
+			<button type="submit" id="unsubscribe" class="unsubscribe-button" style="display: none">구독취소</button>
 		</form>
 	</div>
 
@@ -105,7 +106,6 @@
 		</form>
 	</div>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 		var player1, player2;
 		$(document).ready(function () {
