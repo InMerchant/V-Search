@@ -86,6 +86,11 @@ public class VideoController {
 		model.addAttribute("videoNo", videoNo);
 		List<TimeLine> SMYresult = TS.timeLineCaption(videoNo);
 		model.addAttribute("SMYresult", SMYresult);
+		List<Object[]> scriptObj = videoService.findSmyScriptAndOBJ(videoNo);
+		for (Object[] objArray : scriptObj) {
+			System.out.println(Arrays.toString(objArray));
+		}
+		model.addAttribute("scriptObj", scriptObj);
 		int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
 		model.addAttribute("recommendationsCount", recommendationsCount);
 		List<Comment> comments = commentService.getCommentsByVideoNumber(videoNo);

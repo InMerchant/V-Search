@@ -30,4 +30,7 @@ public class Video {
 	private String STOURL;
 	private String VIDEO_NAME;
 	private String SMYURL;
+	@Column(name="VIDEO_OBJ")
+	private String videoObj;
+	private String SMYSCRIPT;
 }

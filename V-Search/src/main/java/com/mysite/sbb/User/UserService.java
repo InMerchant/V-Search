@@ -67,7 +67,6 @@ public class UserService {
 		
 		subscribeCount = subscribeRepository.mSubscribeCount(videoUserId);
 		dto.setSubscribeCount(subscribeCount);
-		System.out.println(subscribeCount);
 		
 		// 현재 로그인 여부 체크
 		if (username == "anonymousUser") {

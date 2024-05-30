@@ -55,38 +55,38 @@ public class VideoService {
 		return vR.findAllVideoNamesAndUserNumbersAndSTOURL();
 	}
 
-	@Transactional
 	@ResponseBody
 	public void uploadFile(File file, String title, int summary) throws IOException {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int userNo = userService.getUserNO(username);
 		String URL = null;
 		String SMYURL = null;
+		String Url = "https://d4f6-61-34-253-238.ngrok-free.app";
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
 			if (summary == 1) {
-				String Url = "https://daa7-61-34-253-238.ngrok-free.app/execute";
-				String callResponse = callService.sendPostRequest(Url, title);
-				System.out.println("Call Response: " + callResponse);
+				callService.sendPostRequest(Url + "/execute", title);
 				SMYURL = UR.VideoUrl(title + "_smr");
+				Video Video = new Video();
+				Video.setUSER_NO(userNo);
+				Video.setVIDEO_NAME(title);
+				Video.setSMYURL(SMYURL);
+				Video.setSummary_chk(summary);
+				Video.setSTOURL(URL);
+				vR.save(Video);
+				Thread.sleep(1000);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Video Video = new Video();
-		Video.setUSER_NO(userNo);
-		Video.setVIDEO_NAME(title);
-		Video.setSMYURL(SMYURL);
-		Video.setSummary_chk(summary);
-		Video.setSTOURL(URL);
-		vR.save(Video);
-		if (summary == 1) {
-			Video videosave=vR.findByUserNoAndTitle(userNo, title);
-			int videoNo=videosave.getVideoNo();
-			String Url = "https://daa7-61-34-253-238.ngrok-free.app/info";
-			callService.sendPostvideoNotitle(Url, videoNo, title);
-		}
+		Csvupload(userNo, title);
+	}
+
+	public void Csvupload(int userNo, String title) {
+		Video videosave = vR.findByUserNoAndTitle(userNo, title);
+		int videoNo = videosave.getVideoNo();
+		callService.sendPostvideoNotitle("https://d4f6-61-34-253-238.ngrok-free.app/info", videoNo, title);
 	}
 
 	public String videoPlay(int videoNO) throws SQLException {
@@ -103,6 +103,10 @@ public class VideoService {
 
 	public Video getVideoByNo(int videoNo) {
 		return vR.findByVideoNo(videoNo);
+	}
+	
+	public List<Object[]> findSmyScriptAndOBJ(int videoNo){
+		return vR.findSmyScriptAndVideoOBJ(videoNo);
 	}
 
 }
