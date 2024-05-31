@@ -24,6 +24,7 @@ public class CallService {
 		HttpEntity<String> requestEntity = new HttpEntity<>(payloadJson, headers);
 		try {
 			String response = restTemplate.postForObject(url, requestEntity, String.class);
+			System.out.println("서버로부터의 응답: " + response);
 			return response;
 		} catch (RestClientException e) {
 			e.printStackTrace();

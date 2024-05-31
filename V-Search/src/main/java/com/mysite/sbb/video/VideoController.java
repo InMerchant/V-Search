@@ -73,23 +73,16 @@ public class VideoController {
 	@Autowired
 	private TimeLineService TS;
 
-	@GetMapping(value = "/video/{no}")
+	@GetMapping(value = "/video/{no}")//최적화
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
-		String URL = videoService.videoPlay(videoNo);
-		String SMYURL = videoService.SMYPlay(videoNo);
 		Del video = entityManager.find(Del.class, videoNo);
 		int videoUserId = video.getUsernumber();
 		UserProfileDto userDto = userService.userProfile(videoUserId, videoNo);
 		model.addAttribute("userDto", userDto);
-		model.addAttribute("videoData", URL);
-		model.addAttribute("SMYURL", SMYURL);
 		model.addAttribute("videoNo", videoNo);
 		List<TimeLine> SMYresult = TS.timeLineCaption(videoNo);
 		model.addAttribute("SMYresult", SMYresult);
-		List<Object[]> scriptObj = videoService.findSmyScriptAndOBJ(videoNo);
-		for (Object[] objArray : scriptObj) {
-			System.out.println(Arrays.toString(objArray));
-		}
+		Video scriptObj = videoService.findSmyScriptAndOBJ(videoNo);
 		model.addAttribute("scriptObj", scriptObj);
 		int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
 		model.addAttribute("recommendationsCount", recommendationsCount);

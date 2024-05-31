@@ -12,8 +12,8 @@ public class Call {
     @Bean
     public RestTemplate restTemplate() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(5000);
-        factory.setReadTimeout(3600000); 
+        factory.setConnectTimeout(0);
+        factory.setReadTimeout(0); 
 
         RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
