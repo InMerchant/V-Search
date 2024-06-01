@@ -54,8 +54,9 @@
 			<button type="submit" class="upload">업로드</button>
 		</div>
 	</form>
-	<div id="loadingIndicator" style="display: none;">
-		로딩중
+	<div id="overlay">
+		<img id="loadingIndicator" src="/img/loading.png" alt="로딩중">
+		<div id="progress-status">(1/4) 진행 중...</div>
 	</div>
 	<script>
 		function dropHandler(event) {
@@ -113,18 +114,16 @@
 				var file = fileInput.files[0];
 				var title = titleInput.value;
 				var radioValue = document.querySelector('input[name="summary"]:checked').value;
-
-				// FormData 생성
 				var formData = new FormData();
 				formData.append('file', file);
 				formData.append('title', title);
 				formData.append('summary', radioValue);
-				loadingIndicator.style.display = 'block';
-				// Ajax로 서버에 데이터 전송
+				overlay.style.display = 'flex';
 				var xhr = new XMLHttpRequest();
 				xhr.open('POST', '/upload', true);
 				xhr.timeout = 3600000;
 				xhr.onload = function () {
+					overlay.style.display = 'none';
 					if (xhr.status === 200) {
 						console.log('Upload successful');
 						window.location.href = "/"
@@ -133,19 +132,22 @@
 						console.error('Upload failed');
 					}
 				};
-				 xhr.ontimeout = function () {
-					// 타임아웃 발생 시 처리할 내용
-					loadingIndicator.style.display = 'none'; // 로딩 표시 숨기기
+				xhr.ontimeout = function () {
+					overlay.style.display = 'none'; 
 					console.error('Request timed out');
 					alert('Request timed out. Please try again.');
 				};
 				xhr.onerror = function () {
-					// 통신 오류 시 처리할 내용
+					overlay.style.display = 'none'; 
 					console.error('Communication error');
 				};
 				xhr.send(formData);
 			});
 		});
+		function updateProgress(currentStep, totalSteps) {
+			document.getElementById('progress-status').innerText = '(' + currentStep + '/' + totalSteps + ') 진행 중...';
+		}
+
 
 	</script>
 </body>

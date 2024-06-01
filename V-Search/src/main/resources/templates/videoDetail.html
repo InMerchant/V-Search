@@ -8,8 +8,7 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-markers/0.7.0/videojs.markers.css" rel="stylesheet">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.10.0/video.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-markers/0.7.0/videojs.markers.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-markers/0.7.0/videojs-markers.min.js"></script>
 	<link rel="stylesheet" type="text/css" th:href="@{/detail.css}">
 </head>
 
@@ -37,7 +36,9 @@
 				</video>
 			</div>
 		</div>
-		<div id="smyscript"></div>
+		<div id="smyscript">
+			<span th:text="${scriptObj.SMYSCRIPT}"></span>
+		</div>
 		<div id="summarymain" style="display: none;">
 			<div class="smybtn">
 				<button class="user" th:onclick="checks()">사용자 요약</button>
@@ -47,6 +48,7 @@
 				<div id="checkboxCard">
 					<p th:attr="scriptObj=${scriptObj.videoObj}" style="display: none;"></p>
 				</div>
+				<button id="showSectionsButton">테스트</button>
 			</div>
 			<div>
 				<div id="searchsmy" style="display: none;">
@@ -56,7 +58,9 @@
 					<div id="resultsContainer">
 						<div th:each="SMYresult:${SMYresult}">
 							<p>
-								<span th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}" class="videoLink"></span>
+								<span
+									th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"
+									class="videoLink"></span>
 							</p>
 						</div>
 					</div>
@@ -101,15 +105,15 @@
 		</form>
 	</div>
 
-	<button id="showSectionsButton">Show Selected Sections</button>
 	<div id="selectedSectionsContainer"></div>
 
+
 	<script>
-		var player1, player2;
 		$(document).ready(function () {
 			$('.front').on('click', function () {
 				$('.front').hide();
 				$('.back').show();
+				$('#smyscript').hide();
 				$('#summarymain').show();
 				$('.card').addClass('active');
 				var player = videojs('VideoPlayer');
@@ -121,128 +125,187 @@
 				$('.back').hide();
 				$('.card').removeClass('active');
 				$('#summarymain').hide();
+				$('#smyscript').show();
 				var player = videojs('VideoPlayer2');
 				player.pause();
 			});
+		});
+		var player1, player2;
+		player1 = videojs("VideoPlayer", {
+			controls: true,
+			playsinline: true,
+			preload: "auto",
+			controlBar: {
+				playToggle: true,
+				pictureInPictureToggle: true,
+				remainingTimeDisplay: true,
+				progressControl: true
+			}
+		});
 
-			player1 = videojs("VideoPlayer", {
-				controls: true,
-				playsinline: true,
-				preload: "auto",
-				controlBar: {
-					playToggle: true,
-					pictureInPictureToggle: true,
-					remainingTimeDisplay: true,
-					progressControl: true
+
+		player2 = videojs("VideoPlayer2", {
+			controls: true,
+			playsinline: true,
+			preload: "auto",
+			controlBar: {
+				playToggle: true,
+				pictureInPictureToggle: true,
+				remainingTimeDisplay: true,
+				progressControl: true
+			}
+		});
+		player2.markers({
+			markerTip: {
+				display: true,
+				text: function (marker) {
+					return marker.text;
+				},
+				time: function (marker) {
+					return marker.time;
+				}
+			},
+			markers: []
+		});
+		function searchs() {
+			$('#searchsmy').show()
+			$('#summaryobject').hide()
+		}
+		function checks() {
+			$('#searchsmy').hide()
+			$('#summaryobject').show()
+		}
+		function calculateTimeInSeconds(timeComponents) {
+			if (timeComponents.length === 3) {
+				return parseInt(timeComponents[0]) * 3600 + parseInt(timeComponents[1]) * 60 + parseInt(timeComponents[2]);
+			} else if (timeComponents.length === 2) {
+				return parseInt(timeComponents[0]) * 60 + parseInt(timeComponents[1]);
+			}
+			return 0;
+		}
+		var scriptObjData = document.getElementById("checkboxCard").querySelector("p").getAttribute("scriptObj");
+		if (scriptObjData) {
+			var words = scriptObjData.split(", ");
+			words.forEach(function (word) {
+				var checkbox = document.createElement('input');
+				checkbox.type = "checkbox";
+				checkbox.value = word;
+				checkbox.id = word;
+				checkbox.onchange = updateSelectedWords;
+
+				var label = document.createElement('label');
+				label.htmlFor = word;
+				label.appendChild(document.createTextNode(word));
+
+				document.getElementById('checkboxCard').appendChild(checkbox);
+				document.getElementById('checkboxCard').appendChild(label);
+				document.getElementById('checkboxCard').appendChild(document.createElement('br'));
+			});
+		}
+
+		$('#showSectionsButton').on('click', function () {
+			var selectedCaptions = [];
+			$('#checkboxCard input[type="checkbox"]:checked').each(function () {
+				selectedCaptions.push($(this).val());
+			});
+			showSelectedSections(selectedCaptions);
+		});
+
+		var sections = [];
+
+		function showSelectedSections(selectedCaptions) {
+			sections = [];
+			var scriptArray = scriptObjData.split(', ');
+
+			scriptArray.forEach(function (caption) {
+				if (selectedCaptions.includes(caption)) {
+					var timeComponents = caption.split(':');
+					var time = calculateTimeInSeconds(timeComponents);
+					sections.push({start: time, end: time + 5}); // 각 섹션은 5초간 지속됩니다.
 				}
 			});
 
-			player2 = videojs("VideoPlayer2", {
-				controls: true,
-				playsinline: true,
-				preload: "auto",
-				controlBar: {
-					playToggle: true,
-					pictureInPictureToggle: true,
-					remainingTimeDisplay: true,
-					progressControl: true
-				}
+			updateSections();
+		}
+
+		function updateSections() {
+			var curIndex = 0;
+			if (player2.markers && typeof player2.markers.destroy === 'function') {
+				player2.markers.destroy(function () {
+					createMarkers();
+				});
+			} else {
+				createMarkers();
+			}
+		}
+
+		function createMarkers() {
+			var markersArray = sections.map(function (section) {
+				return {time: section.start, text: ''};
 			});
 
-			// 체크박스 생성
-			var scriptObjData = document.getElementById("checkboxCard").querySelector("p").getAttribute("scriptObj");
-			if (scriptObjData) {
-				var words = scriptObjData.split(", ");
-				words.forEach(function (word) {
-					var checkbox = document.createElement('input');
-					checkbox.type = "checkbox";
-					checkbox.value = word;
-					checkbox.id = word;
-					checkbox.onchange = updateSelectedWords;
-
-					var label = document.createElement('label');
-					label.htmlFor = word;
-					label.appendChild(document.createTextNode(word));
-
-					document.getElementById('checkboxCard').appendChild(checkbox);
-					document.getElementById('checkboxCard').appendChild(label);
-					document.getElementById('checkboxCard').appendChild(document.createElement('br'));
-				});
-			}
-
-			$('#showSectionsButton').on('click', function () {
-				var selectedCaptions = [];
-				$('#checkboxCard input[type="checkbox"]:checked').each(function () {
-					selectedCaptions.push($(this).val());
-				});
-				showSelectedSections(selectedCaptions);
-			});
-
-			var sections = [];
-
-			function showSelectedSections(selectedCaptions) {
-				sections = [];
-				var scriptObjData = document.getElementById("checkboxCard").querySelector("p").getAttribute("scriptObj");
-				var scriptArray = scriptObjData.split(', ');
-
-				scriptArray.forEach(function (caption) {
-					if (selectedCaptions.includes(caption)) {
-						var timeComponents = caption.split(':');
-						var time = 0;
-						if (timeComponents.length === 3) {
-							time = parseInt(timeComponents[0]) * 3600 + parseInt(timeComponents[1]) * 60 + parseInt(timeComponents[2]);
-						} else if (timeComponents.length === 2) {
-							time = parseInt(timeComponents[0]) * 60 + parseInt(timeComponents[1]);
-						}
-						sections.push({ start: time, end: time + 5 });
-					}
-				});
-
-				updateSections();
-			}
-
-			function updateSections() {
-				var curIndex = 0;
-				player2.markers.destroy(); // 기존 마커 제거
-
-				player2.markers({
-					markerTip: {
-						display: true,
-						text: function (marker) {
-							return marker.text;
-						},
-						time: function (marker) {
-							return marker.time;
-						}
+			player2.markers({
+				markerTip: {
+					display: true,
+					text: function (marker) {
+						return marker.text;
 					},
-					markers: sections.map(function (section) {
-						return { time: section.start, text: '' };
-					})
-				});
-
-				player2.on('timeupdate', function () {
-					var currentTime = player2.currentTime();
-					if (curIndex < sections.length && currentTime >= sections[curIndex].end) {
-						curIndex++;
-						if (curIndex < sections.length) {
-							player2.currentTime(sections[curIndex].start);
-							player2.play();
-						} else {
-							player2.pause();
-						}
+					time: function (marker) {
+						return marker.time;
 					}
-				});
-			}
+				},
+				markers: markersArray
+			});
 
-			function updateSelectedWords() {
-				var selectedWords = [];
-				words.forEach(function (word) {
-					if (document.getElementById(word).checked) {
-						selectedWords.push(word);
+			player2.on('timeupdate', function () {
+				var currentTime = player2.currentTime();
+				if (curIndex < sections.length && currentTime >= sections[curIndex].end) {
+					curIndex++;
+					if (curIndex < sections.length) {
+						player2.currentTime(sections[curIndex].start);
+						player2.play();
+					} else {
+						player2.pause();
 					}
-				});
-				document.getElementById("selectedWords").innerText = selectedWords.join(", ");
-			}
+				}
+			});
+		}
+
+
+		function updateSelectedWords() {
+			var selectedCaptions = [];
+			words.forEach(function (word) {
+				if (document.getElementById(word).checked) {
+					selectedCaptions.push(word);
+				}
+			});
+			showSelectedSections(selectedCaptions);
+		}
+
+		document.querySelectorAll('.videoLink').forEach(function (element) {
+			element.addEventListener('click', function () {
+				var text = element.textContent.trim();
+				var timeComponents = text.split(':');
+				var time = 0;
+				var time = calculateTimeInSeconds(timeComponents);
+				console.log("클릭된 시간값:", time)
+				timemove(parseInt(time));
+			});
+		});
+		function timemove(time) {
+			player2.currentTime(time);
+		}
+		$('#searchInput').on('input', function () {
+			var searchTerm = $(this).val().toLowerCase();
+			$('#resultsContainer > div').each(function () {
+				var text = $(this).text().toLowerCase();
+				if (text.includes(searchTerm)) {
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			});
+			$('#searchsmy').show();
 		});
 	</script>
 

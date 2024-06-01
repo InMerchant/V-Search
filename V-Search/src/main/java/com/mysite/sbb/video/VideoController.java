@@ -81,6 +81,7 @@ public class VideoController {
 		model.addAttribute("userDto", userDto);
 		model.addAttribute("videoNo", videoNo);
 		List<TimeLine> SMYresult = TS.timeLineCaption(videoNo);
+		System.out.println(SMYresult);
 		model.addAttribute("SMYresult", SMYresult);
 		Video scriptObj = videoService.findSmyScriptAndOBJ(videoNo);
 		model.addAttribute("scriptObj", scriptObj);

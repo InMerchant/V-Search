@@ -14,6 +14,12 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -61,12 +67,18 @@ public class VideoService {
 		int userNo = userService.getUserNO(username);
 		String URL = null;
 		String SMYURL = null;
-		String Url = "https://0fac-61-34-253-238.ngrok-free.app";
+		String Url = "https://404c-61-34-253-238.ngrok-free.app";
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
 			if (summary == 1) {
 				callService.sendPostRequest(Url + "/execute", title);
+				Thread.sleep(1000);
+				callService.sendPostRequest(Url + "/execute2", title);
+				Thread.sleep(1000);
+				callService.sendPostRequest(Url + "/execute3", title);
+				Thread.sleep(1000);
+				callService.sendPostRequest(Url + "/execute4", title);
 				SMYURL = UR.VideoUrl(title + "_smr");
 				Video Video = new Video();
 				Video.setUSER_NO(userNo);
@@ -76,29 +88,17 @@ public class VideoService {
 				Video.setSTOURL(URL);
 				vR.save(Video);
 				Thread.sleep(1000);
-				Csvupload(userNo, title);
+				Csvupload(userNo, title, Url);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void Csvupload(int userNo, String title) {
+	public void Csvupload(int userNo, String title, String URL) {
 		Video videosave = vR.findByUserNoAndTitle(userNo, title);
 		int videoNo = videosave.getVideoNo();
-		callService.sendPostvideoNotitle("https://0fac-61-34-253-238.ngrok-free.app/info", videoNo, title);
-	}
-
-	public String videoPlay(int videoNO) throws SQLException {
-		String sql = "SELECT STOURL FROM bae.VIDEO WHERE VIDEO_NO=?";
-		String url = jT.queryForObject(sql, new Object[] { videoNO }, String.class);
-		return url;
-	}
-
-	public String SMYPlay(int videoNO) throws SQLException {
-		String sql = "SELECT SMYURL FROM bae.VIDEO WHERE VIDEO_NO=?";
-		String url = jT.queryForObject(sql, new Object[] { videoNO }, String.class);
-		return url;
+		callService.sendPostvideoNotitle(URL + "/info", videoNo, title);
 	}
 
 	public Video getVideoByNo(int videoNo) {

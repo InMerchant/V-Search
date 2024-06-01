@@ -13,7 +13,7 @@ public class TimeLineService {
 	private TimeLineRepository TR;
 
 	public List<TimeLine> timeLineCaption(int videoNO) {
-		List<TimeLine> timeLineList =TR.findByvideoNo(videoNO);
+		List<TimeLine> timeLineList =TR.findByvideoNoOrderByFRAMENUMBERAsc(videoNO);
 		return timeLineList;
 	}
 }
