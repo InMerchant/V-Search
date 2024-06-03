@@ -67,27 +67,28 @@ public class VideoService {
 		int userNo = userService.getUserNO(username);
 		String URL = null;
 		String SMYURL = null;
-		String Url = "https://404c-61-34-253-238.ngrok-free.app";
+		String Url = "https://0b56-61-34-253-238.ngrok-free.app";
 		try {
+			Video Video = new Video();
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
 			if (summary == 1) {
-				callService.sendPostRequest(Url + "/execute", title);
+				callService.sendPostRequest(Url + "/aiload", title);
 				Thread.sleep(1000);
-				callService.sendPostRequest(Url + "/execute2", title);
+				callService.sendPostRequest(Url + "/generate", title);
 				Thread.sleep(1000);
-				callService.sendPostRequest(Url + "/execute3", title);
+				callService.sendPostRequest(Url + "/savevideo", title);
 				Thread.sleep(1000);
-				callService.sendPostRequest(Url + "/execute4", title);
+				callService.sendPostRequest(Url + "/translate", title);
 				SMYURL = UR.VideoUrl(title + "_smr");
-				Video Video = new Video();
-				Video.setUSER_NO(userNo);
-				Video.setVIDEO_NAME(title);
 				Video.setSMYURL(SMYURL);
-				Video.setSummary_chk(summary);
-				Video.setSTOURL(URL);
-				vR.save(Video);
-				Thread.sleep(1000);
+			}
+			Video.setSTOURL(URL);
+			Video.setSummary_chk(summary);
+			Video.setUSER_NO(userNo);
+			Video.setVIDEO_NAME(title);
+			vR.save(Video);
+			if (summary == 1) {
 				Csvupload(userNo, title, Url);
 			}
 		} catch (Exception e) {
@@ -98,7 +99,7 @@ public class VideoService {
 	public void Csvupload(int userNo, String title, String URL) {
 		Video videosave = vR.findByUserNoAndTitle(userNo, title);
 		int videoNo = videosave.getVideoNo();
-		callService.sendPostvideoNotitle(URL + "/info", videoNo, title);
+		callService.sendPostvideoNotitle(URL + "/saveinfo", videoNo, title);
 	}
 
 	public Video getVideoByNo(int videoNo) {

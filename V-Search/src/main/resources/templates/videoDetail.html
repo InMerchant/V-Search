@@ -47,6 +47,10 @@
 			<div id="summaryobject">
 				<div id="checkboxCard">
 					<p th:attr="scriptObj=${scriptObj.videoObj}" style="display: none;"></p>
+					<form id="searchForm">
+						<input id="searchObject" type="text" placeholder="검색">
+					</form>
+					<button id="addSearchFieldButton">+</button>
 					<div th:each="SMYresult:${SMYresult}" style="display: none;">
 						<p>
 							<span th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"
@@ -64,11 +68,8 @@
 					<div id="resultsContainer">
 						<div th:each="SMYresult:${SMYresult}">
 							<p>
-							<p>
 								<span th:text="${#strings.substring(SMYresult.TIMELINE, 11)}"
-									th:value="${SMYresult.CAPTION}" class="videoLink" style="display:block;"></span>
-							</p>
-
+									th:value="${SMYresult.CAPTION}" class="videoLink" style="display:none;"></span>
 							</p>
 						</div>
 					</div>
@@ -188,39 +189,35 @@
 			if (timeComponents.length === 3) {
 				return parseInt(timeComponents[0]) * 3600 + parseInt(timeComponents[1]) * 60 + parseInt(timeComponents[2]);
 			} else if (timeComponents.length === 2) {
-				return parseInt(timeComponents[0]) * 60 + parseInt(timeComponents[1]);
+				var hours = parseInt(timeComponents[0]);
+				var minutes = parseInt(timeComponents[1]);
+				return hours * 3600 + minutes * 60;
 			}
-			return 0;
+			return parseInt(timeComponents[0]);
 		}
-		var scriptObjData = document.getElementById("checkboxCard").querySelector("p").getAttribute("scriptObj");
-		if (scriptObjData) {
-			var words = scriptObjData.split(", ");
-			words.forEach(function (word) {
-				var checkbox = document.createElement('input');
-				checkbox.type = "checkbox";
-				checkbox.value = word;
-				checkbox.id = word;
-				checkbox.onchange = updateSelectedWords;
 
-				var label = document.createElement('label');
-				label.htmlFor = word;
-				label.appendChild(document.createTextNode(word));
 
-				document.getElementById('checkboxCard').appendChild(checkbox);
-				document.getElementById('checkboxCard').appendChild(label);
-				document.getElementById('checkboxCard').appendChild(document.createElement('br'));
-			});
-		}
+		var searchInput = document.getElementById('searchObject');
+		var searchForm = $('#searchForm');
+		var selectedCaptions = [];
 
 		$('#showSectionsButton').on('click', function () {
-			var selectedCaptions = [];
-			$('#checkboxCard input[type="checkbox"]:checked').each(function () {
-				selectedCaptions.push($(this).val());
-			});
+			var searchValue = searchInput.value;
+			selectedCaptions = [];
+			selectedCaptions.push(searchValue); // 현재 검색어를 배열에 추가
 			showSelectedSections(selectedCaptions);
+			player2.controlBar.progressControl.hide();
+			player2.controlBar.remainingTimeDisplay.hide();
 		});
 
-		var sections = [];
+		$('#addSearchFieldButton').on('click', function () {
+			var newInput = $('<input type="text" class="searchField" placeholder="검색어">');
+			searchForm.append(newInput);
+
+			newInput.on('change', function () {
+				selectedCaptions.push($(this).val());
+			});
+		});
 
 		function showSelectedSections(selectedCaptions) {
 			var sections = [];
@@ -228,40 +225,36 @@
 			var SMYresults = document.querySelectorAll('.script');
 			SMYresults.forEach(function (result) {
 				var caption = result.textContent.trim();
-				selectedCaptions.forEach(function (selectedCaption) {
-					if (caption.indexOf(selectedCaption) !== -1) {
-						console.log(caption);
-						var timeString = result.textContent.trim().split(' ')[0];
-						var timeComponents = timeString.split(':');
-						var time = calculateTimeInSeconds(timeComponents);
-						sections.push({start: time, end: time + 1});
-						foundSection = true;
-					}
+				var isMatched = selectedCaptions.some(function (selectedCaption) {
+					return caption.includes(selectedCaption);
 				});
+				if (isMatched) {
+					var timeString = result.textContent.trim().split(' ')[0];
+					console.log(caption);
+					var timeComponents = timeString.split(':');
+					var time = calculateTimeInSeconds(timeComponents);
+					sections.push({start: time, end: time + 1});
+					foundSection = true;
+				}
 			});
 			if (!foundSection) {
 				alert("선택한 캡션이 포함된 섹션을 찾지 못했습니다.");
 			}
 			var mergedSections = mergeSections(sections);
-			console.log(mergedSections);
 			updateSections(mergedSections);
 		}
 
 		function updateSections(sections) {
 			if (player2.markers && typeof player2.markers.destroy === 'function') {
-				player2.markers.destroy(function () {
-					createMarkers(sections);
-				});
-			} else {
-				createMarkers(sections);
+				player2.markers.destroy();
 			}
+			createMarkers(sections);
 		}
 
 		function createMarkers(sections) {
 			var markersArray = sections.map(function (section) {
 				return {time: section.start, text: ''};
 			});
-
 			player2.markers({
 				markerTip: {
 					display: true,
@@ -274,10 +267,14 @@
 				},
 				markers: markersArray
 			});
-
-			var currentTime = player2.currentTime();
-			player2.currentTime(sections[curIndex].start);
-
+			curIndex = 0;
+			if (sections.length > 0) {
+				player2.one('loadedmetadata', function () {
+					player2.currentTime(sections[curIndex].start);
+					player2.play();
+				});
+				player2.currentTime(sections[curIndex].start);
+			}
 			player2.on('timeupdate', function () {
 				var currentTime = player2.currentTime();
 				if (curIndex < sections.length && currentTime >= sections[curIndex].end) {
@@ -291,15 +288,7 @@
 				}
 			});
 		}
-
-		function updateSelectedWords() {
-			var selectedCaptions = [];
-			$('#checkboxCard input[type="checkbox"]:checked').each(function () {
-				selectedCaptions.push($(this).val());
-			});
-			showSelectedSections(selectedCaptions);
-		}
-
+		
 		document.querySelectorAll('.videoLink').forEach(function (element) {
 			element.addEventListener('click', function () {
 				var text = element.textContent.trim();
@@ -319,8 +308,10 @@
 				var text = $(this).find('.videoLink').attr('value').toLowerCase(); // videoLink의 value 값 가져오기
 				if (text.includes(searchTerm)) {
 					$(this).show();
+					$(this).find('.videoLink').show();
 				} else {
 					$(this).hide();
+					$(this).find('.videoLink').hide();
 				}
 			});
 			$('#searchsmy').show();
@@ -329,26 +320,25 @@
 
 		function mergeSections(sections) {
 			sections.sort((a, b) => a.start - b.start);
-
-			var mergedSections = [];
-			var currentSection = sections[0];
-
+			var mergeSections = [];
+			var currSection = sections[0];
 			for (var i = 1; i < sections.length; i++) {
 				var nextSection = sections[i];
+				var gap = nextSection.start - currSection.end;
 
-				if (currentSection.end >= nextSection.start - 1) {
-					currentSection.end = Math.max(currentSection.end, nextSection.end);
+				if (gap <= 3) {
+					currSection.end = Math.max(currSection.end, nextSection.end);
 				} else {
-					mergedSections.push(currentSection);
-					currentSection = nextSection;
+					mergedSections.push(currSection);
+					currSection = nextSection;
 				}
 			}
 
-			// Add the last section
-			mergedSections.push(currentSection);
-
-			return mergedSections;
+			mergedSections.push(currSection);
+			return mergesSections;
 		}
+
+
 	</script>
 
 </body>
