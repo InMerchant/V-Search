@@ -12,14 +12,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class VideoChkService {
 	
-	private final VideoChkRepository videoChkRepository;
+	@Autowired
+	private VideoChkRepository videoChkRepository;
 
-    @Autowired
-    public VideoChkService(VideoChkRepository videoChkRepository) {
-        this.videoChkRepository = videoChkRepository;
-    }
-
-    public int calculateVideoAge(Long videoNo) {
+    public int calculateVideoAge(int videoNo) {
         List<Object[]> scriptimoCounts = videoChkRepository.countScriptimoByVideoNo(videoNo);
         List<Object[]> nudeCounts = videoChkRepository.countNudeByVideoNo(videoNo);
 

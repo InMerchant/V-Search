@@ -48,7 +48,7 @@
 				<div id="checkboxCard">
 					<p th:attr="scriptObj=${scriptObj.videoObj}" style="display: none;"></p>
 					<form id="searchForm">
-						<input id="searchObject" type="text" placeholder="검색">
+						<input id="searchObject" type="text" placeholder="검색" class="searchField">
 					</form>
 					<button id="addSearchFieldButton">+</button>
 					<div th:each="SMYresult:${SMYresult}" style="display: none;">
@@ -57,6 +57,10 @@
 								class="script"></span>
 						</p>
 					</div>
+					<form id="searchDel">
+						<input id="searchDel" type="text" placeholder="검색" class="searchField">
+					</form>
+					<button id="addSearchDelButton">+</button>
 				</div>
 				<button id="showSectionsButton">테스트</button>
 			</div>
@@ -65,7 +69,7 @@
 					<form>
 						<input id="searchInput" type="text" placeholder="검색">
 					</form>
-					<div id="resultsContainer">
+					<div id="resultsContainer"  style="overflow-y: auto;">
 						<div th:each="SMYresult:${SMYresult}">
 							<p>
 								<span th:text="${#strings.substring(SMYresult.TIMELINE, 11)}"
@@ -199,13 +203,27 @@
 
 		var searchInput = document.getElementById('searchObject');
 		var searchForm = $('#searchForm');
+		var searchDel = $('#searchDel');
 		var selectedCaptions = [];
 
 		$('#showSectionsButton').on('click', function () {
 			var searchValue = searchInput.value;
 			selectedCaptions = [];
-			selectedCaptions.push(searchValue); // 현재 검색어를 배열에 추가
-			showSelectedSections(selectedCaptions);
+			selectedDelCaptions = [];
+			selectedCaptions.push(searchValue);
+			$('#searchForm .searchField').each(function () {
+				if ($(this).val() !== '') {
+					selectedCaptions.push($(this).val());
+				}
+			});
+
+			// searchDel 안의 .searchField 값 추가
+			$('#searchDel .searchField').each(function () {
+				if ($(this).val() !== '') {
+					selectedDelCaptions.push($(this).val());
+				}
+			});
+			showSelectedSections(selectedCaptions, selectedDelCaptions);
 			player2.controlBar.progressControl.hide();
 			player2.controlBar.remainingTimeDisplay.hide();
 		});
@@ -213,22 +231,33 @@
 		$('#addSearchFieldButton').on('click', function () {
 			var newInput = $('<input type="text" class="searchField" placeholder="검색어">');
 			searchForm.append(newInput);
-
-			newInput.on('change', function () {
-				selectedCaptions.push($(this).val());
-			});
 		});
 
-		function showSelectedSections(selectedCaptions) {
+		$('#addSearchDelButton').on('click', function () {
+			var newInput = $('<input type="text" class="searchField" placeholder="검색어">');
+			searchDel.append(newInput);
+		});
+
+
+		function showSelectedSections(selectedCaptions, selectedDelCaptions) {
 			var sections = [];
 			var foundSection = false;
 			var SMYresults = document.querySelectorAll('.script');
+
 			SMYresults.forEach(function (result) {
 				var caption = result.textContent.trim();
+
+				// selectedCaptions 중 하나라도 포함되면 isMatched가 true
 				var isMatched = selectedCaptions.some(function (selectedCaption) {
 					return caption.includes(selectedCaption);
 				});
-				if (isMatched) {
+
+				// selectedDelCaptions 중 하나라도 포함되면 isExcluded가 true
+				var isExcluded = selectedDelCaptions.some(function (selectedDelCaption) {
+					return caption.includes(selectedDelCaption);
+				});
+
+				if (isMatched && !isExcluded) {
 					var timeString = result.textContent.trim().split(' ')[0];
 					console.log(caption);
 					var timeComponents = timeString.split(':');
@@ -237,9 +266,11 @@
 					foundSection = true;
 				}
 			});
+
 			if (!foundSection) {
 				alert("선택한 캡션이 포함된 섹션을 찾지 못했습니다.");
 			}
+
 			var mergedSections = mergeSections(sections);
 			updateSections(mergedSections);
 		}
@@ -288,7 +319,7 @@
 				}
 			});
 		}
-		
+
 		document.querySelectorAll('.videoLink').forEach(function (element) {
 			element.addEventListener('click', function () {
 				var text = element.textContent.trim();
@@ -329,13 +360,13 @@
 				if (gap <= 3) {
 					currSection.end = Math.max(currSection.end, nextSection.end);
 				} else {
-					mergedSections.push(currSection);
+					mergeSections.push(currSection);
 					currSection = nextSection;
 				}
 			}
 
-			mergedSections.push(currSection);
-			return mergesSections;
+			mergeSections.push(currSection);
+			return mergeSections;
 		}
 
 

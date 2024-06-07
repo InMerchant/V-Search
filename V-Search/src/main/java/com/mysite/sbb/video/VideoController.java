@@ -6,6 +6,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -73,7 +74,7 @@ public class VideoController {
 	@Autowired
 	private TimeLineService TS;
 
-	@GetMapping(value = "/video/{no}")//최적화
+	@GetMapping(value = "/video/{no}") // 최적화
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
 		Del video = entityManager.find(Del.class, videoNo);
 		int videoUserId = video.getUsernumber();
@@ -164,6 +165,12 @@ public class VideoController {
 	public String mainPage(Model model) {
 		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbersAndSTOURL();
 		model.addAttribute("videoDetails", videoDetails);
+		List<Integer> userNumbers = new ArrayList<>();
+
+		for (Object[] videoDetail : videoDetails) {
+			Integer userNumber = (Integer) videoDetail[2];
+			userNumbers.add(userNumber);
+		}
 		return "mainpage";
 	}
 

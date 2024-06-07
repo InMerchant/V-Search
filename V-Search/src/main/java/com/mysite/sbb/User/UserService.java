@@ -92,4 +92,10 @@ public class UserService {
 			return dto;
 		}
 	}
+	
+	public String getUsername(int userNo) {
+		String userName = userRepository.findByuserno(userNo);
+		System.out.println(userName);
+		return userName;
+	}
 }

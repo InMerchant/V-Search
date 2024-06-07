@@ -15,6 +15,7 @@ import lombok.Data;
 @Data
 public class TimeLine {
 	@Id
+	private int infoId;
 	@Column(name="FRAME_NUMBER")
 	private int FRAMENUMBER;
 	@Column(name="VIDEO_NO")
