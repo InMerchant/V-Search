@@ -33,20 +33,24 @@ public class VideoChkService {
                 scriptimoCountArray[scriptimo] = (int) count;
             }
         }
-
+        
+        boolean hasNude1 = false;
+        boolean hasNude2 = false;
+        
         for (Object[] result : nudeCounts) {
             int nude = ((Number) result[0]).intValue();
-            long count = (long) result[1];
-            if (nude >= 0 && nude <= 2) {
-                nudeCountArray[nude] = (int) count;
+            if (nude == 1) {
+                hasNude1 = true;
+            } else if (nude == 2) {
+                hasNude2 = true;
             }
         }
 
-        int totalScore = calculateTotalScore(scriptimoCountArray, nudeCountArray);
+        int totalScore = calculateTotalScore(scriptimoCountArray, hasNude1, hasNude2);
         return determineAgeCategory(totalScore);
     }
 
-    private int calculateTotalScore(int[] scriptimoCounts, int[] nudeCounts) {
+    private int calculateTotalScore(int[] scriptimoCounts, boolean hasNude1, boolean hasNude2) {
         int totalScore = 0;
 
         totalScore += scriptimoCounts[0] * 1;  // 0: 비난
@@ -57,8 +61,12 @@ public class VideoChkService {
         totalScore += scriptimoCounts[5] * 10; // 5: 폭력
         totalScore += scriptimoCounts[6] * 10; // 6: 범죄
 
-        totalScore += nudeCounts[1] * 20;      // 1: 반누드
-        totalScore += nudeCounts[2] * 100;     // 2: 누드
+        if (hasNude1) {
+            totalScore += 21;  // 반누드
+        }
+        if (hasNude2) {
+            totalScore += 101;  // 누드
+        }
 
         return totalScore;
     }
