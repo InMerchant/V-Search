@@ -52,7 +52,8 @@ public class VideoChkService {
 
     private int calculateTotalScore(int[] scriptimoCounts, boolean hasNude1, boolean hasNude2) {
         int totalScore = 0;
-
+        
+        // 0 = 전체이용가, 1~5 = 7세, 6~20 = 12세, 21~100 = 15세, 101~ = 18세
         totalScore += scriptimoCounts[0] * 1;  // 0: 비난
         totalScore += scriptimoCounts[1] * 1;  // 1: 차별
         totalScore += scriptimoCounts[2] * 1;  // 2: 혐오
