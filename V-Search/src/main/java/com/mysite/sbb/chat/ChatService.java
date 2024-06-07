@@ -12,7 +12,9 @@ public class ChatService {
 
     @Autowired
     private ChatRepository chatRepository;
-
+    @Autowired
+    private ChatTitleRepository chatTitleRepository;
+    
     public List<Map<String, String>> readDataFromDatabase() {
         List<Chat> chats = chatRepository.findAll();
         return chats.stream().map(chat -> {
@@ -25,4 +27,15 @@ public class ChatService {
             return map;
         }).collect(Collectors.toList());
     }
+    
+    public List<Map<String, String>> readDataFromDatabasetitle() {
+        List<ChatTitle> chatTitles = chatTitleRepository.findAll();
+        return chatTitles.stream().map(chatTitle -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("VIDEO_NO", String.valueOf(chatTitle.getVideoNo()));
+            map.put("VIDEO_NAME", chatTitle.getVideoname());
+            return map;
+        }).collect(Collectors.toList());
+    }
+
 }
