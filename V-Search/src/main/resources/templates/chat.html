@@ -1,63 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-    
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chat</title>
+
 </head>
-<body>
-<div class="sidebar" id="sidebar">
-		<ul>
-			<li><a th:href="@{'/Member/' + ${username}}">유저 정보</a></li>
-			<li><a th:href="@{'/channel/' + ${userNo}}">동영상 목록</a></li>
-			<li><a th:href="@{'/subscriber'+${userNo}}">구독 목록</a></li>
-		</ul>
-	</div>
-    <h1>Chat</h1>
-    <!-- 사용자 입력을 받을 입력 필드 추가 -->
-    <label for="userInput">Enter your question:</label>
-    <input type="text" id="userInput" name="userInput">
-    <!-- 버튼 추가 -->
-    <button id="sendButton">Send Data to Server</button>
-    <!-- 데이터를 표시할 요소 추가 -->
-    <div id="data"></div>
 
-    <script>
-        // 버튼 요소 찾기
-        const sendButton = document.getElementById('sendButton');
-        // 데이터를 표시할 요소 찾기
-        const dataElement = document.getElementById('data');
-        // 사용자 입력 필드 찾기
-        const userInputField = document.getElementById('userInput');
+<body layout:fragment="content">
+	<h1>Chat</h1>
+	<!-- 사용자 입력을 받을 입력 필드 추가 -->
+	<label for="userInput">Enter your question:</label>
+	<input type="text" id="userInput" name="userInput">
+	<!-- 버튼 추가 -->
+	<button id="sendButton">Send Data to Server</button>
+	<!-- 데이터를 표시할 요소 추가 -->
+	<div id="data"></div>
 
-        // 버튼에 클릭 이벤트 리스너 추가
-        sendButton.addEventListener('click', async () => {
-            try {
-                // 사용자 입력 가져오기
-                const userQuestion = userInputField.value;
-                // 서버로 데이터 보내기
-                const response = await fetch('/chats/asd', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ user_input: userQuestion }) // 사용자 입력을 JSON 형식으로 보냄
-                });
-                // 서버 응답을 JSON 형식으로 파싱
-                const responseData = await response.json();
-                // 데이터를 표시할 요소에 서버에서 받은 데이터 설정
-                dataElement.innerHTML += "<p>User input: " + responseData.user_input + "</p>";
-                dataElement.innerHTML += "<p>Server response: " + responseData.answer + "</p>";
+	<script>
+		// 버튼 요소 찾기
+		const sendButton = document.getElementById('sendButton');
+		// 데이터를 표시할 요소 찾기
+		const dataElement = document.getElementById('data');
+		// 사용자 입력 필드 찾기
+		const userInputField = document.getElementById('userInput');
 
-                // 응답 확인
-                console.log('Response from server:', responseData);
-            } catch (error) {
-                // 오류 메시지 표시
-                console.error('Error sending data:', error);
-                alert('Error sending data: ' + error.message); // 오류를 사용자에게 알림
-            }
-        });
-    </script>
+		// 버튼에 클릭 이벤트 리스너 추가
+		sendButton.addEventListener('click', async () => {
+			try {
+				// 사용자 입력 가져오기
+				const userQuestion = userInputField.value;
+				// 서버로 데이터 보내기
+				const response = await fetch('/chats/asd', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({user_input: userQuestion}) // 사용자 입력을 JSON 형식으로 보냄
+				});
+				// 서버 응답을 JSON 형식으로 파싱
+				const responseData = await response.json();
+				// 데이터를 표시할 요소에 서버에서 받은 데이터 설정
+				dataElement.innerHTML += "<p>User input: " + responseData.user_input + "</p>";
+				dataElement.innerHTML += "<p>Server response: " + responseData.answer + "</p>";
+
+				// 응답 확인
+				console.log('Response from server:', responseData);
+			} catch (error) {
+				// 오류 메시지 표시
+				console.error('Error sending data:', error);
+				alert('Error sending data: ' + error.message); // 오류를 사용자에게 알림
+			}
+		});
+	</script>
 </body>
+
 </html>

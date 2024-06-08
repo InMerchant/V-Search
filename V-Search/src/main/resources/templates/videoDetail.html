@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 
@@ -13,63 +12,62 @@
 </head>
 
 <body layout:fragment="content">
-	<div class="btncontainer">
-		<button class="btn front">
-			<img th:src="@{/img/btn.png}" class="image-btn">
-		</button>
-		<button class="btn back" style="display: none;">
-			<img th:src="@{/img/smybtn.png}" class="image-btn">
-		</button>
-	</div>
 	<div class="main">
 		<div class="container">
 			<div class="card front-card">
-				<video width="640" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
+				<video width="980" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
 					<source th:src="@{${scriptObj.SMYURL}}" type="video/mp4">
 					요약영상
 				</video>
 			</div>
 			<div class="card back-card">
-				<video width="640" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
+				<video width="980" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
 					<source th:src="@{${scriptObj.STOURL}}" type="video/mp4">
 					원본 영상
 				</video>
 			</div>
 		</div>
-		<div id="smyscript">
-			<!--영상 요약 데이터 출력<span th:text="${scriptObj.SMYSCRIPT}"></span>-->
-		</div>
-		<div id="summarymain" style="display: none;">
-			<div class="smybtn">
-				<button class="user" th:onclick="checks()">사용자 요약</button>
-				<button class="search" th:onclick="searchs()">검색</button>
+		<div id="summarymain" class="totalcontainer">
+			<div class="btncontainer">
+				<button class="btn front">
+					<img th:src="@{/img/btn.png}" class="image-btn">
+				</button>
+				<button class="btn back" style="display: none;">
+					<img th:src="@{/img/smybtn.png}" class="image-btn">
+				</button>
 			</div>
-			<div id="summaryobject">
-				<div id="checkboxCard">
-					<p th:attr="scriptObj=${scriptObj.videoObj}" style="display: none;"></p>
-					<form id="searchForm">
-						<input id="searchObject" type="text" placeholder="검색" class="searchField">
-					</form>
-					<button id="addSearchFieldButton">+</button>
-					<div th:each="SMYresult:${SMYresult}" style="display: none;">
-						<p>
-							<span th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"
-								class="script"></span>
-						</p>
-					</div>
-					<form id="searchDel">
-						<input id="searchDel" type="text" placeholder="검색" class="searchField">
-					</form>
-					<button id="addSearchDelButton">+</button>
+			<div class="smycontainer" aria-disabled="true">
+				<div class="smybtn">
+					<button class="user" th:onclick="checks()">사용자 요약</button>
+					<button class="search" th:onclick="searchs()">검색</button>
 				</div>
-				<button id="showSectionsButton">테스트</button>
-			</div>
-			<div>
+				<div id="summaryobject">
+					<div id="checkboxCard">
+						<p th:attr="scriptObj=${scriptObj.videoObj}" style="display: none;"></p>
+						<form id="searchForm">
+							<input id="searchObject" type="text" placeholder="검색" class="searchField" disabled>
+						</form>
+						<button id="addSearchFieldButton" disabled>+</button>
+						<div th:each="SMYresult:${SMYresult}" style="display: none;">
+							<p>
+								<span
+									th:text="${#strings.substring(SMYresult.TIMELINE, 11)} + ' ' + ${SMYresult.CAPTION}"
+									class="script"></span>
+							</p>
+						</div>
+						<form id="searchDel">
+							<input id="searchDel" type="text" placeholder="검색" class="searchField" disabled>
+
+						</form>
+						<button id="addSearchDelButton" disabled>+</button>
+					</div>
+					<button id="showSectionsButton" disabled>테스트</button>
+				</div>
 				<div id="searchsmy" style="display: none;">
 					<form>
-						<input id="searchInput" type="text" placeholder="검색">
+						<input id="searchInput" type="text" placeholder="검색" disabled>
 					</form>
-					<div id="resultsContainer"  style="overflow-y: auto;">
+					<div id="resultsContainer" style="overflow-y: auto;">
 						<div th:each="SMYresult:${SMYresult}">
 							<p>
 								<span th:text="${#strings.substring(SMYresult.TIMELINE, 11)}"
@@ -118,259 +116,8 @@
 		</form>
 	</div>
 
-	<div id="selectedSectionsContainer"></div>
 
-
-	<script>
-		var curIndex = 0;
-		$(document).ready(function () {
-			$('.front').on('click', function () {
-				$('.front').hide();
-				$('.back').show();
-				$('#smyscript').hide();
-				$('#summarymain').show();
-				$('.card').addClass('active');
-				var player = videojs('VideoPlayer');
-				player.pause();
-			});
-
-			$('.back').on('click', function () {
-				$('.front').show();
-				$('.back').hide();
-				$('.card').removeClass('active');
-				$('#summarymain').hide();
-				$('#smyscript').show();
-				var player = videojs('VideoPlayer2');
-				player.pause();
-			});
-		});
-		var player1, player2;
-		player1 = videojs("VideoPlayer", {
-			controls: true,
-			playsinline: true,
-			preload: "auto",
-			controlBar: {
-				playToggle: true,
-				pictureInPictureToggle: true,
-				remainingTimeDisplay: true,
-				progressControl: true
-			}
-		});
-
-
-		player2 = videojs("VideoPlayer2", {
-			controls: true,
-			playsinline: true,
-			preload: "auto",
-			controlBar: {
-				playToggle: true,
-				pictureInPictureToggle: true,
-				remainingTimeDisplay: true,
-				progressControl: true
-			}
-		});
-		player2.markers({
-			markerTip: {
-				display: true,
-				text: function (marker) {
-					return marker.text;
-				},
-				time: function (marker) {
-					return marker.time;
-				}
-			},
-			markers: []
-		});
-		function searchs() {
-			$('#searchsmy').show()
-			$('#summaryobject').hide()
-		}
-		function checks() {
-			$('#searchsmy').hide()
-			$('#summaryobject').show()
-		}
-		function calculateTimeInSeconds(timeComponents) {
-			if (timeComponents.length === 3) {
-				return parseInt(timeComponents[0]) * 3600 + parseInt(timeComponents[1]) * 60 + parseInt(timeComponents[2]);
-			} else if (timeComponents.length === 2) {
-				var hours = parseInt(timeComponents[0]);
-				var minutes = parseInt(timeComponents[1]);
-				return hours * 3600 + minutes * 60;
-			}
-			return parseInt(timeComponents[0]);
-		}
-
-
-		var searchInput = document.getElementById('searchObject');
-		var searchForm = $('#searchForm');
-		var searchDel = $('#searchDel');
-		var selectedCaptions = [];
-
-		$('#showSectionsButton').on('click', function () {
-			var searchValue = searchInput.value;
-			selectedCaptions = [];
-			selectedDelCaptions = [];
-			selectedCaptions.push(searchValue);
-			$('#searchForm .searchField').each(function () {
-				if ($(this).val() !== '') {
-					selectedCaptions.push($(this).val());
-				}
-			});
-
-			// searchDel 안의 .searchField 값 추가
-			$('#searchDel .searchField').each(function () {
-				if ($(this).val() !== '') {
-					selectedDelCaptions.push($(this).val());
-				}
-			});
-			showSelectedSections(selectedCaptions, selectedDelCaptions);
-			player2.controlBar.progressControl.hide();
-			player2.controlBar.remainingTimeDisplay.hide();
-		});
-
-		$('#addSearchFieldButton').on('click', function () {
-			var newInput = $('<input type="text" class="searchField" placeholder="검색어">');
-			searchForm.append(newInput);
-		});
-
-		$('#addSearchDelButton').on('click', function () {
-			var newInput = $('<input type="text" class="searchField" placeholder="검색어">');
-			searchDel.append(newInput);
-		});
-
-
-		function showSelectedSections(selectedCaptions, selectedDelCaptions) {
-			var sections = [];
-			var foundSection = false;
-			var SMYresults = document.querySelectorAll('.script');
-
-			SMYresults.forEach(function (result) {
-				var caption = result.textContent.trim();
-
-				// selectedCaptions 중 하나라도 포함되면 isMatched가 true
-				var isMatched = selectedCaptions.some(function (selectedCaption) {
-					return caption.includes(selectedCaption);
-				});
-
-				// selectedDelCaptions 중 하나라도 포함되면 isExcluded가 true
-				var isExcluded = selectedDelCaptions.some(function (selectedDelCaption) {
-					return caption.includes(selectedDelCaption);
-				});
-
-				if (isMatched && !isExcluded) {
-					var timeString = result.textContent.trim().split(' ')[0];
-					console.log(caption);
-					var timeComponents = timeString.split(':');
-					var time = calculateTimeInSeconds(timeComponents);
-					sections.push({start: time, end: time + 1});
-					foundSection = true;
-				}
-			});
-
-			if (!foundSection) {
-				alert("선택한 캡션이 포함된 섹션을 찾지 못했습니다.");
-			}
-
-			var mergedSections = mergeSections(sections);
-			updateSections(mergedSections);
-		}
-
-		function updateSections(sections) {
-			if (player2.markers && typeof player2.markers.destroy === 'function') {
-				player2.markers.destroy();
-			}
-			createMarkers(sections);
-		}
-
-		function createMarkers(sections) {
-			var markersArray = sections.map(function (section) {
-				return {time: section.start, text: ''};
-			});
-			player2.markers({
-				markerTip: {
-					display: true,
-					text: function (marker) {
-						return marker.text;
-					},
-					time: function (marker) {
-						return marker.time;
-					}
-				},
-				markers: markersArray
-			});
-			curIndex = 0;
-			if (sections.length > 0) {
-				player2.one('loadedmetadata', function () {
-					player2.currentTime(sections[curIndex].start);
-					player2.play();
-				});
-				player2.currentTime(sections[curIndex].start);
-			}
-			player2.on('timeupdate', function () {
-				var currentTime = player2.currentTime();
-				if (curIndex < sections.length && currentTime >= sections[curIndex].end) {
-					curIndex++;
-					if (curIndex < sections.length) {
-						player2.currentTime(sections[curIndex].start);
-						player2.play();
-					} else {
-						player2.pause();
-					}
-				}
-			});
-		}
-
-		document.querySelectorAll('.videoLink').forEach(function (element) {
-			element.addEventListener('click', function () {
-				var text = element.textContent.trim();
-				var timeComponents = text.split(':');
-				var time = 0;
-				var time = calculateTimeInSeconds(timeComponents);
-				console.log("클릭된 시간값:", time)
-				timemove(parseInt(time));
-			});
-		});
-		function timemove(time) {
-			player2.currentTime(time);
-		}
-		$('#searchInput').on('input', function () {
-			var searchTerm = $(this).val().toLowerCase();
-			$('#resultsContainer > div').each(function () {
-				var text = $(this).find('.videoLink').attr('value').toLowerCase(); // videoLink의 value 값 가져오기
-				if (text.includes(searchTerm)) {
-					$(this).show();
-					$(this).find('.videoLink').show();
-				} else {
-					$(this).hide();
-					$(this).find('.videoLink').hide();
-				}
-			});
-			$('#searchsmy').show();
-		});
-
-
-		function mergeSections(sections) {
-			sections.sort((a, b) => a.start - b.start);
-			var mergeSections = [];
-			var currSection = sections[0];
-			for (var i = 1; i < sections.length; i++) {
-				var nextSection = sections[i];
-				var gap = nextSection.start - currSection.end;
-
-				if (gap <= 3) {
-					currSection.end = Math.max(currSection.end, nextSection.end);
-				} else {
-					mergeSections.push(currSection);
-					currSection = nextSection;
-				}
-			}
-
-			mergeSections.push(currSection);
-			return mergeSections;
-		}
-
-
-	</script>
+	<script type="text/javascript" th:src="@{/js/detailent.js}"></script>
 
 </body>
 

@@ -40,6 +40,7 @@ import com.mysite.sbb.ResponseDto;
 import com.mysite.sbb.User.SiteUser;
 import com.mysite.sbb.User.UserProfileDto;
 import com.mysite.sbb.User.UserService;
+import com.mysite.sbb.agechk.VideoChkService;
 import com.mysite.sbb.comment.Comment;
 import com.mysite.sbb.comment.CommentService;
 
@@ -73,6 +74,8 @@ public class VideoController {
 	private EntityManager entityManager;
 	@Autowired
 	private TimeLineService TS;
+	@Autowired
+	private VideoChkService VC;
 
 	@GetMapping(value = "/video/{no}") // 최적화
 	public String videoDetail(@PathVariable("no") int videoNo, Model model) throws SQLException {
@@ -89,6 +92,9 @@ public class VideoController {
 		model.addAttribute("recommendationsCount", recommendationsCount);
 		List<Comment> comments = commentService.getCommentsByVideoNumber(videoNo);
 		model.addAttribute("comments", comments);
+		int age=VC.calculateVideoAge(videoNo);
+		System.out.println(age);
+		
 		return "videoDetail";
 	}
 
@@ -171,6 +177,8 @@ public class VideoController {
 			Integer userNumber = (Integer) videoDetail[2];
 			userNumbers.add(userNumber);
 		}
+		model.addAttribute(userNumbers);
+	
 		return "mainpage";
 	}
 
