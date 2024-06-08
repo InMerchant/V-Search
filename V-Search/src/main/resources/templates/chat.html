@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
+    
 </head>
 <body>
+<div class="sidebar" id="sidebar">
+		<ul>
+			<li><a th:href="@{'/Member/' + ${username}}">유저 정보</a></li>
+			<li><a th:href="@{'/channel/' + ${userNo}}">동영상 목록</a></li>
+			<li><a th:href="@{'/subscriber'+${userNo}}">구독 목록</a></li>
+		</ul>
+	</div>
     <h1>Chat</h1>
     <!-- 사용자 입력을 받을 입력 필드 추가 -->
     <label for="userInput">Enter your question:</label>

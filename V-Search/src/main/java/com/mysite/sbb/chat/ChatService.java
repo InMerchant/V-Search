@@ -19,11 +19,9 @@ public class ChatService {
         List<Chat> chats = chatRepository.findAll();
         return chats.stream().map(chat -> {
             Map<String, String> map = new HashMap<>();
-            map.put("FRAME_NUMBER", String.valueOf(chat.getFRAMENUMBER()));
             map.put("VIDEO_NO", String.valueOf(chat.getVideoNo()));
             map.put("CAPTION", chat.getCAPTION());
             map.put("SCRIPT", chat.getSCRIPT());
-            map.put("TIMELINE", chat.getTIMELINE().toString());
             return map;
         }).collect(Collectors.toList());
     }

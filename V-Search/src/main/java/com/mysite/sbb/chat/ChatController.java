@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 import java.util.HashMap;
 
 @Controller
@@ -56,12 +57,23 @@ public class ChatController {
             requestData.put("db_data_title", dbDataTitleJson);
 
             String pythonServerUrl = "http://localhost:5000/receive_data";
-            ResponseEntity<Map> response = restTemplate.postForEntity(pythonServerUrl, requestData, Map.class);
+            ResponseEntity<Map> response = null;
+            
+            // 서버에 한 번의 요청으로 데이터를 보냄
+            response = restTemplate.postForEntity(pythonServerUrl, requestData, Map.class);
+
+            // 만약 응답이 실패하면 예외를 발생시킴
+            if (response.getStatusCode() != HttpStatus.OK) {
+                throw new RuntimeException("Failed to send data to Python server");
+            }
 
             return ResponseEntity.ok().body(response.getBody());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Failed to send data to Python server"));
         }
     }
 }
