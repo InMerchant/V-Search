@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.10.0/video-js.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-markers/0.7.0/videojs.markers.css" rel="stylesheet">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -13,15 +14,15 @@
 
 <body layout:fragment="content">
 	<div class="main">
-		<div class="container">
+		<div class="videocontainer">
 			<div class="card front-card">
-				<video width="980" height="480" id="VideoPlayer" class="video-js vjs-default-skin">
+				<video width="1280" height="720" id="VideoPlayer" class="video-js vjs-default-skin">
 					<source th:src="@{${scriptObj.SMYURL}}" type="video/mp4">
 					요약영상
 				</video>
 			</div>
 			<div class="card back-card">
-				<video width="980" height="480" id="VideoPlayer2" class="video-js vjs-default-skin">
+				<video width="1280" height="720" id="VideoPlayer2" class="video-js vjs-default-skin">
 					<source th:src="@{${scriptObj.STOURL}}" type="video/mp4">
 					원본 영상
 				</video>
@@ -38,16 +39,21 @@
 			</div>
 			<div class="smycontainer" aria-disabled="true">
 				<div class="smybtn">
-					<button class="user" th:onclick="checks()">사용자 요약</button>
-					<button class="search" th:onclick="searchs()">검색</button>
+					<button class="user" th:onclick="checks()" disabled>사용자 요약</button>
+					<button class="search" th:onclick="searchs()" disabled>검색</button>
 				</div>
 				<div id="summaryobject">
 					<div id="checkboxCard">
 						<p th:attr="scriptObj=${scriptObj.videoObj}" style="display: none;"></p>
-						<form id="searchForm">
-							<input id="searchObject" type="text" placeholder="검색" class="searchField" disabled>
-						</form>
-						<button id="addSearchFieldButton" disabled>+</button>
+						<div class="pluscontainer">
+							<h4>
+								검색할 객체
+							</h4>
+							<form id="searchForm">
+								<input id="searchObject" type="text" placeholder="임시" class="searchField" disabled>
+							</form>
+							<button id="addSearchFieldButton" disabled>+</button>
+						</div>
 						<div th:each="SMYresult:${SMYresult}" style="display: none;">
 							<p>
 								<span
@@ -55,13 +61,17 @@
 									class="script"></span>
 							</p>
 						</div>
-						<form id="searchDel">
-							<input id="searchDel" type="text" placeholder="검색" class="searchField" disabled>
-
-						</form>
-						<button id="addSearchDelButton" disabled>+</button>
+						<div class="delcontainer">
+							<h4>
+								삭제할 객체
+							</h4>
+							<form id="searchDel">
+								<input id="searchDel" type="text" placeholder="검색" class="searchField" disabled>
+							</form>
+							<button id="addSearchDelButton" disabled>+</button>
+						</div>
 					</div>
-					<button id="showSectionsButton" disabled>테스트</button>
+					<button id="showSectionsButton" disabled>요약</button>
 				</div>
 				<div id="searchsmy" style="display: none;">
 					<form>
@@ -79,41 +89,39 @@
 			</div>
 		</div>
 	</div>
-	<div class="button-container">
-		<form th:action="@{'/recommend/toggle/'+ ${videoNo}}" method="POST">
-			<button type="submit" class="recommend-button">추천</button>
+	<div class="bottomcontainer">
+		<div class="button-container">
+			<p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
+			<div class="recommand">
+				<form th:action="@{'/recommend/toggle/'+ ${videoNo}}" method="POST">
+					<button type="submit" class="recommend-button">추천 수 : <span
+							th:text="${recommendationsCount}"></span></button>
+				</form>
+			</div>
+			<div class="subscribe">
+				<form th:action="@{'/api/subscribe/'+${videoNo}}" method="POST">
+					<button type="submit" id="subscribe" class="subscribe-button">구독</button>
+					<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET">
+						<button type="submit" id="unsubscribe" class="unsubscribe-button"
+							style="display: none">구독취소</button>
+					</form>
+				</form>
+			</div>
+		</div>
+
+		<form th:action="@{'/comments/create/'+${videoNo}}" method="POST">
+			<input type="hidden" name="videoNo" th:value="${videoNo}">
+			<textarea name="content" placeholder="Enter your comment" required></textarea><br>
+			<button type="submit" class="submit-comment-button">Submit</button>
 		</form>
 
-		<form th:action="@{'/delvideos/' + ${videoNo}}" method="POST">
-			<input type="hidden" name="_method" value="DELETE">
-			<input type="submit" value="동영상 삭제" class="delete-video-button">
-		</form>
-
-		<form th:action="@{'/api/subscribe/'+${videoNo}}" method="POST">
-			<button type="submit" id="subscribe" class="subscribe-button">구독</button>
-		</form>
-
-		<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET">
-			<button type="submit" id="unsubscribe" class="unsubscribe-button" style="display: none">구독취소</button>
-		</form>
-	</div>
-
-	<p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
-	<p>추천 수 : <span th:text="${recommendationsCount}"></span></p>
-
-	<form th:action="@{'/comments/create/'+${videoNo}}" method="POST">
-		<input type="hidden" name="videoNo" th:value="${videoNo}">
-		<textarea name="content" placeholder="Enter your comment" required></textarea><br>
-		<button type="submit" class="submit-comment-button">Submit</button>
-	</form>
-
-	<div th:each="comment : ${comments}">
-		<p th:text="${comment.content}"></p>
-		<!-- 삭제 버튼 -->
-		<form th:action="@{'/comments/' + ${videoNo} + '/' + ${comment.id}}" method="POST">
-			<input type="hidden" name="_method" value="delete" />
-			<input type="submit" value="삭제" class="delete-comment-button" />
-		</form>
+		<div th:each="comment : ${comments}">
+			<p th:text="${comment.content}"></p>
+			<form th:action="@{'/comments/' + ${videoNo} + '/' + ${comment.id}}" method="POST">
+				<input type="hidden" name="_method" value="delete" />
+				<input type="submit" value="삭제" class="delete-comment-button" />
+			</form>
+		</div>
 	</div>
 
 

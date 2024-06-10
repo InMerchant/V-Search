@@ -1,13 +1,22 @@
+html {
+	height: 100%;
+	;
+	width: 100%;
+}
+
 .main {
 	display: flex;
 	justify-content: center;
+	width: 100%;
 }
 
-.container {
+.videocontainer {
+	position: relative;
 	display: flex;
 	justify-content: flex-start;
-	align-items: center;
-	height: 50vh;
+	align-items: flex-start;
+	position: relative;
+	width: 100%;
 }
 
 .front-card,
@@ -16,6 +25,7 @@
 	background: black;
 	overflow: hidden;
 }
+
 
 .front-card {
 	animation-name: frontcard-front;
@@ -129,9 +139,69 @@ textarea {
 #checkboxCard {
 	border: 1px solid #ccc;
 	padding: 10px;
+	width: 300px;
+}
+
+#resultsContainer {
+	height: 500px;
+}
+
+#checkboxCard {
+	display: flex;
+	height: 400px;
+	flex-direction: column;
 }
 
 .videoLink {
 	color: #007bff;
 	cursor: pointer;
+}
+
+.button-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+#searchForm {
+	display: flex;
+	flex-direction: column;
+}
+
+.searchField {
+	margin-bottom: 5px;
+}
+
+#searchDel {
+	display: flex;
+	flex-direction: column;
+}
+
+.bottomcontainer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background-color: #ffffff;
+	padding: 10px;
+	transform: translateY(10px);
+}
+
+.pluscontainer,
+.delcontainer {
+	flex: 1;
+}
+
+.subscribe-button {
+	background-color: #008CBA;
+	color: white;
+	border: none;
+	border-radius: 10%;
+}
+
+.recommend-button {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 10%;
 }

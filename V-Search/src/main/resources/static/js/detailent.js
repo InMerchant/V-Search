@@ -120,6 +120,10 @@ $('#addSearchDelButton').on('click', function () {
 	searchDel.append(newInput);
 });
 
+$('.removeFieldButton').on('click',function(){
+	$(this).parent('.searchField').remove();
+})
+
 
 function showSelectedSections(selectedCaptions, selectedDelCaptions) {
 	var sections = [];
@@ -205,7 +209,6 @@ document.querySelectorAll('.videoLink').forEach(function (element) {
 		var timeComponents = text.split(':');
 		var time = 0;
 		var time = calculateTimeInSeconds(timeComponents);
-		console.log("클릭된 시간값:", time)
 		timemove(parseInt(time));
 	});
 });
