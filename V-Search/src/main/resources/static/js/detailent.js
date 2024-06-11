@@ -32,6 +32,7 @@ player1 = videojs("VideoPlayer", {
 	controls: true,
 	playsinline: true,
 	preload: "auto",
+	responsive: true,
 	controlBar: {
 		playToggle: true,
 		pictureInPictureToggle: true,
@@ -45,6 +46,7 @@ player2 = videojs("VideoPlayer2", {
 	controls: true,
 	playsinline: true,
 	preload: "auto",
+	responsive: true,
 	controlBar: {
 		playToggle: true,
 		pictureInPictureToggle: true,
@@ -111,19 +113,18 @@ $('#showSectionsButton').on('click', function () {
 });
 
 $('#addSearchFieldButton').on('click', function () {
-	var newInput = $('<input type="text" class="searchField" placeholder="Search">');
-	searchForm.append(newInput);
+    var newInput = $('<div class="inputWrapper"><input type="text" class="searchField" placeholder="단어 입력"><button type="button" class="removeFieldButton">-</button></div>');
+    $('#searchForm').append(newInput);
 });
 
 $('#addSearchDelButton').on('click', function () {
-	var newInput = $('<input type="text" class="searchField" placeholder="Delete">');
-	searchDel.append(newInput);
+    var newInput = $('<div class="inputWrapper"><input type="text" class="searchField" placeholder="단어 입력"><button type="button" class="removeFieldButton">-</button></div>');
+    $('#searchDel').append(newInput);
 });
 
-$('.removeFieldButton').on('click',function(){
-	$(this).parent('.searchField').remove();
-})
-
+$(document).on('click', '.removeFieldButton', function(){
+    $(this).closest('.inputWrapper').remove();
+});
 
 function showSelectedSections(selectedCaptions, selectedDelCaptions) {
 	var sections = [];

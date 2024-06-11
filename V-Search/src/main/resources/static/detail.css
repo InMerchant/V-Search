@@ -1,7 +1,20 @@
-html {
-	height: 100%;
-	;
-	width: 100%;
+:root {
+	--color-light: white;
+	--color-dark: #212121;
+	--color-signal: #fab700;
+
+	--color-background: var(--color-light);
+	--color-text: var(--color-dark);
+	--color-accent: var(--color-signal);
+
+	--size-bezel: .5rem;
+	--size-radius: 4px;
+	line-height: 1.4;
+	font-family: 'Inter', sans-serif;
+	font-size: calc(.6rem + .4vw);
+	color: var(--color-text);
+	background: var(--color-background);
+	font-weight: 300;
 }
 
 .main {
@@ -24,6 +37,8 @@ html {
 	position: absolute;
 	background: black;
 	overflow: hidden;
+	height: auto;
+	transform: translateX(5%);
 }
 
 
@@ -60,6 +75,14 @@ html {
 	animation-duration: 1s;
 	animation-fill-mode: forwards;
 	z-index: 2;
+}
+
+.front-card video,
+.back-card video {
+	width: 100%;
+	/* 부모 요소에 맞게 비디오의 너비를 조절합니다. */
+	height: auto;
+	/* 높이를 자동으로 조절하여 비율을 유지합니다. */
 }
 
 @keyframes frontcard-front {
@@ -137,9 +160,15 @@ textarea {
 
 #resultsContainer,
 #checkboxCard {
-	border: 1px solid #ccc;
-	padding: 10px;
-	width: 300px;
+	background: var(--color-background);
+	padding: calc(4 * var(--size-bezel));
+	border-radius: var(--size-radius);
+	border: 3px solid var(--color-shadow, currentColor);
+	box-shadow: .5rem .5rem 0 var(--color-shadow, currentColor);
+	margin-bottom: 10px;
+	margin-right: 15px;
+	margin-top: 10px;
+	height: auto;
 }
 
 #resultsContainer {
@@ -148,13 +177,7 @@ textarea {
 
 #checkboxCard {
 	display: flex;
-	height: 400px;
 	flex-direction: column;
-}
-
-.videoLink {
-	color: #007bff;
-	cursor: pointer;
 }
 
 .button-container {
@@ -166,10 +189,6 @@ textarea {
 #searchForm {
 	display: flex;
 	flex-direction: column;
-}
-
-.searchField {
-	margin-bottom: 5px;
 }
 
 #searchDel {
@@ -192,6 +211,7 @@ textarea {
 .pluscontainer,
 .delcontainer {
 	flex: 1;
+	margin-bottom: 10px;
 }
 
 .subscribe-button {
@@ -207,13 +227,101 @@ textarea {
 	border: none;
 	border-radius: 10%;
 }
-.btncontainer{
+
+.btncontainer {
 	display: flex;
 	flex-direction: row;
-	flex:1;
+	flex: 1;
 }
-.information{
+
+.information {
 	display: flex;
-	flex:3;
+	flex: 3;
 	gap: 10px;
+}
+
+.user,
+.search,
+.addbutton,
+.Delbutton,
+.resultbutton,
+.submit-comment-button {
+	color: currentColor;
+	background: #fab700;
+	border: none;
+	border-radius: var(--size-radius);
+	font-weight: 900;
+
+	&[type=reset] {
+		background: var(--color-background);
+		font-weight: 200;
+	}
+}
+
+button:disabled,
+button[disabled] {
+	background-color: gainsboro;
+	color: gray;
+}
+
+.searchField {
+	margin-bottom: 5px;
+	position: relative;
+	left: 0;
+	top: 0;
+	padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * .5);
+	margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * .5);
+	background: pink;
+	white-space: nowrap;
+	transform: translate(0, 0);
+	transform-origin: 0 0;
+	background: var(--color-background);
+	transition: transform 120ms ease-in;
+	font-weight: bold;
+	line-height: 1.2;
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+	border: 3px solid currentColor;
+	padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
+	color: currentColor;
+	background: transparent;
+	border-radius: var(--size-radius);
+
+	&:focus,
+	&:not(:placeholder-shown) {
+		&+.input__label {
+			transform: translate(.25rem, -65%) scale(.8);
+			color: var(--color-accent);
+		}
+	}
+}
+
+.btnhover {
+	display: none;
+	position: absolute;
+	background-color: #444444;
+	border-radius: 5px;
+	color: #ffffff;
+}
+
+
+.inputWrapper {
+	position: relative;
+}
+
+.removeFieldButton {
+	font-weight: 900;
+	color: currentColor;
+	position: absolute;
+	right: -6px;
+	top: 3px;
+	bottom: 4px;
+	border: 0;
+	background: #fab700;
+	color: #fff;
+	outline: none;
+	margin: calc(var(--size-bezel) * 0.75 + 2px) calc(var(--size-bezel) * .5);
+	padding: 0 10;
+	z-index: 2;
 }

@@ -16,13 +16,13 @@
 	<div class="main">
 		<div class="videocontainer">
 			<div class="card front-card">
-				<video width="1280" height="720" id="VideoPlayer" class="video-js vjs-default-skin">
+				<video id="VideoPlayer" class="video-js vjs-default-skin">
 					<source th:src="@{${scriptObj.SMYURL}}" type="video/mp4">
 					요약영상
 				</video>
 			</div>
 			<div class="card back-card">
-				<video width="1280" height="720" id="VideoPlayer2" class="video-js vjs-default-skin">
+				<video id="VideoPlayer2" class="video-js vjs-default-skin">
 					<source th:src="@{${scriptObj.STOURL}}" type="video/mp4">
 					원본 영상
 				</video>
@@ -36,23 +36,24 @@
 				<button class="btn back" style="display: none;">
 					<img th:src="@{/img/smybtn.png}" class="image-btn">
 				</button>
+				<div class="btnhover">현재 AI 요약 버젼입니다.</div>
 			</div>
-			<div class="smycontainer" aria-disabled="true">
+			<div class="smycontainer">
 				<div class="smybtn">
 					<button class="user" th:onclick="checks()" disabled>사용자 요약</button>
 					<button class="search" th:onclick="searchs()" disabled>검색</button>
 				</div>
-				<div id="summaryobject">
+				<div id="summaryobject" aria-disabled="true">
 					<div id="checkboxCard">
 						<p th:attr="scriptObj=${scriptObj.videoObj}" style="display: none;"></p>
 						<div class="pluscontainer">
 							<h4>
-								검색할 객체
+								포함할 요소
 							</h4>
 							<form id="searchForm">
-								<input id="searchObject" type="text" placeholder="임시" class="searchField" disabled>
+								<input id="searchObject" type="text" placeholder="단어 입력" class="searchField" disabled>
 							</form>
-							<button id="addSearchFieldButton" disabled>+</button>
+							<button id="addSearchFieldButton" class="addbutton" disabled>+</button>
 						</div>
 						<div th:each="SMYresult:${SMYresult}" style="display: none;">
 							<p>
@@ -63,19 +64,19 @@
 						</div>
 						<div class="delcontainer">
 							<h4>
-								삭제할 객체
+								제거할 요소
 							</h4>
 							<form id="searchDel">
-								<input id="searchDel" type="text" placeholder="검색" class="searchField" disabled>
+								<input id="searchDel" type="text" placeholder="단어 입력" class="searchField" disabled>
 							</form>
-							<button id="addSearchDelButton" disabled>+</button>
+							<button id="addSearchDelButton" class="Delbutton" disabled>+</button>
 						</div>
+						<button id="showSectionsButton" class="resultbutton" disabled>요약</button>
 					</div>
-					<button id="showSectionsButton" disabled>요약</button>
 				</div>
 				<div id="searchsmy" style="display: none;">
 					<form>
-						<input id="searchInput" type="text" placeholder="검색" disabled>
+						<input id="searchInput" type="text" placeholder="단어 입력" disabled>
 					</form>
 					<div id="resultsContainer" style="overflow-y: auto;">
 						<div th:each="SMYresult:${SMYresult}">
