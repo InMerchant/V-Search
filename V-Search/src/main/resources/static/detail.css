@@ -38,6 +38,7 @@
 	background: black;
 	overflow: hidden;
 	height: auto;
+	transform:translateY(5%);
 	transform: translateX(5%);
 }
 

@@ -24,23 +24,23 @@ public class SubscribeApiController {
 	private SubscribeService subscribeService;
 
 	@PostMapping("/api/subscribe/{videoNo}")
-	public ResponseEntity<?> subscribe(@PathVariable("videoNo") int videoNo) {
+	public String subscribe(@PathVariable("videoNo") int videoNo) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int principalNo = userService.getUserNO(username);
 		Del video = entityManager.find(Del.class, videoNo);
-		int videoUserId=video.getUsernumber();
+		int videoUserId = video.getUsernumber();
 		subscribeService.subscribe(principalNo, videoUserId, videoNo);
-		
-		return null;
+
+		return "redirect:/video/{videoNo}";
 	}
 
 	@GetMapping("/api/subscribe/{videoNo}")
-	public ResponseEntity<?> unsubscribe(@PathVariable("videoNo") int videoNo) {
+	public String unsubscribe(@PathVariable("videoNo") int videoNo) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		int principalNo = userService.getUserNO(username);
 		Del video = entityManager.find(Del.class, videoNo);
 		int videoUserId=video.getUsernumber();
 		subscribeService.unSubscribe(principalNo, videoUserId);
-		return null;
+		return "redirect:/video/{videoNo}";
 	}
 }

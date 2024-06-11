@@ -92,9 +92,9 @@ public class VideoController {
 		model.addAttribute("recommendationsCount", recommendationsCount);
 		List<Comment> comments = commentService.getCommentsByVideoNumber(videoNo);
 		model.addAttribute("comments", comments);
-		int age=VC.calculateVideoAge(videoNo);
+		int age = VC.calculateVideoAge(videoNo);
 		System.out.println(age);
-		
+
 		return "videoDetail";
 	}
 
@@ -133,14 +133,9 @@ public class VideoController {
 		}
 
 		@PostMapping("/recommend/toggle/{videoNo}")
-		public ResponseEntity<String> toggleRecommendation(@PathVariable("videoNo") int videoNo) {
-			try {
-				recommendService.toggleRecommendation(videoNo);
-				return ResponseEntity.ok("Recommendation toggled successfully");
-			} catch (Exception e) {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-						.body("Error toggling recommendation: " + e.getMessage());
-			}
+		public String toggleRecommendation(@PathVariable("videoNo") int videoNo) {
+			recommendService.toggleRecommendation(videoNo);
+			return "redirect:/video/" + videoNo;
 		}
 	}
 
@@ -154,41 +149,34 @@ public class VideoController {
 		}
 
 		@PostMapping("/comments/create/{videoNo}")
-		public ResponseEntity<?> createComment(HttpServletRequest request, @PathVariable("videoNo") Video videoNumber) {
-			try {
-				commentService.createComment(request, videoNumber);
-				return ResponseEntity.ok("댓글이 등록되었습니다.");
-			} catch (Exception e) {
-				System.out.println(videoNumber);
-				System.err.println("An error occurred while creating comment: " + e.getMessage());
-				e.printStackTrace();
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-			}
+		public String createComment(HttpServletRequest request, @PathVariable("videoNo") Video videoNumber) {
+			commentService.createComment(request, videoNumber);
+			return "redirect:/video/{videoNo}";
 		}
 	}
 
 	@GetMapping("/")
 	public String mainPage(Model model) {
-	    List<Object[]> videoDetails = videoService.getAllVideoDetails();
-	    model.addAttribute("videoDetails", videoDetails);
-	    
-	    List<Integer> userNumbers = new ArrayList<>();
-	    List<Integer> videoAges = new ArrayList<>();
+		List<Object[]> videoDetails = videoService.getAllVideoDetails();
+		model.addAttribute("videoDetails", videoDetails);
 
-	    for (Object[] videoDetail : videoDetails) {
-	        Integer userNumber = (Integer) videoDetail[2];
-	        userNumbers.add(userNumber);
+		List<Integer> userNumbers = new ArrayList<>();
+		List<Integer> videoAges = new ArrayList<>();
 
-	        Integer videoNo = (Integer) videoDetail[0];
-	        int age = VC.calculateVideoAge(videoNo);
-	        videoAges.add(age);
-	        //System.out.println(age);
-	    }
-	    
-	    model.addAttribute("userNumbers", userNumbers);
-	    model.addAttribute("videoAges", videoAges);
+		for (Object[] videoDetail : videoDetails) {
+			Integer userNumber = (Integer) videoDetail[2];
+			userNumbers.add(userNumber);
 
-	    return "mainpage";
+			Integer videoNo = (Integer) videoDetail[0];
+			int age = VC.calculateVideoAge(videoNo);
+			videoAges.add(age);
+			// System.out.println(age);
+		}
+
+		model.addAttribute("userNumbers", userNumbers);
+		model.addAttribute("videoAges", videoAges);
+
+		return "mainpage";
 	}
 
 	@GetMapping("/uploadForm")
