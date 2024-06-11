@@ -60,6 +60,11 @@ public class VideoService {
 	public List<Object[]> getAllVideoNamesAndUserNumbersAndSTOURL() {
 		return vR.findAllVideoNamesAndUserNumbersAndSTOURL();
 	}
+	
+	public List<Object[]> getAllVideoDetails() {
+	    // video_no, video_name, user_number, sto_url 등을 가져오는 쿼리
+	    return vR.findAllVideoDetails();
+	}
 
 	@ResponseBody
 	public void uploadFile(File file, String title, int summary) throws IOException {

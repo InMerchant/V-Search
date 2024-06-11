@@ -19,4 +19,7 @@ public interface VideoRepository extends JpaRepository<Video, Integer> {
 	@Query("SELECT v FROM Video v WHERE v.USER_NO = :userNo AND v.VIDEO_NAME = :title")
 	Video findByUserNoAndTitle(@Param("userNo") int userNo, @Param("title") String title);
 
+	
+	@Query("SELECT v.videoNo, v.VIDEO_NAME, v.USER_NO, v.STOURL FROM Video v")
+    List<Object[]> findAllVideoDetails();
 }

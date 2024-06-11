@@ -169,17 +169,26 @@ public class VideoController {
 
 	@GetMapping("/")
 	public String mainPage(Model model) {
-		List<Object[]> videoDetails = videoService.getAllVideoNamesAndUserNumbersAndSTOURL();
-		model.addAttribute("videoDetails", videoDetails);
-		List<Integer> userNumbers = new ArrayList<>();
+	    List<Object[]> videoDetails = videoService.getAllVideoDetails();
+	    model.addAttribute("videoDetails", videoDetails);
+	    
+	    List<Integer> userNumbers = new ArrayList<>();
+	    List<Integer> videoAges = new ArrayList<>();
 
-		for (Object[] videoDetail : videoDetails) {
-			Integer userNumber = (Integer) videoDetail[2];
-			userNumbers.add(userNumber);
-		}
-		model.addAttribute(userNumbers);
-	
-		return "mainpage";
+	    for (Object[] videoDetail : videoDetails) {
+	        Integer userNumber = (Integer) videoDetail[2];
+	        userNumbers.add(userNumber);
+
+	        Integer videoNo = (Integer) videoDetail[0];
+	        int age = VC.calculateVideoAge(videoNo);
+	        videoAges.add(age);
+	        //System.out.println(age);
+	    }
+	    
+	    model.addAttribute("userNumbers", userNumbers);
+	    model.addAttribute("videoAges", videoAges);
+
+	    return "mainpage";
 	}
 
 	@GetMapping("/uploadForm")

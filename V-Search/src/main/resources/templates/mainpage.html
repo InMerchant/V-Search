@@ -5,21 +5,6 @@
 <head>
 	<link rel="stylesheet" type="text/css" th:href="@{/mainpage.css}">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-	<style>
-		.line-clamp-2 {
-			display: -webkit-box;
-			-webkit-line-clamp: 2;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
-		}
-
-		.line-clamp-1 {
-			display: -webkit-box;
-			-webkit-line-clamp: 1;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
-		}
-	</style>
 </head>
 
 <body layout:fragment="content" class="bg-gray-900 text-white">
@@ -28,9 +13,38 @@
 			<a class="absolute inset-0 z-10" th:href="@{|/video/${detail[0]}|}">
 				<span class="sr-only">비디오 보기</span>
 			</a>
-			<h3 th:text="${detail[3]}" style="display: none;"></h3>
-			<img alt="Video Thumbnail" class="w-full h-60 object-cover" th:src="@{/placeholder.svg}"
-				style="aspect-ratio: 400/225;">
+
+			<div class="image-container relative">
+				<h3 th:text="${detail[3]}" style="display: none;"></h3>
+				<img alt="Video Thumbnail" class="w-full h-60 object-cover" th:src="@{/placeholder.svg}"
+					style="aspect-ratio: 400/225;">
+				<div class="absolute top-0 right-0 z-20 p-2 bg-white flex flex-col items-end rounded-bl-lg">
+					<img th:src="@{'/img/' + ${videoAges[iterStat.index]} + '.png'}" alt="Age Restriction"
+						class="w-8 h-8 age-restriction-img">
+					<div class="image-source">
+						<span th:if="${videoAges[iterStat.index]} == 0">
+							<a href="https://www.flaticon.com/kr/free-icons/" title="모두 아이콘">모두 아이콘 제작자: Freepik -
+								Flaticon</a>
+						</span>
+						<span th:if="${videoAges[iterStat.index]} == 7">
+							<a href="https://www.flaticon.com/kr/free-icons/" title="번호 아이콘">번호 아이콘 제작자: riajulislam -
+								Flaticon</a>
+						</span>
+						<span th:if="${videoAges[iterStat.index]} == 12">
+							<a href="https://www.flaticon.com/kr/free-icons/12" title="12 아이콘">12 아이콘 제작자: Freepik -
+								Flaticon</a>
+						</span>
+						<span th:if="${videoAges[iterStat.index]} == 15">
+							<a href="https://www.flaticon.com/kr/free-icons/15" title="15 아이콘">15 아이콘 제작자: bearicons -
+								Flaticon</a>
+						</span>
+						<span th:if="${videoAges[iterStat.index]} == 18">
+							<a href="https://www.flaticon.com/kr/free-icons/-" title="연령 제한 아이콘">연령 제한 아이콘 제작자: Freepik
+								- Flaticon</a>
+						</span>
+					</div>
+				</div>
+			</div>
 			<div
 				class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
 				<button class="text-white" style="background: none; border: none;">
