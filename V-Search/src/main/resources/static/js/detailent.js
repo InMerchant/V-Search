@@ -263,3 +263,18 @@ function unsubscribe(videoNo) {
 		}
 	});
 }
+
+function recommend(videoNo) {
+	$.ajax({
+		url: '/recommend/toggle/' + videoNo,
+		type: 'POST',
+		success: function(response) {
+			alert("추천되었습니다.");
+			// 추천 수를 업데이트하기 위해 페이지를 다시 로드하거나 특정 요소를 업데이트
+			location.reload(); // 페이지를 다시 로드하여 추천 수 업데이트
+		},
+		error: function(error) {
+			console.error("추천 오류:", error);
+		}
+	});
+}
