@@ -95,13 +95,8 @@
 			<div class="information">
 				<p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
 				<div class="subscribe">
-					<form th:action="@{'/api/subscribe/'+${videoNo}}" method="POST">
-						<button type="submit" id="subscribe" class="subscribe-button">구독</button>
-						<form th:action="@{'/api/subscribe/'+${videoNo}}" method="GET">
-							<button type="submit" id="unsubscribe" class="unsubscribe-button"
-								style="display: none">구독취소</button>
-						</form>
-					</form>
+					<button id="subscribe" class="subscribe-button" th:onclick="|subscribe(${videoNo})|">구독</button>
+					<button id="unsubscribe" class="unsubscribe-button" th:onclick="|unsubscribe(${videoNo})|" style="display: none;">구독취소</button>
 				</div>
 			</div>
 
@@ -132,7 +127,37 @@
 
 
 	<script type="text/javascript" th:src="@{/js/detailent.js}"></script>
+	<script>
+		function subscribe(videoNo) {
+			$.ajax({
+				url: '/api/subscribe/' + videoNo,
+				type: 'POST',
+				success: function(response) {
+					alert("구독되었습니다.");
+					$('#subscribe').hide();
+					$('#unsubscribe').show();
+				},
+				error: function(error) {
+					console.error("구독 오류:", error);
+				}
+			});
+		}
 
+		function unsubscribe(videoNo) {
+			$.ajax({
+				url: '/api/subscribe/' + videoNo,
+				type: 'DELETE',
+				success: function(response) {
+					alert("구독 취소되었습니다.");
+					$('#subscribe').show();
+					$('#unsubscribe').hide();
+				},
+				error: function(error) {
+					console.error("구독 취소 오류:", error);
+				}
+			});
+		}
+	</script>
 </body>
 
 </html>
