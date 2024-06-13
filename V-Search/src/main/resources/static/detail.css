@@ -16,11 +16,11 @@
 	background: var(--color-background);
 	font-weight: 300;
 }
-
 .main {
 	display: flex;
 	justify-content: center;
 	width: 100%;
+	height: 100%;
 }
 
 .videocontainer {
@@ -28,7 +28,6 @@
 	display: flex;
 	justify-content: flex-start;
 	align-items: flex-start;
-	position: relative;
 	width: 100%;
 }
 
@@ -38,10 +37,7 @@
 	background: black;
 	overflow: hidden;
 	height: auto;
-	transform:translateY(5%);
-	transform: translateX(5%);
 }
-
 
 .front-card {
 	animation-name: frontcard-front;
