@@ -233,3 +233,33 @@ function mergeSections(sections) {
 	mergeSections.push(currSection);
 	return mergeSections;
 }
+
+function subscribe(videoNo) {
+	$.ajax({
+		url: '/api/subscribe/' + videoNo,
+		type: 'POST',
+		success: function(response) {
+			alert("구독되었습니다.");
+			$('#subscribe').hide();
+			$('#unsubscribe').show();
+		},
+		error: function(error) {
+			console.error("구독 오류:", error);
+		}
+	});
+}
+
+function unsubscribe(videoNo) {
+	$.ajax({
+		url: '/api/subscribe/' + videoNo,
+		type: 'DELETE',
+		success: function(response) {
+			alert("구독 취소되었습니다.");
+			$('#subscribe').show();
+			$('#unsubscribe').hide();
+		},
+		error: function(error) {
+			console.error("구독 취소 오류:", error);
+		}
+	});
+}
