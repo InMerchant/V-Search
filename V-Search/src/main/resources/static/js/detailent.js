@@ -143,7 +143,6 @@ function showSelectedSections(selectedCaptions, selectedDelCaptions) {
 
 		if (isMatched && !isExcluded) {
 			var timeString = result.textContent.trim().split(' ')[0];
-			console.log(caption);
 			var timeComponents = timeString.split(':');
 			var time = calculateTimeInSeconds(timeComponents);
 			sections.push({start: time, end: time + 1});
@@ -167,21 +166,6 @@ function updateSections(sections) {
 }
 
 function createMarkers(sections) {
-	var markersArray = sections.map(function (section) {
-		return {time: section.start, text: ''};
-	});
-	player2.markers({
-		markerTip: {
-			display: true,
-			text: function (marker) {
-				return marker.text;
-			},
-			time: function (marker) {
-				return marker.time;
-			}
-		},
-		markers: markersArray
-	});
 	curIndex = 0;
 	if (sections.length > 0) {
 		player2.one('loadedmetadata', function () {
@@ -190,6 +174,7 @@ function createMarkers(sections) {
 		});
 		player2.currentTime(sections[curIndex].start);
 	}
+	player2.off('timeupdate');
 	player2.on('timeupdate', function () {
 		var currentTime = player2.currentTime();
 		if (curIndex < sections.length && currentTime >= sections[curIndex].end) {

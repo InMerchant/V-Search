@@ -1,8 +1,6 @@
 :root {
 	--sidebar-width: 270px;
 }
-
-
 .sidebar {
 	position: fixed;
 	top: 0;

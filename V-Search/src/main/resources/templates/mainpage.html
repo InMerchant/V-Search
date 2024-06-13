@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
-
 <head>
 	<link rel="stylesheet" type="text/css" th:href="@{/mainpage.css}">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
-
 <body layout:fragment="content" class="bg-gray-900 text-white">
 	<main class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
 		<div class="relative group rounded-lg overflow-hidden" th:each="detail, iterStat : ${videoDetails}">
