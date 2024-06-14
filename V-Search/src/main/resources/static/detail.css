@@ -16,6 +16,7 @@
 	background: var(--color-background);
 	font-weight: 300;
 }
+
 .main {
 	display: flex;
 	justify-content: center;
@@ -37,6 +38,8 @@
 	background: black;
 	overflow: hidden;
 	height: auto;
+	flex: 1 1 45%;
+	max-width: 100%;
 }
 
 .front-card {
@@ -318,4 +321,12 @@ button[disabled] {
 	margin: calc(var(--size-bezel) * 0.75 + 2px) calc(var(--size-bezel) * .5);
 	padding: 0 10;
 	z-index: 2;
+}
+
+
+.card .video-js {
+	position: relative;
+	padding-bottom: 56.25%;
+	/* 16:9 비율 유지 */
+	height: 0;
 }

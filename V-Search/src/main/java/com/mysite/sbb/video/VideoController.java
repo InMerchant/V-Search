@@ -93,8 +93,6 @@ public class VideoController {
 		List<Comment> comments = commentService.getCommentsByVideoNumber(videoNo);
 		model.addAttribute("comments", comments);
 		int age = VC.calculateVideoAge(videoNo);
-		System.out.println(age);
-
 		return "videoDetail";
 	}
 
@@ -204,8 +202,22 @@ public class VideoController {
 		return "uploadResult";
 	}
 
-	@GetMapping("/video/test")
-	public String test() {
+	@GetMapping("/video/test/{no}")
+	public String test(@PathVariable("no") int videoNo, Model model) throws SQLException {
+		Del video = entityManager.find(Del.class, videoNo);
+		int videoUserId = video.getUsernumber();
+		UserProfileDto userDto = userService.userProfile(videoUserId, videoNo);
+		model.addAttribute("userDto", userDto);
+		model.addAttribute("videoNo", videoNo);
+		List<TimeLine> SMYresult = TS.timeLineCaption(videoNo);
+		model.addAttribute("SMYresult", SMYresult);
+		Video scriptObj = videoService.findSmyScriptAndOBJ(videoNo);
+		model.addAttribute("scriptObj", scriptObj);
+		int recommendationsCount = recommendService.getRecommendationsCountByVideoNo(videoNo);
+		model.addAttribute("recommendationsCount", recommendationsCount);
+		List<Comment> comments = commentService.getCommentsByVideoNumber(videoNo);
+		model.addAttribute("comments", comments);
+		int age = VC.calculateVideoAge(videoNo);
 		return "test";
 	}
 
