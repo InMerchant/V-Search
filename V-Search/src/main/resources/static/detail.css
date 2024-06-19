@@ -80,9 +80,7 @@
 .front-card video,
 .back-card video {
 	width: 100%;
-	/* 부모 요소에 맞게 비디오의 너비를 조절합니다. */
 	height: auto;
-	/* 높이를 자동으로 조절하여 비율을 유지합니다. */
 }
 
 @keyframes frontcard-front {
@@ -330,6 +328,5 @@ button[disabled] {
 .card .video-js {
 	position: relative;
 	padding-bottom: 56.25%;
-	/* 16:9 비율 유지 */
 	height: 0;
 }
