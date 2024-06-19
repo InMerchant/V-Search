@@ -170,7 +170,7 @@ textarea {
 }
 
 #resultsContainer {
-	height: 500px;
+	height: 360px;
 }
 
 #checkboxCard {
@@ -262,7 +262,8 @@ button[disabled] {
 	color: gray;
 }
 
-.searchField {
+.searchField,
+#searchInput {
 	margin-bottom: 5px;
 	position: relative;
 	left: 0;
@@ -293,6 +294,10 @@ button[disabled] {
 			color: var(--color-accent);
 		}
 	}
+}
+
+#searchInput{
+	max-width: 209px;
 }
 
 .btnhover {
