@@ -60,10 +60,10 @@ public class VideoService {
 	public List<Object[]> getAllVideoNamesAndUserNumbersAndSTOURL() {
 		return vR.findAllVideoNamesAndUserNumbersAndSTOURL();
 	}
-	
+
 	public List<Object[]> getAllVideoDetails() {
-	    // video_no, video_name, user_number, sto_url 등을 가져오는 쿼리
-	    return vR.findAllVideoDetails();
+		// video_no, video_name, user_number, sto_url 등을 가져오는 쿼리
+		return vR.findAllVideoDetails();
 	}
 
 	@ResponseBody
@@ -72,9 +72,8 @@ public class VideoService {
 		int userNo = userService.getUserNO(username);
 		String URL = null;
 		String SMYURL = null;
-		String Url = "https://aa19-61-34-253-238.ngrok-free.app";
+		String Url = "https://2d79-61-34-253-238.ngrok-free.app";
 		try {
-			Video Video = new Video();
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
 			if (summary == 1) {
@@ -86,8 +85,9 @@ public class VideoService {
 				Thread.sleep(1000);
 				callService.sendPostRequest(Url + "/translate", title);
 				SMYURL = UR.VideoUrl(title + "_smr");
-				Video.setSMYURL(SMYURL);
 			}
+			Video Video = new Video();
+			Video.setSMYURL(SMYURL);
 			Video.setSTOURL(URL);
 			Video.setSummary_chk(summary);
 			Video.setUSER_NO(userNo);

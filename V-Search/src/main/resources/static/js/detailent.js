@@ -206,18 +206,25 @@ $('#searchInput').on('input', function () {
     var searchTerm = $(this).val().toLowerCase();
     searchTerm = searchTerm.replace(/\s+/g, ''); // 공백 제거
     $(this).val(searchTerm); // 수정된 값을 입력 필드에 다시 설정
-    $('#resultsContainer > div').each(function () {
-        var text = $(this).find('.videoLink').attr('value').toLowerCase();
-        if (text.includes(searchTerm)) {
-            $(this).show();
-            $(this).find('.videoLink').show();
-        } else {
-            $(this).hide();
-            $(this).find('.videoLink').hide();
-        }
-    });
-    $('#searchsmy').show();
+
+    if (searchTerm === '') {
+        $('.videoLink').hide(); // 검색 요약 숨기기
+    } else {
+        // 검색어가 있을 때만 검색 실행
+        $('#resultsContainer > div').each(function () {
+            var text = $(this).find('.videoLink').attr('value').toLowerCase();
+            if (text.includes(searchTerm)) {
+                $(this).show();
+                $(this).find('.videoLink').show();
+            } else {
+                $(this).hide();
+                $(this).find('.videoLink').hide();
+            }
+        });
+        $('#searchsmy').show();
+    }
 });
+
 
 function mergeSections(sections) {
 	sections.sort((a, b) => a.start - b.start);
