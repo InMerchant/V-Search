@@ -16,7 +16,7 @@ import jakarta.persistence.Lob;// 파링 형식 blob 대용량 처리
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Id;
 @Entity
-@Table(name="VIDEO",schema = "bae")
+@Table(name="VIDEO",schema = "admin")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

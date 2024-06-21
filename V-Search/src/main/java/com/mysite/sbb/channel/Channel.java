@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="VIDEO", schema = "bae")
+@Table(name="VIDEO", schema = "admin")
 public class Channel {
     @Id
     @Column(name = "VIDEO_NAME")

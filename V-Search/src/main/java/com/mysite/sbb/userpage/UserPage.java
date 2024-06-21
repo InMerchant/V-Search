@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="MEMBER",schema = "bae")
+@Table(name="MEMBER",schema = "admin")
 
 public class UserPage {
 

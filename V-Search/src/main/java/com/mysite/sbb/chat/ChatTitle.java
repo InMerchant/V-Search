@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "VIDEO", schema = "bae")
+@Table(name = "VIDEO", schema = "admin")
 @Data
 public class ChatTitle {
 

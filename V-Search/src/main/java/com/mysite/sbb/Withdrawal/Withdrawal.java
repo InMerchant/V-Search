@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 @Entity
-@Table(name="MEMBER", schema = "bae")
+@Table(name="MEMBER", schema = "admin")
 public class Withdrawal {
 
     @Id

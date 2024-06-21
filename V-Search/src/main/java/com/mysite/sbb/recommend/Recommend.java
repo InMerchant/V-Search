@@ -11,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.SequenceGenerator;
 @Data
 @Entity
-@Table(name = "RECOMMEND", schema = "bae")
+@Table(name = "RECOMMEND", schema = "admin")
 public class Recommend {
    
 	

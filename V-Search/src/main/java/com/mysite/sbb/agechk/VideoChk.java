@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "VIDEO_INFO", schema = "bae")
+@Table(name = "VIDEO_INFO", schema = "admin")
 public class VideoChk {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

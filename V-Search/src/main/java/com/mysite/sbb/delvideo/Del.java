@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 
 @Entity
-@Table(name="VIDEO",schema = "bae")
+@Table(name="VIDEO",schema = "admin")
 @Data
 
 public class Del {
