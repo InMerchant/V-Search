@@ -1,28 +1,32 @@
-$('.front').on('click',function(){
+$('.front').on('click', function() {
 	$('.card').addClass('active');
 })
 
-$('.back').on('click',function(){
+$('.back').on('click', function() {
 	$('.card').removeClass('active');
 })
 var curIndex = 0;
-$(document).ready(function () {
-	$('.front').on('click', function () {
+$(document).ready(function() {
+	$('.front').on('click', function() {
 		$('.front').hide();
 		$('.back').show();
+		$('.smyvideo').hide();
+		$('.ognvideo').show();
 		$('#smyscript').hide();
 		$('.card').addClass('active');
-		$('.smycontainer').find("input,select,button,textarea").prop("disabled",false);
+		$('.smycontainer').find("input,select,button,textarea").prop("disabled", false);
 		var player = videojs('VideoPlayer');
 		player.pause();
 	});
 
-	$('.back').on('click', function () {
+	$('.back').on('click', function() {
 		$('.front').show();
 		$('.back').hide();
+		$('.smyvideo').show();
+		$('.ognvideo').hide();
 		$('.card').removeClass('active');
 		$('#smyscript').show();
-		$('.smycontainer').find("input,select,button,textarea").prop("disabled",true);
+		$('.smycontainer').find("input,select,button,textarea").prop("disabled", true);
 		var player = videojs('VideoPlayer2');
 		player.pause();
 	});
@@ -57,10 +61,10 @@ player2 = videojs("VideoPlayer2", {
 player2.markers({
 	markerTip: {
 		display: true,
-		text: function (marker) {
+		text: function(marker) {
 			return marker.text;
 		},
-		time: function (marker) {
+		time: function(marker) {
 			return marker.time;
 		}
 	},
@@ -91,18 +95,18 @@ var searchForm = $('#searchForm');
 var searchDel = $('#searchDel');
 var selectedCaptions = [];
 
-$('#showSectionsButton').on('click', function () {
+$('#showSectionsButton').on('click', function() {
 	var searchValue = searchInput.value;
 	selectedCaptions = [];
 	selectedDelCaptions = [];
 	selectedCaptions.push(searchValue);
-	$('#searchForm .searchField').each(function () {
+	$('#searchForm .searchField').each(function() {
 		if ($(this).val() !== '') {
 			selectedCaptions.push($(this).val());
 		}
 	});
 
-	$('#searchDel .searchField').each(function () {
+	$('#searchDel .searchField').each(function() {
 		if ($(this).val() !== '') {
 			selectedDelCaptions.push($(this).val());
 		}
@@ -112,18 +116,18 @@ $('#showSectionsButton').on('click', function () {
 	player2.controlBar.remainingTimeDisplay.hide();
 });
 
-$('#addSearchFieldButton').on('click', function () {
-    var newInput = $('<div class="inputWrapper"><input type="text" class="searchField" placeholder="단어 입력"><button type="button" class="removeFieldButton">-</button></div>');
-    $('#searchForm').append(newInput);
+$('#addSearchFieldButton').on('click', function() {
+	var newInput = $('<div class="inputWrapper"><input type="text" class="searchField" placeholder="단어 입력"><button type="button" class="removeFieldButton">-</button></div>');
+	$('#searchForm').append(newInput);
 });
 
-$('#addSearchDelButton').on('click', function () {
-    var newInput = $('<div class="inputWrapper"><input type="text" class="searchField" placeholder="단어 입력"><button type="button" class="removeFieldButton">-</button></div>');
-    $('#searchDel').append(newInput);
+$('#addSearchDelButton').on('click', function() {
+	var newInput = $('<div class="inputWrapper"><input type="text" class="searchField" placeholder="단어 입력"><button type="button" class="removeFieldButton">-</button></div>');
+	$('#searchDel').append(newInput);
 });
 
-$(document).on('click', '.removeFieldButton', function(){
-    $(this).closest('.inputWrapper').remove();
+$(document).on('click', '.removeFieldButton', function() {
+	$(this).closest('.inputWrapper').remove();
 });
 
 function showSelectedSections(selectedCaptions, selectedDelCaptions) {
@@ -131,13 +135,13 @@ function showSelectedSections(selectedCaptions, selectedDelCaptions) {
 	var foundSection = false;
 	var SMYresults = document.querySelectorAll('.script');
 
-	SMYresults.forEach(function (result) {
+	SMYresults.forEach(function(result) {
 		var caption = result.textContent.trim();
 
-		var isMatched = selectedCaptions.some(function (selectedCaption) {
+		var isMatched = selectedCaptions.some(function(selectedCaption) {
 			return caption.includes(selectedCaption);
 		});
-		var isExcluded = selectedDelCaptions.some(function (selectedDelCaption) {
+		var isExcluded = selectedDelCaptions.some(function(selectedDelCaption) {
 			return caption.includes(selectedDelCaption);
 		});
 
@@ -145,7 +149,7 @@ function showSelectedSections(selectedCaptions, selectedDelCaptions) {
 			var timeString = result.textContent.trim().split(' ')[0];
 			var timeComponents = timeString.split(':');
 			var time = calculateTimeInSeconds(timeComponents);
-			sections.push({start: time, end: time + 1});
+			sections.push({ start: time, end: time + 1 });
 			foundSection = true;
 		}
 	});
@@ -168,14 +172,14 @@ function updateSections(sections) {
 function createMarkers(sections) {
 	curIndex = 0;
 	if (sections.length > 0) {
-		player2.one('loadedmetadata', function () {
+		player2.one('loadedmetadata', function() {
 			player2.currentTime(sections[curIndex].start);
 			player2.play();
 		});
 		player2.currentTime(sections[curIndex].start);
 	}
 	player2.off('timeupdate');
-	player2.on('timeupdate', function () {
+	player2.on('timeupdate', function() {
 		var currentTime = player2.currentTime();
 		if (curIndex < sections.length && currentTime >= sections[curIndex].end) {
 			curIndex++;
@@ -189,8 +193,8 @@ function createMarkers(sections) {
 	});
 }
 
-document.querySelectorAll('.videoLink').forEach(function (element) {
-	element.addEventListener('click', function () {
+document.querySelectorAll('.videoLink').forEach(function(element) {
+	element.addEventListener('click', function() {
 		var text = element.textContent.trim();
 		var timeComponents = text.split(':');
 		var time = 0;
@@ -202,27 +206,27 @@ function timemove(time) {
 	player2.currentTime(time);
 }
 
-$('#searchInput').on('input', function () {
-    var searchTerm = $(this).val().toLowerCase();
-    searchTerm = searchTerm.replace(/\s+/g, ''); // 공백 제거
-    $(this).val(searchTerm); // 수정된 값을 입력 필드에 다시 설정
+$('#searchInput').on('input', function() {
+	var searchTerm = $(this).val().toLowerCase();
+	searchTerm = searchTerm.replace(/\s+/g, ''); // 공백 제거
+	$(this).val(searchTerm); // 수정된 값을 입력 필드에 다시 설정
 
-    if (searchTerm === '') {
-        $('.videoLink').hide(); // 검색 요약 숨기기
-    } else {
-        // 검색어가 있을 때만 검색 실행
-        $('#resultsContainer > div').each(function () {
-            var text = $(this).find('.videoLink').attr('value').toLowerCase();
-            if (text.includes(searchTerm)) {
-                $(this).show();
-                $(this).find('.videoLink').show();
-            } else {
-                $(this).hide();
-                $(this).find('.videoLink').hide();
-            }
-        });
-        $('#searchsmy').show();
-    }
+	if (searchTerm === '') {
+		$('.videoLink').hide(); // 검색 요약 숨기기
+	} else {
+		// 검색어가 있을 때만 검색 실행
+		$('#resultsContainer > div').each(function() {
+			var text = $(this).find('.videoLink').attr('value').toLowerCase();
+			if (text.includes(searchTerm)) {
+				$(this).show();
+				$(this).find('.videoLink').show();
+			} else {
+				$(this).hide();
+				$(this).find('.videoLink').hide();
+			}
+		});
+		$('#searchsmy').show();
+	}
 });
 
 
@@ -281,7 +285,6 @@ function recommend(videoNo) {
 		type: 'POST',
 		success: function(response) {
 			alert("추천되었습니다.");
-			// 추천 수를 업데이트하기 위해 페이지를 다시 로드하거나 특정 요소를 업데이트
 			location.reload(); // 페이지를 다시 로드하여 추천 수 업데이트
 		},
 		error: function(error) {

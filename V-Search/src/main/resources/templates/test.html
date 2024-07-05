@@ -15,13 +15,12 @@
 
 <body layout:fragment="content">
 	<div class="main">
-		<div class="card front-card">
+		<div>
 			<video id="VideoPlayer" class="video-js vjs-default-skin vjs-big-play-centered" controls>
 				<source th:src="@{${scriptObj.SMYURL}}" type="video/mp4">
 				요약영상
 			</video>
-		</div>
-		<div class="card back-card">
+		<div>
 			<video id="VideoPlayer2" class="video-js vjs-default-skin vjs-big-play-centered" controls>
 				<source th:src="@{${scriptObj.STOURL}}" type="video/mp4">
 				원본 영상
