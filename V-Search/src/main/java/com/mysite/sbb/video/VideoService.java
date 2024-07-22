@@ -74,6 +74,7 @@ public class VideoService {
 		String SMYURL = null;
 		String Url = "http://localhost:5000";
 		try {
+			Video Video = new Video();
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);
 			if (summary == 1) {
@@ -85,9 +86,8 @@ public class VideoService {
 				Thread.sleep(1000);
 				callService.sendPostRequest(Url + "/translate", title);
 				SMYURL = UR.VideoUrl(title + "_smr");
+				Video.setSMYURL(SMYURL);
 			}
-			Video Video = new Video();
-			Video.setSMYURL(SMYURL);
 			Video.setSTOURL(URL);
 			Video.setSummary_chk(summary);
 			Video.setUSER_NO(userNo);

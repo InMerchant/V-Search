@@ -114,18 +114,18 @@
 				var file = fileInput.files[0];
 				var title = titleInput.value;
 				var title = titleInput.value.trim();
-				var radioValue = document.querySelector('input[name="summary"]').value;
+				var radioValue = document.querySelector('input[name="summary"]:checked')?.value;
 				var formData = new FormData();
 				if (!file) {
 					alert('파일을 선택해주세요.');
 					return;
 				}
-				if (title === '') {
-					alert('제목을 입력해 주세요.');
-					return;
-				}
 				if (!radioValue) {
 					alert("하나의 옵션을 선택해주세요.")
+					return;
+				}
+				if (title === '') {
+					alert('제목을 입력해 주세요.');
 					return;
 				}
 				formData.append('file', file);
