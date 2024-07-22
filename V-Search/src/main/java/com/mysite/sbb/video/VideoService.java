@@ -72,7 +72,7 @@ public class VideoService {
 		int userNo = userService.getUserNO(username);
 		String URL = null;
 		String SMYURL = null;
-		String Url = "https://df5e-61-103-70-244.ngrok-free.app";
+		String Url = "http://localhost:5000";
 		try {
 			UO.uploadOracle(file, title);
 			URL = UR.VideoUrl(title);

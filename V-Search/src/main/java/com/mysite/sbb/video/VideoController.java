@@ -137,7 +137,7 @@ public class VideoController {
 		}
 	}
 
-	@RestController
+	@Controller
 	public class CommentController {
 		private final CommentService commentService;
 
