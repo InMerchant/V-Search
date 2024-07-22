@@ -113,8 +113,13 @@
 				var titleInput = document.querySelector('textarea[name="title"]');
 				var file = fileInput.files[0];
 				var title = titleInput.value;
+				var title = titleInput.value.trim();
 				var radioValue = document.querySelector('input[name="summary"]:checked').value;
 				var formData = new FormData();
+				if (title === '') {
+					alert('제목을 입력해 주세요.');
+					return;
+				}
 				formData.append('file', file);
 				formData.append('title', title);
 				formData.append('summary', radioValue);
@@ -133,12 +138,12 @@
 					}
 				};
 				xhr.ontimeout = function () {
-					overlay.style.display = 'none'; 
+					overlay.style.display = 'none';
 					console.error('Request timed out');
 					alert('Request timed out. Please try again.');
 				};
 				xhr.onerror = function () {
-					overlay.style.display = 'none'; 
+					overlay.style.display = 'none';
 					console.error('Communication error');
 				};
 				xhr.send(formData);
