@@ -369,3 +369,55 @@ button[disabled] {
 		margin: calc(var(--size-bezel) * 0.5 + 2px) calc(var(--size-bezel) * .25);
 	}
 }
+
+.comment-container {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background-color: #f9f9f9;
+}
+
+.comment-container p {
+	margin: 0 0 10px;
+	font-size: 16px;
+	color: #333;
+}
+
+.comment-container .delete-comment-button {
+	background-color: #ff4d4d;
+	border: none;
+	color: white;
+	padding: 8px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+	margin-top: 5px;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+}
+
+.comment-container .delete-comment-button:hover {
+	background-color: #ff1a1a;
+}
+
+
+.information p {
+	font-size: 16px;
+	color: #333;
+}
+
+.unsubscribe-button {
+	background-color: #dc3545;
+}
+
+.subscribe-button:hover {
+	background-color: #0056b3;
+}
+
+.unsubscribe-button:hover {
+	background-color: #c82333;
+}

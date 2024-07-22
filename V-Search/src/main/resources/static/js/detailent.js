@@ -255,8 +255,7 @@ function subscribe(videoNo) {
 		type: 'POST',
 		success: function(response) {
 			alert("구독되었습니다.");
-			$('#subscribe').hide();
-			$('#unsubscribe').show();
+			location.reload();
 		},
 		error: function(error) {
 			console.error("구독 오류:", error);
@@ -270,8 +269,7 @@ function unsubscribe(videoNo) {
 		type: 'DELETE',
 		success: function(response) {
 			alert("구독 취소되었습니다.");
-			$('#subscribe').show();
-			$('#unsubscribe').hide();
+			location.reload();
 		},
 		error: function(error) {
 			console.error("구독 취소 오류:", error);
@@ -284,7 +282,7 @@ function recommend(videoNo) {
 		url: '/recommend/toggle/' + videoNo,
 		type: 'POST',
 		success: function(response) {
-			alert("추천되었습니다.");
+			alert(response); // 서버에서 받은 메시지를 알림으로 표시
 			location.reload(); // 페이지를 다시 로드하여 추천 수 업데이트
 		},
 		error: function(error) {
@@ -292,3 +290,4 @@ function recommend(videoNo) {
 		}
 	});
 }
+

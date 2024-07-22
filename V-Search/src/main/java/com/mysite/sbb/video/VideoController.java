@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.cookie.SM;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,21 +123,25 @@ public class VideoController {
 	}
 
 	@RestController
+	@RequestMapping("/recommend")
 	public class RecommendController {
-
-		private final RecommendService recommendService;
-
-		@Autowired
+	   
+	    private RecommendService recommendService;
 		public RecommendController(RecommendService recommendService) {
-			this.recommendService = recommendService;
-		}
+	        this.recommendService = recommendService;
+	    }
 
-		@PostMapping("/recommend/toggle/{videoNo}")
-		public String toggleRecommendation(@PathVariable("videoNo") int videoNo) {
-			recommendService.toggleRecommendation(videoNo);
-			return "redirect:/video/" + videoNo;
-		}
+	    @PostMapping("/toggle/{videoNo}")
+	    public ResponseEntity<String> toggleRecommendation(@PathVariable("videoNo") int videoNo) {
+	        boolean isRecommended = recommendService.toggleRecommendation(videoNo);
+	        if (isRecommended) {
+	            return ResponseEntity.ok("추천되었습니다.");
+	        } else {
+	            return ResponseEntity.ok("추천이 취소되었습니다.");
+	        }
+	    }
 	}
+
 
 	@Controller
 	public class CommentController {

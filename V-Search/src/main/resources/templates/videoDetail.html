@@ -95,11 +95,13 @@
 		<div class="bottomcontainer">
 			<div class="button-container">
 				<div class="information">
-				    <p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
-				    <div class="subscribe">
-				        <button id="subscribe" class="subscribe-button" th:if="!${userDto.subscribeState}" th:onclick="|subscribe(${videoNo})|">구독</button>
-				        <button id="unsubscribe" class="unsubscribe-button" th:if="${userDto.subscribeState}" th:onclick="|unsubscribe(${videoNo})|">구독취소</button>
-				    </div>
+					<p>구독자 수 : <span th:text="${userDto.subscribeCount}"></span></p>
+					<div class="subscribe">
+						<button id="subscribe" class="subscribe-button" th:if="!${userDto.subscribeState}"
+							th:onclick="|subscribe(${videoNo})|">구독</button>
+						<button id="unsubscribe" class="unsubscribe-button" th:if="${userDto.subscribeState}"
+							th:onclick="|unsubscribe(${videoNo})|">구독취소</button>
+					</div>
 				</div>
 
 				<div class="btncontainer">
@@ -116,7 +118,7 @@
 				<button type="submit" class="submit-comment-button">Submit</button>
 			</form>
 
-			<div th:each="comment : ${comments}">
+			<div th:each="comment : ${comments}" class="comment-container">
 				<p th:text="${comment.content}"></p>
 				<form th:action="@{'/comments/' + ${videoNo} + '/' + ${comment.id}}" method="POST">
 					<input type="hidden" name="_method" value="delete" />
