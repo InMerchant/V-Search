@@ -58,6 +58,8 @@
 - 사용자 요약
 ![image](https://github.com/user-attachments/assets/81120ac5-6c75-4e99-aab6-bd44a8716699)
 
+- 시연 영상
+<https://www.youtube.com/watch?v=a_flUtwkcwc>
 
 
 # 실행방법
