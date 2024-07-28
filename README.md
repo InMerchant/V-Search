@@ -1,8 +1,8 @@
 # V-Search
 ---
-#실행방법
+# 실행방법
 
-#####사용한 자바버전 - java17
+##### 사용한 자바버전 - java17
 1. STS설치
 > https://spring.io/tools
 >> Spring Tools 4 for Eclipse - 윈도우 버전 설치
