@@ -45,6 +45,20 @@
 
 ![image](https://github.com/user-attachments/assets/80adad4c-f169-4f43-b298-552b87f9e4b9)
 
+# 실행 화면
+-메인화면
+![image](https://github.com/user-attachments/assets/d5f713eb-9b6d-4eff-a558-ddac42141952)
+
+- 영상화면
+![image](https://github.com/user-attachments/assets/a4cb9309-dfaa-4660-b8cb-61a0da380f88)
+
+- 장면검색
+![image](https://github.com/user-attachments/assets/756424e6-6ba5-42d3-ad4d-e5915eec506e)
+
+- 사용자 요약
+![image](https://github.com/user-attachments/assets/81120ac5-6c75-4e99-aab6-bd44a8716699)
+
+
 
 # 실행방법
 
