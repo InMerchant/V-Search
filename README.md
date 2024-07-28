@@ -13,6 +13,7 @@
 + 롬복설치
 > 롬복 경로 - https://projectlombok.org/download 
 >> 롬복은 무조건 sts 폴더 안에서 놔둔 후 Java Platform SE binary실행 후 설치한 후 프로젝트 클린해야됨
+>>> 오류가 생길경우 롬복 재실치 필요 이후 프로젝트 클린 다시 실행
 + SpringToolSuite4.exe 실행
 + File -> Open Projects from File System... -> Directory... -> 클론한 파일 위치(ex: C:\Users\5600X\Documents\workspace-spring-tool-suite-4-4.23.1.RELEASE\V-Search\V-Search)로 이동 후 선택 -> Finish
 + Project -> Clean... 버튼 선택 후 프로젝트 명 sbb변경 확인
